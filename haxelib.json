@@ -1,0 +1,13 @@
+{
+  "name": "flixel-rpg",  
+  "url" : "http://www.kevinresol.com",  
+  "license": "MIT",  
+  "tags": ["game", "flixel", "openfl", "cross"],
+  "description": "A RPG framework based on HaxeFlixel.",
+  "version": "0.0.1",
+  "releasenote": "Initial release, everything is working correctly",
+  "contributors": ["KevinResoL"],
+  "dependencies": {
+    "flixel": ""
+  }
+}
