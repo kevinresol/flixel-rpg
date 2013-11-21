@@ -25,6 +25,8 @@ class EngageAI extends AI
 	
 	override public function update():Void 
 	{
+		super.update();
+		
 		//Check distance with the player if not yet engaged
 		if (!passive && entity.target == null && FlxMath.isDistanceWithin(entity, GroupManager.player, engageRange))/* FlxMath.distanceBetween(this, Reg.player) < engageRange*/
 			entity.engage(GroupManager.player);

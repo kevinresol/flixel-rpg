@@ -20,6 +20,8 @@ class AttackAI extends AI
 	
 	override public function update():Void 
 	{
+		super.update();
+		
 		if (entity.target != null)
 		{
 			//Follow & attack target if engaged
