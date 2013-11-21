@@ -1,12 +1,12 @@
 package flixel.rpg.damage;
 import flixel.addons.weapon.FlxBullet;
+import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.rpg.data.Data;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.weapon.Bullet;
-import flixel.rpg.weapon.Weapon;
 
 /**
  * ...
@@ -16,7 +16,7 @@ class WeaponController
 {
 	public var group:FlxTypedGroup<FlxTypedGroup<FlxBullet>>;
 	
-	private var weapons:Map<Int, Weapon>;
+	private var weapons:Map<Int, FlxWeapon>;
 	private var entity:Entity;	
 	
 	/**
@@ -26,7 +26,7 @@ class WeaponController
 	private var fireWeaponAtTarget:FlxSprite-> Bool;
 	
 	
-	public var currentWeapon(default, null):Weapon;
+	public var currentWeapon(default, null):FlxWeapon;
 	
 	public var currentWeaponID(default, set):Int;
 	private function set_currentWeaponID(v:Int):Int
@@ -46,7 +46,7 @@ class WeaponController
 	{
 		this.entity = entity;
 		group = new FlxTypedGroup<FlxTypedGroup<FlxBullet>>();		
-		weapons = new Map<Int, Weapon>();
+		weapons = new Map<Int, FlxWeapon>();
 	}
 	
 	/**
@@ -54,7 +54,7 @@ class WeaponController
 	 * @param	id
 	 * @return	FlxWeaponX instance
 	 */
-	public function getWeapon(id:Int):Weapon
+	public function getWeapon(id:Int):FlxWeapon
 	{
 		if (weapons.get(id) == null)
 			createWeapon(id);
@@ -69,7 +69,7 @@ class WeaponController
 	private function createWeapon(id:Int):Void
 	{
 		var wd = Data.getWeaponData(id);
-		var w = new Weapon(id, wd.name, Bullet, entity);
+		var w = new FlxWeapon(wd.name, entity, Bullet, id);
 		weapons.set(id, w);
 		
 				
