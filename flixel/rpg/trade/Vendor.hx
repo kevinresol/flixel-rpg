@@ -7,7 +7,7 @@ import flixel.rpg.inventory.Inventory;
  * ...
  * @author Kevin
  */
-class Merchant
+class Vendor
 {
 	/**
 	 * 
@@ -19,12 +19,8 @@ class Merchant
 	{
 		var tradeData:TradeData = Data.getTradeData(id);
 		
-		//Check if the inventory has enough cost
-		for (c in tradeData.cost)
-		{
-			if (inventory.countStack(c.id) < c.count)
-				return false;
-		}
+		if (!inventory.canTrade(tradeData.cost, tradeData.reward))
+			return false;
 		
 		//Deduct the cost from inventory
 		for (c in tradeData.cost)
@@ -34,9 +30,9 @@ class Merchant
 		}
 		
 		//Add the traded items to inventory
-		for (i in tradeData.item)
+		for (i in tradeData.reward)
 		{
-			inventory.addItem(Factory.createInvetoryItem(i.id, i.count));
+			inventory.addItem(Factory.createInventoryItem(i.id, i.count));
 		}
 		
 		return true;
