@@ -1,8 +1,10 @@
 package flixel.rpg.inventory;
 
 /**
- * ...
+ * An inventory that holds items. A collection of InventorySlots
  * @author Kevin
+ * @see flixel.rpg.inventory.InventoryItem
+ * @see flixel.rpg.inventory.InventorySlot
  */
 class Inventory
 {
@@ -10,7 +12,7 @@ class Inventory
 
 	public function new() 
 	{		
-		slots = [];
+		slots = []; 		
 	}
 	
 	/**
@@ -86,6 +88,12 @@ class Inventory
 			return true;
 	}
 	
+	/**
+	 * Remove an item of [amount] from the inventory.
+	 * @param	id	id of the item
+	 * @param	amount	count (stack) of item to be removed
+	 * @return	true if sucessful. false if inventory contains not enough [amount]
+	 */
 	public function removeItem(id:Int, amount:Int):Bool
 	{
 		if (countStack(id) < amount)
@@ -140,6 +148,11 @@ class Inventory
 		return null;
 	}
 	
+	/**
+	 * Get the first slot that contains the item [id]
+	 * @param	id
+	 * @return	null if not found
+	 */
 	public function getItemSlot(id:Int):InventorySlot
 	{
 		for (s in slots)
@@ -187,6 +200,9 @@ class Inventory
 		return result.join(",");
 	}
 	
+	/**
+	 * Properly destroys the object
+	 */
 	public function destroy():Void
 	{
 		for (s in slots)

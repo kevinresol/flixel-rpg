@@ -4,8 +4,11 @@ import flixel.rpg.data.Data;
 import haxe.Json;
 
 /**
- * ...
+ * An object representing the items that can be stored in an inventory
  * @author Kevin
+ * @see flixel.rpg.inventory.Inventory
+ * @see flixel.rpg.inventory.InventorySlot
+ * 
  */
 class InventoryItem
 {
@@ -24,7 +27,7 @@ class InventoryItem
 		this.slotType = slotType;
 		this.maxStack = maxStack;
 		this.stack = stack;
-		this.tooltip = tooltip;
+		this.tooltip = tooltip; 
 	}
 	
 	/**
@@ -63,14 +66,24 @@ class InventoryItem
 			return null;		
 	}
 	
+	/**
+	 * If the item stack is full
+	 */
 	public var full(get, never):Bool;
 	private inline function get_full():Bool { return stack == maxStack; }
 	
+	/**
+	 * Debug String
+	 * @return
+	 */
 	public function toString():String
 	{
 		return displayName + " (" + stack + "/" + maxStack + ")";
 	}
 	
+	/**
+	 * Properly destroys the object
+	 */
 	public function destroy():Void
 	{
 		
