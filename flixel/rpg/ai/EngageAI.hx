@@ -1,7 +1,5 @@
 package flixel.rpg.ai;
-import flixel.FlxSprite;
 import flixel.rpg.entity.Entity;
-import flixel.rpg.entity.manager.GroupManager;
 import flixel.util.FlxMath;
 
 /**
@@ -11,6 +9,7 @@ import flixel.util.FlxMath;
 class EngageAI extends AI
 {
 	public var passive:Bool = false;
+	public var returnFire:Bool = true;	
 	public var engageRange:Float = 80;	
 	
 	/**
@@ -18,20 +17,43 @@ class EngageAI extends AI
 	 */
 	public var targets:Array<Entity>;
 	
-	public function new() 
+	public function new(?targets:Array<Entity>) 
 	{
 		super();
+
+		if(targets == null)
+			this.targets = [];
+		else
+			this.targets = targets;
 	}
 	
 	override public function update():Void 
 	{
 		super.update();
+				
+		//Try to aquire a target when currently not engaged
+		if (entity.target == null)
+		{
+			//being attacked, return fire~!
+			if (returnFire && entity.lastHitBy != null)
+				entity.engage(entity.lastHitBy);
+			
+			//Check distance with the potential targets if not yet engaged
+			if (!passive)
+			{
+				for (e in targets)
+				{				
+					if (FlxMath.isDistanceWithin(entity, e, engageRange))
+					{
+						entity.engage(e);
+						break;
+					}
+				}
+			}
+		}
 		
-		//Check distance with the player if not yet engaged
-		if (!passive && entity.target == null && FlxMath.isDistanceWithin(entity, GroupManager.player, engageRange))/* FlxMath.distanceBetween(this, Reg.player) < engageRange*/
-			entity.engage(GroupManager.player);
-		
-		if (entity.target != null)
+		//Update target info
+		else
 		{
 			//target is dead
 			if (!entity.target.alive)

@@ -33,15 +33,16 @@ class BulletCallbacks
 			init();
 			
 		callbackMap.get(bullet.ID)(bullet, hitBox.parent);
+		
+		//For EngageAI's use
+		hitBox.parent.lastHitBy = cast(bullet.weapon.parent);
 	}
 	
 	
 	private static function singleHitAndVanish(bullet:Bullet, target:FlxSprite):Void
 	{
 		bullet.kill();
-		target.hurt(1);
-		
-		engageIfNeeded(bullet, target);
+		target.hurt(1);		
 	}
 	
 	private static function continuousHit(bullet:Bullet, target:FlxSprite):Void
@@ -50,19 +51,9 @@ class BulletCallbacks
 		{
 			target.hurt(1);
 			bullet.reload(target);
-			engageIfNeeded(bullet, target);
 		}
 	}
 	
-	private static inline function engageIfNeeded(bullet:Bullet, target:FlxSprite):Void
-	{
-		if (Std.is(target, Enemy))
-		{
-			var e = cast(target, Enemy);
-			if (!e.engaged)
-				e.engage(cast(bullet.weapon.parent));
-		}
-	}
 	
 	
 }

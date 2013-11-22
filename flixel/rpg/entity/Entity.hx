@@ -1,5 +1,4 @@
 package flixel.rpg.entity;
-import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
@@ -17,7 +16,8 @@ class Entity extends FlxSprite
 	public var hitBox:HitBox;
 	public var pickupBox:HitBox;
 	
-	public var target(default, null):FlxSprite;
+	public var target(default, null):Entity;
+	public var lastHitBy:Entity;
 	
 	public var engaged(get, never):Bool;
 	private inline function get_engaged():Bool { return target != null;}
