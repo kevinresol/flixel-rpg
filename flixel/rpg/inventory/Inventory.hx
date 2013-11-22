@@ -1,5 +1,8 @@
 package flixel.rpg.inventory;
-
+import flixel.rpg.data.Data.TradeItemData;
+import flixel.rpg.entity.factory.Factory;
+import flixel.util.FlxPool;
+using flixel.util.FlxArrayUtil;
 /**
  * An inventory that holds items. A collection of InventorySlots
  * @author Kevin
@@ -8,22 +11,64 @@ package flixel.rpg.inventory;
  */
 class Inventory
 {
-	public var slots:Array<InventorySlot>;
+	private static var pool:FlxPool<Inventory> = new FlxPool<Inventory>();
+	
+	private var slots:Array<InventorySlot>;
 
 	public function new() 
 	{		
 		slots = []; 		
 	}
 	
+	public static function create():Inventory
+	{
+		var inventory = pool.get();
+		inventory.slots = [];
+		return inventory;
+	}
+	
 	/**
-	 * Add some item slots to this inventory
+	 * Put this back into the recycle pool
+	 */
+	public function recycle():Void
+	{
+		for (s in slots)
+			s.recycle();		
+		
+		pool.put(this);
+	}
+	
+	/**
+	 * Add an item slot to this inventory
+	 * @param	slot
+	 */
+	public inline function addSlot(slot:InventorySlot):Void
+	{
+		slots.push(slot);
+	}
+	
+	/**
+	 * Create some empty slots of the specified type and add to this inventory
 	 * @param	type
 	 * @param	count
 	 */
-	public function addSlot(type:Int, count:Int = 1):Void
+	public function createEmptySlots(type:Int, count:Int = 1):Void
 	{
 		for (i in 0...count)
-			slots.push(new InventorySlot(type));
+		{
+			var slot = InventorySlot.create(type);
+			addSlot(slot);
+		}
+	}
+	
+	/**
+	 * Remove a slot from this inventory
+	 * @param	slot
+	 * @return	false if this inventory does not contain the specified slot 
+	 */
+	public inline function removeSlot(slot:InventorySlot):Bool
+	{
+		return slots.remove(slot);
 	}
 	
 	/**
@@ -33,22 +78,13 @@ class Inventory
 	 * @param	count
 	 * @return	true if successful.
 	 */
-	public function removeSlot(type:Int, count:Int = 1):Bool
+	public function removeEmptySlots(type:Int, count:Int = 1):Bool
 	{
-		var slotsToRemove:Array<InventorySlot> = [];
+		if (countEmptySlot(type) < count)
+			return false;			
 		
-		for (i in 0...count)
-		{
-			var s = getEmptySlot(type);
-			
-			if (s == null)
-				return false;
-			else
-				slotsToRemove.push(s);
-		}
-		
-		for(s in slotsToRemove)
-			slots.remove(s);
+		for(i in 0...count)
+			removeSlot(getEmptySlot(type));
 		
 		return true;
 	}
@@ -115,6 +151,22 @@ class Inventory
 		return true;
 	}
 	
+	
+	/**
+	 * Count number of empty slots of the specified type
+	 * @param	type
+	 * @return
+	 */
+	public function countEmptySlot(type:Int):Int
+	{
+		var count:Int = 0;
+		for (s in slots)
+		{
+			if (s.canHold(type) && s.empty)
+				count++;
+		}
+		return count;
+	}
 	
 	/**
 	 * Get an empty slot of the type.
@@ -200,14 +252,61 @@ class Inventory
 		return result.join(",");
 	}
 	
+	
+	/**
+	 * TODO
+	 * @param	cost
+	 * @param	reward
+	 * @return
+	 */
+	public function canTrade(cost:Array<TradeItemData>, reward:Array<TradeItemData>):Bool
+	{
+		var inventory = clone();
+		
+		//Try to remove the cost from the inventory
+		for (c in cost)
+		{
+			if (!inventory.removeItem(c.id, c.count))
+			{
+				inventory.recycle();
+				return false; //not enough
+			}
+		}		
+		
+		//Try to add the traded items to inventory
+		for (i in reward)
+		{
+			if (!inventory.addItem(Factory.createInventoryItem(i.id, i.count)))
+			{
+				inventory.recycle();
+				return false; //cannot add, not enough space
+			}
+		}
+		
+		inventory.recycle();
+		return true;		
+	}
+	
+	/**
+	 * Clone this inventory and its containing items
+	 * @return	a cloned inventory
+	 */
+	public function clone():Inventory
+	{
+		var inventory = Inventory.create();
+		
+		for (s in slots)
+			inventory.addSlot(s.clone());
+			
+		return inventory;
+	}
+	
+	
 	/**
 	 * Properly destroys the object
 	 */
 	public function destroy():Void
 	{
-		for (s in slots)
-			s.destroy();
-		
 		slots = null;
 	}
 	

@@ -77,7 +77,7 @@ class Data
 			var d:TradeData = 
 			{
 				id: j.id, 
-				item: j.item,
+				reward: j.reward,
 				cost: j.cost
 			}
 			tradeData.push(d);
@@ -102,7 +102,7 @@ class Data
 typedef TradeData = 
 {
 	id:Int,
-	item:Array<TradeItemData>,
+	reward:Array<TradeItemData>,
 	cost:Array<TradeItemData>
 }
 

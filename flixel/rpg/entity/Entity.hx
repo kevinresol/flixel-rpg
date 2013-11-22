@@ -43,8 +43,8 @@ class Entity extends FlxSprite
 		super(x, y);
 		damageOverTime = new DamageOverTime();
 		weapon = new WeaponController(this);		
-		inventory = new Inventory();			
-		equipments = new Inventory();		
+		inventory = Inventory.create();			
+		equipments = Inventory.create();		
 		ai = new AIController(this);
 		
 		hitBox = new HitBox(this, 20, 20);

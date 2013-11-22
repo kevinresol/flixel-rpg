@@ -1,6 +1,7 @@
 package flixel.rpg.inventory;
 import flixel.util.FlxMath;
 import flixel.rpg.data.Data;
+import flixel.util.FlxPool;
 import haxe.Json;
 
 /**
@@ -12,6 +13,8 @@ import haxe.Json;
  */
 class InventoryItem
 {
+	private static var pool:FlxPool<InventoryItem> = new FlxPool<InventoryItem>();
+	
 	public var id(default, null):Int;
 	public var displayName(default, null):String;
 	public var slotType(default, null):Int;
@@ -20,15 +23,41 @@ class InventoryItem
 	public var tooltip(default, null):String;
 	
 
-	public function new(id:Int, displayName:String, slotType:Int, maxStack:Int, stack:Int = 1, tooltip:String = "") 
+	public function new() 
 	{
-		this.id = id;
-		this.displayName = displayName;
-		this.slotType = slotType;
-		this.maxStack = maxStack;
-		this.stack = stack;
-		this.tooltip = tooltip; 
+		
 	}
+	
+	/**
+	 * Create an item or recycle one from the pool
+	 * @param	id
+	 * @param	displayName
+	 * @param	slotType
+	 * @param	maxStack
+	 * @param	stack
+	 * @param	tooltip
+	 * @return
+	 */
+	public static function create(id:Int, displayName:String, slotType:Int, maxStack:Int, stack:Int = 1, tooltip:String = ""):InventoryItem
+	{
+		var item = pool.get();
+		item.id = id;
+		item.displayName = displayName;
+		item.slotType = slotType;
+		item.maxStack = maxStack;
+		item.stack = stack;
+		item.tooltip = tooltip; 
+		return item;
+	}
+	
+	/**
+	 * Put this back into the recycle pool
+	 */
+	public function recycle():Void
+	{
+		pool.put(this);
+	}
+	
 	
 	/**
 	 * Try to stack [item] to [this]. Any remaining stack will remains in the [item]
@@ -60,10 +89,19 @@ class InventoryItem
 		if (stack >= amount)
 		{
 			stack -= amount;
-			return new InventoryItem(id, displayName, slotType, maxStack, amount);
+			return InventoryItem.create(id, displayName, slotType, maxStack, amount);
 		}
 		else 
 			return null;		
+	}
+	
+	/**
+	 * Clone this item
+	 * @return
+	 */
+	public function clone():InventoryItem
+	{
+		return InventoryItem.create(id, displayName, slotType, maxStack, stack, tooltip);
 	}
 	
 	/**

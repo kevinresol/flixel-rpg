@@ -16,7 +16,7 @@ class Factory
 		if (data == null)
 			throw "ID not exist";
 		
-		return new InventoryItem(id, data.displayName, 0, data.maxStack, stack);
+		return InventoryItem.create(id, data.displayName, 0, data.maxStack, stack);
 	}
 	
 	/*public static function createEnemy(id:Int):Enemy

@@ -1,4 +1,5 @@
 package flixel.rpg.inventory;
+import flixel.util.FlxPool;
 
 /**
  * An inventory slot that can hold one InventoryItem.
@@ -8,6 +9,8 @@ package flixel.rpg.inventory;
  */
 class InventorySlot
 {
+	
+	private static var pool:FlxPool<InventorySlot> = new FlxPool<InventorySlot>();
 	/**
 	 * Type of this slot. Only matched Item can be put in this slot
 	 * Type = 0 is a special case, any items can be put.
@@ -27,13 +30,38 @@ class InventorySlot
 	
 	
 	/**
-	 * Constructor
-	 * @param	type
+	 * Do not use this contructor to create an instance.
+	 * Use InventorySlot.create instead.
 	 */
-	public function new(type:Int) 
+	public function new() 
 	{
-		this.type = type;
+		
 	}
+	
+	/**
+	 * Create a slot or recycle one from the pool
+	 * @param	type
+	 * @return
+	 */
+	public static function create(type:Int):InventorySlot
+	{
+		var slot = pool.get();
+		slot.type = type;
+		return slot;
+	}
+	
+	/**
+	 * Put this back into the recycle pool
+	 */
+	public function recycle():Void
+	{
+		if(item != null)
+			item.recycle();
+		
+		pool.put(this);
+	}
+	
+	
 	
 	/**
 	 * Hold the item
@@ -75,11 +103,24 @@ class InventorySlot
 	}
 	
 	/**
+	 * Clone this slot
+	 * @return
+	 */
+	public function clone():InventorySlot
+	{
+		var slot = InventorySlot.create(type);
+		
+		if (item != null)
+			slot.hold(item.clone());
+			
+		return slot;
+	}
+	
+	/**
 	 * Properly destroys the object
 	 */
 	public function destroy():Void
 	{
-		item.destroy();
 		item = null;
 	}
 }
