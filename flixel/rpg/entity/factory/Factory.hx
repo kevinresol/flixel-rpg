@@ -9,7 +9,7 @@ import flixel.rpg.inventory.InventoryItem;
 class Factory
 {
 
-	public static function createInvetoryItem(id:Int, stack:Int):InventoryItem
+	public static function createInventoryItem(id:Int, stack:Int):InventoryItem
 	{
 		var data = Data.getItemData(id);
 		

@@ -33,7 +33,7 @@ class PickupManager extends FlxTypedGroup<Pickup>
 		var pickup = manager.recycle(Pickup);
 			
 		pickup.setPosition(x, y);
-		pickup.assignItem(Factory.createInvetoryItem(id, stack));
+		pickup.assignItem(Factory.createInventoryItem(id, stack));
 		return pickup;
 	}
 	
