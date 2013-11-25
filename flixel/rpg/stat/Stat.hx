@@ -98,6 +98,17 @@ class Stat
 		}
 	}
 	
+	public function destroy():Void
+	{
+		for (m in modifiers)
+		{
+			m.destroy();
+		}
+		
+		statController = null;
+		modifiers = null;
+	}
+	
 	
 	
 }
