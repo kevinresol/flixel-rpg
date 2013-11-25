@@ -10,71 +10,71 @@ class StatModifier
 	
 	public var modifierFunction:Stat->Stat->Void;
 	
-	public var dependerStat(default, set):Stat;
-	private function set_dependerStat(v:Stat):Stat
-	{		
-		if (dependerStat == v)
-			return v;
-		
-		//In dependee's point of view, depender has changed
-		if (dependeeStat != null)
+	public var modfiedStat(default, set):Stat;
+	private function set_modfiedStat(v:Stat):Stat
+	{
+		if (modfiedStat == v)
 		{
-			if (dependerStat != null) 
-				dependeeStat.removeDepender(dependerStat);	
-				
-			if (v != null)
-				dependeeStat.addDepender(v);
+			return v;
 		}
 		
-		if (dependerStat != null) 
-			dependerStat.removeModifier(this);
-			
 		if (v != null)
-			v.addModifier(this);
-		
-		
-		//invalidate the new depender
-		if(v != null)
+		{
 			v.invalidate();
-				
-		return dependerStat = v;
+		}
+		
+		return modfiedStat = v;
 	}
 	
 	/**
 	 * Depender depends on a dependee.
 	 */
-	public var dependeeStat(default, set):Stat;
-	private function set_dependeeStat(v:Stat):Stat
+	public var modfierStat(default, set):Stat;
+	private function set_modfierStat(v:Stat):Stat
 	{
-		if (dependeeStat == v)
-			return v;
-		
-		//In depender's point of view, dependee has changed
-		if (dependerStat != null)
+		if (modfierStat == v)
 		{
-			if(dependeeStat != null)
-				dependeeStat.removeDepender(dependerStat);
-			
-			if (v != null)
-				v.addDepender(dependerStat);
-			
-			//invalidate the (current, unchanged) depender
-			dependerStat.invalidate();
-		}			
+			return v;
+		} 
 		
-		return dependeeStat = v;
+		if (modfiedStat != null)
+		{
+			modfiedStat.invalidate();
+		}
+		
+		return modfierStat = v;
 	}
 	
-	public function new(modiferFunction:Stat->Stat->Void, ?dependerStat:Stat, ?dependeeStat:Stat) 
+	/**
+	 * 
+	 * @param	modiferFunction	modifiedStat->modifierStat->Void
+	 * @param	?modfiedStat	depender is modified by dependee
+	 * @param	?modfierStat	dependee modifies depender
+	 */
+	public function new(modiferFunction:Stat->Stat->Void, ?modfiedStat:Stat, ?modfierStat:Stat) 
 	{		
 		this.modifierFunction = modiferFunction;
-		this.dependerStat = dependerStat;
-		this.dependeeStat = dependeeStat;
+		this.modfiedStat = modfiedStat;
+		this.modfierStat = modfierStat;
+		
+		modfiedStat.addModifier(this);
+		modfierStat.addModifier(this);
 	}	
 	
 	public function modify():Void
 	{
-		modifierFunction(dependerStat, dependeeStat);
+		modifierFunction(modfiedStat, modfierStat);
+	}
+	
+	public function destroy():Void
+	{
+		modfiedStat.removeModifier(this);
+		modfierStat.removeModifier(this);
+		
+		modifierFunction = null;
+		modfiedStat = null;
+		modfierStat = null;
+		
 	}
 	
 }

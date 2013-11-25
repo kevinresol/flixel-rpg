@@ -13,7 +13,7 @@ class Stat
 	
 	public var intrinsicValue:Int;
 	
-	public var effectiveValue(default, null):Int;
+	public var effectiveValue:Int;
 	
 	public var maxValue:Int;
 	
@@ -23,18 +23,14 @@ class Stat
 	
 	private var modifiers:Array<StatModifier>;
 	
-	public var dependerStats:Array<Stat>;
-	
-	
-	
 	public function new(intrinsicValue:Int, maxValue:Int, minValue:Int) 
 	{
 		this.intrinsicValue = intrinsicValue;
+		
 		this.maxValue = maxValue;
 		this.minValue = minValue;
 		
 		modifiers = [];
-		dependerStats = [];
 	}	
 	
 	
@@ -45,24 +41,9 @@ class Stat
 	
 	public function removeModifier(modifier:StatModifier):Void
 	{
-		modifier.remove(modifier);
+		modifiers.remove(modifier);
 	}
 	
-	public function addDepender(depender:Stat):Void
-	{
-		if (depender == null)
-			throw "Stat.addDepender() - depender cannot be null";
-			
-		dependerStats.push(depender);
-	}
-	
-	public function removeDepender(depender:Stat):Void
-	{
-		if (depender == null)
-			throw "Stat.removeDepender() - depender cannot be null";
-			
-		dependerStats.remove(depender);
-	}
 	
 	public function validate():Void
 	{
@@ -70,11 +51,13 @@ class Stat
 		if (isValid)
 			return;
 		
-		//Recursively refresh all stats that are depended on by this stat
+		//Recursively validate all stats that are depended on by this stat
 		for (m in modifiers)
 		{
-			if (!m.dependeeStat.isValid)
-				m.dependeeStat.validate();
+			if (m.modfiedStat == this && !m.modfierStat.isValid)
+			{
+				m.modfierStat.validate();
+			}
 		}		
 		
 		//Revert to base value
@@ -82,7 +65,12 @@ class Stat
 		
 		//Start updating according to the modifier formulas
 		for (m in modifiers)
-			m.modifierFunction(this, m.dependeeStat);
+		{
+			if (m.modfiedStat == this)
+			{
+				m.modify();
+			}
+		}
 		
 		//Bound the value
 		if (effectiveValue > maxValue) effectiveValue = maxValue;
@@ -100,8 +88,14 @@ class Stat
 			
 		isValid = false;
 		
-		for (s in dependerStats)
-			s.invalidate();
+		//Invalidates all stats that depend on this
+		for (m in modifiers)
+		{
+			if (m.modfierStat == this)
+			{
+				m.modfiedStat.invalidate();
+			}
+		}
 	}
 	
 	
