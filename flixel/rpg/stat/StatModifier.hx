@@ -57,19 +57,20 @@ class StatModifier
 		this.modfiedStat = modfiedStat;
 		this.modfierStat = modfierStat;
 		
-		modfiedStat.addModifier(this);
-		modfierStat.addModifier(this);
+		if (modfiedStat != null) modfiedStat.addModifier(this);
+		if (modfierStat != null) modfierStat.addModifier(this);
 	}	
 	
 	public function modify():Void
 	{
-		modifierFunction(modfiedStat, modfierStat);
+		if (modfiedStat != null && modfierStat != null) 
+			modifierFunction(modfiedStat, modfierStat);
 	}
 	
 	public function destroy():Void
 	{
-		modfiedStat.removeModifier(this);
-		modfierStat.removeModifier(this);
+		if (modfiedStat != null) modfiedStat.removeModifier(this);
+		if (modfierStat != null) modfierStat.removeModifier(this);
 		
 		modifierFunction = null;
 		modfiedStat = null;
