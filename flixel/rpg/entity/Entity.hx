@@ -4,6 +4,7 @@ import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.inventory.Inventory;
+import flixel.rpg.stat.StatController;
 import flixel.rpg.system.HitBox;
 import flixel.util.FlxTimer;
 
@@ -23,6 +24,7 @@ class Entity extends FlxSprite
 	private inline function get_engaged():Bool { return target != null;}
 	
 	public var ai:AIController;	
+	public var stat:StatController;
 	public var inventory:Inventory;
 	public var equipments:Inventory;
 	public var damageOverTime:DamageOverTime;
@@ -46,6 +48,7 @@ class Entity extends FlxSprite
 		inventory = Inventory.create();			
 		equipments = Inventory.create();		
 		ai = new AIController(this);
+		stat = new StatController();
 		
 		hitBox = new HitBox(this, 20, 20);
 		pickupBox = new HitBox(this, 70, 70);
