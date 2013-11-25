@@ -10,7 +10,35 @@ class StatModifier
 	
 	public var modifierFunction:Stat->Stat->Void;
 	
-	public var dependerStat:Stat
+	public var dependerStat(default, set):Stat;
+	private function set_dependerStat(v:Stat):Stat
+	{		
+		if (dependerStat == v)
+			return v;
+		
+		//In dependee's point of view, depender has changed
+		if (dependeeStat != null)
+		{
+			if (dependerStat != null) 
+				dependeeStat.removeDepender(dependerStat);	
+				
+			if (v != null)
+				dependeeStat.addDepender(v);
+		}
+		
+		if (dependerStat != null) 
+			dependerStat.removeModifier(this);
+			
+		if (v != null)
+			v.addModifier(this);
+		
+		
+		//invalidate the new depender
+		if(v != null)
+			v.invalidate();
+				
+		return dependerStat = v;
+	}
 	
 	/**
 	 * Depender depends on a dependee.
