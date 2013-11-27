@@ -1,8 +1,8 @@
 package flixel.rpg.state;
 
 import flixel.FlxState;
-import flixel.rpg.display.fow.FogOfWar;
-import flixel.rpg.display.fow.Light;
+import flixel.rpg.display.lighting.Darkness;
+import flixel.rpg.display.lighting.Lighting;
 
 /**
  * ...
@@ -13,7 +13,7 @@ class GameState extends FlxState
 
 	public var hud:HUDSubState;
 	
-	public var fogOfWar:FogOfWar;
+	public var lighting:Lighting;
 	
 	public function new() 
 	{
@@ -22,15 +22,21 @@ class GameState extends FlxState
 		setSubState(hud);
 	}	
 	
-	public function enableFogOfWar(color:UInt):Void
+	public function enableLighting(color:UInt):Void
 	{
-		if (fogOfWar != null)
+		if (lighting != null)
 			return;
 		
-		fogOfWar = new FogOfWar(this, color);		
-		add(fogOfWar);
+		lighting = new Lighting(this, color);
 	}
 	
+	override public function update():Void 
+	{
+		if (lighting != null)
+			lighting.update();
+			
+		super.update();
+	}
 	
 	
 	public var paused(default, set):Bool;
