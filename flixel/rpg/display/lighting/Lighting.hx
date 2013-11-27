@@ -24,8 +24,8 @@ class Lighting
 
 	/**
 	 * Constructor
-	 * @param	state
-	 * @param	darknessColor
+	 * @param	state	the state that this Lighting system is hooked to
+	 * @param	darknessColor	color of the darkness, with alpha channel. e.g. 0xaa000000
 	 */
 	public function new(state:FlxState, darknessColor:UInt) 
 	{		

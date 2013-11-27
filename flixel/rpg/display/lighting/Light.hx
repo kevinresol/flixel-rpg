@@ -2,26 +2,48 @@ package flixel.rpg.display.lighting;
 
 import flash.display.BitmapData;
 import flash.display.BlendMode;
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import flixel.util.FlxGradient;
 import flixel.util.FlxPoint;
-import flixel.util.FlxSpriteUtil;
 
 /**
- * ...
+ * A light to be used in the lighting system
  * @author Kevin
  */
 class Light extends FlxSprite
 {
+	/**
+	 * A reference to darkness for stamp()
+	 */
 	public var darkness:Darkness;
+	
+	/**
+	 * A flag to indicate if this sprite has moved since last update
+	 */
 	public var moved:Bool;
+	
+	/**
+	 * A flag to indicate if this sprite has to redraw in next draw()
+	 */
 	public var needToDraw:Bool;
 
+	/**
+	 * Store previous location
+	 */
 	private var prevScreenXY:FlxPoint;
+	
+	/**
+	 * Helper point to fetch current location
+	 */
 	private var screenXY:FlxPoint;
+	
+	/**
+	 * Helper variable to save the half of width
+	 */
 	private var halfWidth:Float;
+	
+	/**
+	 * Helper variable to save the half of height
+	 */
 	private var halfHeight:Float;
 	
 	/**
@@ -36,9 +58,10 @@ class Light extends FlxSprite
 	}
 	
 	/**
-	 * Create a new BitmapData object of the specified size and assign it to this.pixels
+	 * Resize this.pixels
 	 * @param	width
 	 * @param	height
+	 * @param	newBitmapData	true to create a new BitmapData object
 	 */
 	private function resizePixels(width:Int, height:Int, newBitmapData:Bool = true):Void
 	{		
