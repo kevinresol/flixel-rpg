@@ -70,5 +70,20 @@ class Lighting
 		
 	}
 	
+	public function removeDynamicLight(light:Light):Void
+	{
+		
+	}
+	
+	public function addStaticLight(light:Light):Void
+	{
+		
+	}
+	
+	public function removeStaticLight(light:Light):Void
+	{
+		
+	}
+	
 	
 }

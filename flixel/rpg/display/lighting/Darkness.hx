@@ -54,6 +54,11 @@ class Darkness extends FlxSprite
 		super.draw();
 	}
 	
+	override public function destroy():Void 
+	{
+		super.destroy();
+		rect = null;
+	}
 	
 	
 }

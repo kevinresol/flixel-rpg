@@ -95,4 +95,12 @@ class Light extends FlxSprite
 		
 	}
 	
+	override public function destroy():Void 
+	{
+		super.destroy();
+		darkness = null;
+		prevScreenXY = null;
+		screenXY = null;
+	}
+	
 }
