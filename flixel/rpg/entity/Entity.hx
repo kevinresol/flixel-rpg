@@ -1,4 +1,5 @@
 package flixel.rpg.entity;
+import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
