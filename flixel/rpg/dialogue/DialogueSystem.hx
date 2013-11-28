@@ -56,13 +56,13 @@ class DialogueSystem
 	
 	private inline function setCurrent(dialogue:Dialogue):Void
 	{		
-		if (current == dialogue)
-			return;
+		if (current != dialogue)
+		{			
+			current = dialogue;
 			
-		current = dialogue;
-		
-		if (onChange != null)
-			onChange();	
+			if (onChange != null)
+				onChange();	
+		}
 	}
 	
 	private function get(id:Int):Dialogue
