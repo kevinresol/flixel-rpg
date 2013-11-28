@@ -9,6 +9,9 @@ class Data
 {
 
 	public static var weaponData:Array<WeaponData>;
+	public static var itemData:Array<InventoryItemData>;
+	public static var tradeData:Array<TradeData>;
+	
 	public static function loadWeaponData(data:String):Void
 	{
 		weaponData = Json.parse(data);
@@ -16,6 +19,9 @@ class Data
 	
 	public static function getWeaponData(id:Int):WeaponData
 	{
+		if (weaponData == null)
+			throw "loadWeaponData first";
+			
 		for (w in weaponData)
 		{
 			if (w.id == id)
@@ -25,7 +31,6 @@ class Data
 	}
 	
 	
-	public static var itemData:Array<InventoryItemData>;
 	
 	/**
 	 * Load item data from json string. Call once and only once before any use 
@@ -34,21 +39,7 @@ class Data
 	 */
 	public static function loadItemData(data:String):Void
 	{
-		if (itemData != null)
-			throw "Only loadItemData once";
-		
-		itemData = [];
-		
-		for (j in cast(Json.parse(data), Array<Dynamic>))
-		{
-			var d:InventoryItemData = 
-			{
-				id: j.id, 
-				displayName: j.displayName,
-				maxStack: j.maxStack
-			}
-			itemData.push(d);
-		}
+		itemData = Json.parse(data);
 	}
 	
 	public static function getItemData(id:Int):InventoryItemData
@@ -64,30 +55,15 @@ class Data
 		return null;
 	}
 	
-	public static var tradeData:Array<TradeData>;
 	public static function loadTradeData(data:String):Void
 	{
-		if (tradeData != null)
-			throw "Only loadTradeData once";
-		
-		tradeData = [];
-		
-		for (j in cast(Json.parse(data), Array<Dynamic>))
-		{
-			var d:TradeData = 
-			{
-				id: j.id, 
-				reward: j.reward,
-				cost: j.cost
-			}
-			tradeData.push(d);
-		}
+		tradeData = Json.parse(data);		
 	}
 	
 	public static function getTradeData(id:Int):TradeData
 	{
 		if (tradeData == null)
-			throw "LoadTradeData first";
+			throw "loadTradeData first";
 			
 		for (d in tradeData)
 		{
