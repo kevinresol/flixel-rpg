@@ -33,9 +33,14 @@ class GameState extends FlxState
 	public function new() 
 	{
 		super();	
+	}	
+	
+	override public function create():Void 
+	{
+		super.create();
 		hud = new HUDSubState();
 		setSubState(hud);
-	}	
+	}
 	
 	/**
 	 * Enable the lighting system
