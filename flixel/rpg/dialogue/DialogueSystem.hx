@@ -1,4 +1,6 @@
 package flixel.rpg.dialogue;
+import flixel.rpg.requirement.IRequirement;
+import flixel.rpg.requirement.ItemRequirement;
 import haxe.Json;
 
 /**
@@ -35,10 +37,24 @@ class DialogueSystem
 			dialogues.push(dialogue);
 			
 			//create the responses objects
-			for (r in dialogueData.responses)
+			for (responseData in dialogueData.responses)
 			{
-				var action = Reflect.field(dialogueActions, r.action);
-				dialogue.responses.push(new DialogueResponse(r.text, action, r.actionParams));
+				//map the function object
+				var action = Reflect.field(dialogueActions, responseData.action);
+				
+				//create array of requirements
+				var requirements:Array<IRequirement> = [];
+				for (requirementData in responseData.requirements)
+				{
+					//fetch the class reference
+					var type = getRequirementClass(requirementData.type);
+					
+					//create and push the requirement object
+					requirements.push(Type.createInstance(type, requirementData.params));
+				}
+				
+				//create and push the response object
+				dialogue.responses.push(new DialogueResponse(responseData.text, action, responseData.actionParams, requirements));
 			}
 		}
 	}
@@ -74,6 +90,20 @@ class DialogueSystem
 		}
 		return null;
 	}
+	
+	/**
+	 * Get the class reference of the specified requirement type. Currently supported type: "item" -> ItemRequirement
+	 * @param	type
+	 * @return
+	 */
+	private function getRequirementClass(type:String):Class<IRequirement>
+	{
+		switch(type)
+		{
+			case "item": 	return ItemRequirement;
+			default: 		throw "Requriement type not supported";				
+		}
+	}
 }
 
 typedef DialogueData = 
@@ -89,5 +119,12 @@ typedef ResponseData =
 {
 	text:String, 
 	action:String, 
-	actionParams:Array<Dynamic>
+	actionParams:Array<Dynamic>,
+	requirements:Array<RequirementData>
+}
+
+typedef RequirementData = 
+{
+	type:String,
+	params:Array<Dynamic>
 }
