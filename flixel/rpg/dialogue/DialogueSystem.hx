@@ -1,4 +1,5 @@
 package flixel.rpg.dialogue;
+import flixel.rpg.dialogue.DialogueSystem.RequirementData;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.ItemRequirement;
 import haxe.Json;
@@ -45,12 +46,10 @@ class DialogueSystem
 				//create array of requirements
 				var requirements:Array<IRequirement> = [];
 				for (requirementData in responseData.requirements)
-				{
-					//fetch the class reference
-					var type = getRequirementClass(requirementData.type);
-					
+				{					
 					//create and push the requirement object
-					requirements.push(Type.createInstance(type, requirementData.params));
+					var requirement = createRequirement(requirementData);
+					requirements.push(requirement);
 				}
 				
 				//create and push the response object
@@ -91,18 +90,15 @@ class DialogueSystem
 		return null;
 	}
 	
-	/**
-	 * Get the class reference of the specified requirement type. Currently supported type: "item" -> ItemRequirement
-	 * @param	type
-	 * @return
-	 */
-	private function getRequirementClass(type:String):Class<IRequirement>
-	{
-		switch(type)
+	
+	private function createRequirement(data:RequirementData):IRequirement
+	{		
+		switch(data.type)
 		{
-			case "item": 	return ItemRequirement;
+			case "item": 	return new ItemRequirement(data.id, data.count);
 			default: 		throw "Requriement type not supported";				
 		}
+		
 	}
 }
 
@@ -126,5 +122,6 @@ typedef ResponseData =
 typedef RequirementData = 
 {
 	type:String,
-	params:Array<Dynamic>
+	?id:Int,
+	?count:Int
 }
