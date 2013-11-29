@@ -5,7 +5,7 @@ import flixel.FlxState;
  * A system providing lighting effects
  * @author Kevin
  */
-class Lighting
+class LightingSystem
 {
 	/**
 	 * The darkess that cover the whole screen

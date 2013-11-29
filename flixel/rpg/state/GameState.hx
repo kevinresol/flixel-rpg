@@ -4,7 +4,7 @@ import flixel.FlxState;
 import flixel.rpg.dialogue.DialogueActions;
 import flixel.rpg.dialogue.DialogueSystem;
 import flixel.rpg.display.lighting.Darkness;
-import flixel.rpg.display.lighting.Lighting;
+import flixel.rpg.display.lighting.LightingSystem;
 
 /**
  * ...
@@ -20,7 +20,7 @@ class GameState extends FlxState
 	/**
 	 * The Lighting object. Call enableLighting() before accessing this object
 	 */
-	private var lighting:Lighting;
+	private var lighting:LightingSystem;
 	
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
@@ -51,7 +51,7 @@ class GameState extends FlxState
 		if (lighting != null)
 			return;
 		
-		lighting = new Lighting(this, color);
+		lighting = new LightingSystem(this, color);
 	}
 	
 	/**
