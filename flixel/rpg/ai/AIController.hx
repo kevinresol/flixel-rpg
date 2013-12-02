@@ -9,7 +9,16 @@ using Lambda;
  */
 class AIController
 {
+	/**
+	 * @private
+	 * The parent entity
+	 */
 	private var entity:Entity;
+	
+	/**
+	 * @private
+	 * List of the added AI's
+	 */
 	private var aiList:Map<String, AI>;
 	
 	/**

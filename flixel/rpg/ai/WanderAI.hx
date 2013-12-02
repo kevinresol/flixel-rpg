@@ -6,12 +6,11 @@ import flixel.util.FlxTimer;
 import flixel.util.FlxVelocity;
 
 /**
- * Allow the entity to wander (move randomly) around. Stop for a moment, and wanders again
+ * An AI that allows the entity to wander (move randomly) around. Stop for a moment, and wanders again
  * @author Kevin
  */
 class WanderAI extends AI
 {
-	//public static inline var MODE_
 	
 	/**
 	 * Time interval between wanders. In seconds.
@@ -45,17 +44,62 @@ class WanderAI extends AI
 	 */
 	public var radius:Float = 25;
 	
+	/**
+	 * @private
+	 * Flag to indicate if the entity is in wandering mode. Basically it means
+	 * that the entity is not "actively" moving. Note that the entity may be standing still
+	 * even isWandering == true, because there is a pause between each wander moves. 
+	 */
 	private var isWandering:Bool;
+	
+	/**
+	 * @private
+	 * The time interval to next wander move
+	 */
 	private var nextWanderInterval:Float;
+	
+	/**
+	 * @private
+	 * The center point of wander. The entity will wander around this point
+	 */
 	private var wanderCenter:FlxPoint;
 	
+	/**
+	 * @private
+	 * The elpased time since last wander move. Used with nextWanderInterval to
+	 * trigger next mvoe
+	 */
 	private var timeSinceLastMove:Float = 0;	
+	
+	/**
+	 * @private
+	 * X location of previous frame. Used to determine if the entity is moving.
+	 * Used by timeSinceLastMove
+	 */
 	private var prevX:Float;
+	
+	/**
+	 * @private
+	 * Y location of previous frame. Used to determine if the entity is moving.
+	 * Used by timeSinceLastMove
+	 */
 	private var prevY:Float;
 	
+	/**
+	 * @private
+	 * The target location of a wander move
+	 */
 	private var targetLocation:FlxPoint; 
+	
+	/**
+	 * @private
+	 * A timer to stop a wander move, so that it will stop at the targetLocation
+	 */
 	private var stopTimer:FlxTimer;
 
+	/**
+	 * Constructor
+	 */
 	public function new() 
 	{
 		super();
@@ -64,6 +108,9 @@ class WanderAI extends AI
 		wanderCenter = new FlxPoint();
 	}
 	
+	/**
+	 * Override
+	 */
 	override public function update():Void 
 	{
 		super.update();

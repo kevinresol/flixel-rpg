@@ -3,20 +3,36 @@ import flixel.rpg.entity.Entity;
 import flixel.util.FlxMath;
 
 /**
- * Engages the player when it get too close or when it is being attacked
+ * An AI that engages the player (TODO: or a list of targets) when the parent entity
+ * gets too close or when the parent entity is being attacked
  * @author Kevin
  */
 class EngageAI extends AI
 {
+	/**
+	 * Passive entity will not engage by itself.
+	 */
 	public var passive:Bool = false;
+	
+	/**
+	 * Engage upon being attacked
+	 */
 	public var returnFire:Bool = true;	
+	
+	/**
+	 * Engage range of this entity, only relevant when 'passive' is set to false
+	 */
 	public var engageRange:Float = 80;	
 	
 	/**
-	 * TODO
+	 * TODO: A list of targets to check against. Engage if any of them is in range
 	 */
 	public var targets:Array<Entity>;
 	
+	/**
+	 * Constructor
+	 * @param	?targets
+	 */
 	public function new(?targets:Array<Entity>) 
 	{
 		super();
@@ -27,6 +43,9 @@ class EngageAI extends AI
 			this.targets = targets;
 	}
 	
+	/**
+	 * Override
+	 */
 	override public function update():Void 
 	{
 		super.update();
