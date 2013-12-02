@@ -28,7 +28,7 @@ class RpgEngine
 		//Don't shoot through walls
 		FlxG.collide(GroupManager.bullets, GroupManager.level.blocks, bulletCollideWall);
 		
-		//Shoot!
+		//Bullets should hit the target!
 		FlxG.overlap(GroupManager.allyBullets, GroupManager.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
 		FlxG.overlap(GroupManager.enemyBullets, GroupManager.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
 		

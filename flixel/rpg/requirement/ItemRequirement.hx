@@ -3,19 +3,37 @@ import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.inventory.Inventory;
 
 /**
- * ...
+ * A requirement that is fulfilled by possessing the specified item
  * @author Kevin
  */
 class ItemRequirement implements IRequirement
 {
+	/**
+	 * The inventory to check
+	 */
 	public var inventory:Inventory;
+	
+	/**
+	 * The item id
+	 */
 	public var id:Int;
+	
+	/**
+	 * Required amount of the item
+	 */
 	public var count:Int;
 
-	public function new(id:Int, count:Int) 
+	/**
+	 * Constructor 
+	 * @param	id	Item id
+	 * @param	count	Required amount of the item
+	 * @param	inventory	
+	 */
+	public function new(id:Int, count:Int, ?inventory:Inventory) 
 	{
 		this.id = id;
 		this.count = count;
+		this.inventory = inventory;
 	}
 	
 	/* INTERFACE flixel.rpg.requirement.IRequirement */

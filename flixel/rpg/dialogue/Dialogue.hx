@@ -6,8 +6,19 @@ using flixel.util.FlxArrayUtil;
  */
 class Dialogue
 {
+	/**
+	 * ID is good
+	 */
 	public var id:Int;
+	
+	/**
+	 * Name (of the speaker?)
+	 */
 	public var name:String;
+	
+	/**
+	 * The actual dialogue contents
+	 */
 	public var text:String;	
 	
 	/**
@@ -59,7 +70,7 @@ class Dialogue
 	
 	/**
 	 * Respond to this dialogue
-	 * @param	response	A DialogueResponse object
+	 * @param	response	A DialogueResponse object. Must belong to this dialogue object.
 	 */
 	public function respond(response:DialogueResponse):Void
 	{		

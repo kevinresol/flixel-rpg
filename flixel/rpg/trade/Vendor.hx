@@ -4,16 +4,16 @@ import flixel.rpg.entity.factory.Factory;
 import flixel.rpg.inventory.Inventory;
 
 /**
- * ...
+ * A Vendor can trade items.
  * @author Kevin
  */
 class Vendor
 {
 	/**
-	 * 
+	 * Trade items
 	 * @param	invetory
 	 * @param	id trade id (defined by loadTradeData)
-	 * @return
+	 * @return	return true if the trade is successful
 	 */
 	public static function trade(inventory:Inventory, id:Int):Bool
 	{

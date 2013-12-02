@@ -5,20 +5,46 @@ import flixel.rpg.requirement.ItemRequirement;
 import haxe.Json;
 
 /**
- * ...
+ * A dialogue system.
  * @author Kevin
  */
 class DialogueSystem
 {
+	/**
+	 * @private
+	 * A reference to the DialogueAction object
+	 */
 	private var dialogueActions:DialogueActions;
+	
+	/**
+	 * @private
+	 * A list of dialogues
+	 */
 	private var dialogues:Array<Dialogue>;
 	
+	/**
+	 * A callback to be called when a dialogue changes
+	 */
 	public var onChange:Void->Void;
+	
+	/**
+	 * The current dialogue
+	 */
 	public var current(default, null):Dialogue;
 	
-	public function new(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void) 
+	/**
+	 * Constructor
+	 * @param	data	json data
+	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions.
+	 * 									Default is DialogueActions
+	 * @param	?onChange	callback on dialogue change
+	 */
+	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void) 
 	{
 		this.onChange = onChange;
+		
+		if (dialogueActionsClass == null)
+			dialogueActionsClass = DialogueActions;
 		
 		dialogueActions = Type.createInstance(dialogueActionsClass, []);
 		dialogueActions.system = this;
@@ -26,6 +52,10 @@ class DialogueSystem
 		load(data);
 	}
 	
+	/**
+	 * Create dialogue objects from a data string (json)
+	 * @param	data
+	 */
 	private function load(data:String):Void
 	{
 		dialogues = [];
@@ -58,17 +88,29 @@ class DialogueSystem
 		}
 	}
 	
+	/**
+	 * Set current dialogue to the specified id
+	 * @param	id
+	 */
 	public function display(id:Int):Void
 	{
 		setCurrent(get(id));
 			
 	}
 	
+	/**
+	 * Set current dialogue to null
+	 */
 	public function end():Void
 	{
 		setCurrent(null);
 	}
 	
+	/**
+	 * @private
+	 * Internal function to set the current dialogue, will call the onChange callback if there is a change
+	 * @param	dialogue
+	 */
 	private inline function setCurrent(dialogue:Dialogue):Void
 	{		
 		if (current != dialogue)
@@ -80,6 +122,12 @@ class DialogueSystem
 		}
 	}
 	
+	/**
+	 * @private
+	 * Get the dialogue object of the specified id
+	 * @param	id
+	 * @return
+	 */
 	private function get(id:Int):Dialogue
 	{
 		for (d in dialogues)
@@ -90,7 +138,12 @@ class DialogueSystem
 		return null;
 	}
 	
-	
+	/**
+	 * @private
+	 * Internal function for creating a Requirement Object
+	 * @param	data
+	 * @return
+	 */
 	private function createRequirement(data:RequirementData):IRequirement
 	{		
 		switch(data.type)
@@ -101,6 +154,7 @@ class DialogueSystem
 		
 	}
 }
+
 
 typedef DialogueData = 
 {

@@ -3,18 +3,32 @@ import flixel.util.FlxTimer;
 import flixel.rpg.entity.Entity;
 using Lambda;
 /**
- * ...
+ * A helper class that cause damage periodically to entities
+ * TODO: rework the whole flow (currently it is confused, DOT is centeralized? or localized (in an entity?), see onTimerTick)
  * @author Kevin
  */
 class DamageOverTime
 {
+	/**
+	 * @private
+	 * A pool of FlxTimer, which is used to cause damage periodically
+	 */
 	private var pool:Array<FlxTimer>;
 	
+	/**
+	 * Constructor
+	 */
 	public function new()
 	{
 		pool = [];
 	}
 	
+	/**
+	 * Return a damage timer of the specified damageType and damage
+	 * @param	damageType
+	 * @param	damage
+	 * @return
+	 */
 	public function get(damageType:Int, damage:Int):FlxTimer
 	{
 		for (t in pool)
@@ -27,7 +41,7 @@ class DamageOverTime
 	
 	/**
 	 * Create a DOT or extend existing (matching damageType & damage)
-	 * @param	character
+	 * @param	entity
 	 * @param	damageType
 	 * @param	damage
 	 * @param	interval
@@ -50,33 +64,53 @@ class DamageOverTime
 		}		
 	}
 	
-	private function add(t:FlxTimer):Void
+	/**
+	 * @private
+	 * Internal function to add a timer to the pool
+	 * @param	timer
+	 */
+	private function add(timer:FlxTimer):Void
 	{
-		pool.push(t);
+		pool.push(timer);
 	}
 	
-	private function remove(t:FlxTimer):Void
+	/**
+	 * @private
+	 * Internal function to remove a timer from the pool
+	 * @param	timer
+	 */
+	private function remove(timer:FlxTimer):Void
 	{
-		var i = pool.indexOf(t);
+		var i = pool.indexOf(timer);
 		pool.splice(i, 1);
 	}
 	
+	/**
+	 * @private	
+	 * Callback for a damage timer. Inflict damage to the entity
+	 * @param	t
+	 */
 	private static function onTimerTick(t:FlxTimer):Void
 	{
 		var entity:Entity = t.userData.entity;
 		entity.hurt(t.userData.damage);
 		
+		//remove the timer if entity is dead or finished all ticks
 		if (!entity.alive || t.elapsedLoops == t.loops)		
 			entity.damageOverTime.remove(t);
-			
+		
+		
 		if (!entity.alive)
 			t.abort();
 			
 		
 	}
 	
-	public var debug(get, never):String;
-	private function get_debug():String
+	/**
+	 * Debug string
+	 * @return
+	 */
+	private function toString():String
 	{
 		var result = new Array<String>();
 		
