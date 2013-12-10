@@ -26,7 +26,7 @@ class DialogueActions
 	 * Display a dialogue.
 	 * @param	id
 	 */
-	public function displayDialogue(id:Int):Void
+	public function displayDialogue(id:String):Void
 	{
 		system.display(id);
 	}

@@ -92,7 +92,7 @@ class DialogueSystem
 	 * Set current dialogue to the specified id
 	 * @param	id
 	 */
-	public function display(id:Int):Void
+	public function display(id:String):Void
 	{
 		setCurrent(get(id));
 			
@@ -128,7 +128,7 @@ class DialogueSystem
 	 * @param	id
 	 * @return
 	 */
-	private function get(id:Int):Dialogue
+	private function get(id:String):Dialogue
 	{
 		for (d in dialogues)
 		{
@@ -158,7 +158,7 @@ class DialogueSystem
 
 typedef DialogueData = 
 {
-	id:Int,
+	id:String,
 	name:String,
 	text:String,
 	responses:Array<ResponseData>

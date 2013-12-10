@@ -9,7 +9,7 @@ class Dialogue
 	/**
 	 * ID is good
 	 */
-	public var id:Int;
+	public var id:String;
 	
 	/**
 	 * Name (of the speaker?)
@@ -60,7 +60,7 @@ class Dialogue
 	 * @param	name
 	 * @param	text
 	 */
-	public function new(id:Int, name:String, text:String) 
+	public function new(id:String, name:String, text:String) 
 	{
 		this.id = id;
 		this.name = name;
