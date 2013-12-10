@@ -20,7 +20,7 @@ class DialogueSystem
 	 * @private
 	 * A list of dialogues
 	 */
-	private var dialogues:Array<Dialogue>;
+	private var dialogues:Map<String, Dialogue>;
 	
 	/**
 	 * A callback to be called when a dialogue changes
@@ -32,6 +32,8 @@ class DialogueSystem
 	 */
 	public var current(default, null):Dialogue;
 	
+	public var requirementFactory:Dynamic->IRequirement;
+	
 	/**
 	 * Constructor
 	 * @param	data	json data
@@ -39,9 +41,10 @@ class DialogueSystem
 	 * 									Default is DialogueActions
 	 * @param	?onChange	callback on dialogue change
 	 */
-	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void) 
+	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:Dynamic->IRequirement) 
 	{
 		this.onChange = onChange;
+		this.requirementFactory = (requirementFactory == null ? createRequirement : requirementFactory);
 		
 		if (dialogueActionsClass == null)
 			dialogueActionsClass = DialogueActions;
@@ -58,14 +61,14 @@ class DialogueSystem
 	 */
 	private function load(data:String):Void
 	{
-		dialogues = [];
+		dialogues = new Map<String, Dialogue>();
 		
 		var data:Array<DialogueData> = Json.parse(data);
 		for (dialogueData in data)
 		{
 			//create the dialogue object
 			var dialogue = new Dialogue(dialogueData.id, dialogueData.name, dialogueData.text);			
-			dialogues.push(dialogue);
+			dialogues.set(dialogue.id, dialogue);
 			
 			//create the responses objects
 			for (responseData in dialogueData.responses)
@@ -78,7 +81,7 @@ class DialogueSystem
 				for (requirementData in responseData.requirements)
 				{					
 					//create and push the requirement object
-					var requirement = createRequirement(requirementData);
+					var requirement = requirementFactory(requirementData);
 					requirements.push(requirement);
 				}
 				
@@ -94,7 +97,7 @@ class DialogueSystem
 	 */
 	public function display(id:String):Void
 	{
-		setCurrent(get(id));
+		setCurrent(dialogues.get(id));
 			
 	}
 	
@@ -122,21 +125,6 @@ class DialogueSystem
 		}
 	}
 	
-	/**
-	 * @private
-	 * Get the dialogue object of the specified id
-	 * @param	id
-	 * @return
-	 */
-	private function get(id:String):Dialogue
-	{
-		for (d in dialogues)
-		{
-			if (d.id == id)
-				return d;
-		}
-		return null;
-	}
 	
 	/**
 	 * @private
@@ -149,7 +137,7 @@ class DialogueSystem
 		switch(data.type)
 		{
 			case "item": 	return new ItemRequirement(data.id, data.count);
-			default: 		throw "Requriement type not supported";				
+			default: 		throw "Requriement type '" + data.type + "' not supported";				
 		}
 		
 	}
