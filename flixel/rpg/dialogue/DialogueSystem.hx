@@ -32,18 +32,24 @@ class DialogueSystem
 	 */
 	public var current(default, null):Dialogue;
 	
+	/**
+	 * A function to create the requirement object from the data
+	 * Signature: 
+		 * param: requirementData:Dynamic
+		 * return: IRequirement instance
+	 */
 	public var requirementFactory:Dynamic->IRequirement;
 	
 	/**
 	 * Constructor
 	 * @param	data	json data
-	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions.
-	 * 									Default is DialogueActions
+	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?onChange	callback on dialogue change
 	 */
 	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:Dynamic->IRequirement) 
 	{
 		this.onChange = onChange;
+		
 		this.requirementFactory = (requirementFactory == null ? createRequirement : requirementFactory);
 		
 		if (dialogueActionsClass == null)
@@ -163,7 +169,8 @@ typedef ResponseData =
 
 typedef RequirementData = 
 {
+	//TODO: should this typedef only has "type" and "params"?
 	type:String,
-	?id:Int,
-	?count:Int
+	?id:Int, //item id
+	?count:Int//item count
 }

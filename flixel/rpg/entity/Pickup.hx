@@ -1,11 +1,9 @@
 package flixel.rpg.entity;
 
 import flixel.FlxSprite;
-import flixel.util.FlxAngle;
-import flixel.util.FlxVelocity;
-import flixel.rpg.entity.factory.Factory;
 import flixel.rpg.inventory.InventoryItem;
 import flixel.rpg.system.HitBox;
+import flixel.util.FlxAngle;
 
 /**
  * ...
