@@ -1,6 +1,5 @@
 package flixel.rpg.requirement;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.inventory.Inventory;
 
 /**

@@ -1,6 +1,6 @@
 package flixel.rpg.inventory;
+import flixel.rpg.core.Data.TradeItemData;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.data.Data.TradeItemData;
 import flixel.util.FlxPool;
 using flixel.util.FlxArrayUtil;
 /**

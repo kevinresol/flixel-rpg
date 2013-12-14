@@ -4,9 +4,7 @@ import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.data.Data;
 import flixel.rpg.entity.Entity;
-import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.weapon.Bullet;
 
 /**
@@ -69,7 +67,7 @@ class WeaponController
 	 */
 	private function createWeapon(id:Int):Void
 	{
-		var wd = Data.getWeaponData(id);
+		var wd = RpgEngine.data.getWeaponData(id);
 		var w = new FlxWeapon(wd.name, entity, Bullet, id);
 		weapons.set(id, w);
 		
@@ -97,7 +95,7 @@ class WeaponController
 		currentWeapon = getWeapon(id);
 		
 		//Get the fireMode of this weapon from data
-		var fireMode:String = Data.getWeaponData(id).fireMode;
+		var fireMode:String = RpgEngine.data.getWeaponData(id).fireMode;
 		
 		//Reset the fire functions
 		fireWeaponAtMouse = null;

@@ -1,6 +1,4 @@
 package flixel.rpg.trade;
-import flixel.rpg.data.Data;
-import flixel.rpg.entity.factory.Factory;
 import flixel.rpg.inventory.Inventory;
 
 /**

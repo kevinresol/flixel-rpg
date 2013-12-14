@@ -1,6 +1,5 @@
-package flixel.rpg.entity.factory;
+package flixel.rpg.core;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.data.Data;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.inventory.InventoryItem;
 
@@ -17,7 +16,7 @@ class Factory
 
 	public function createInventoryItem(id:Int, stack:Int):InventoryItem
 	{
-		var data = Data.getItemData(id);
+		var data = RpgEngine.data.getItemData(id);
 		
 		if (data == null)
 			throw "ID not exist";

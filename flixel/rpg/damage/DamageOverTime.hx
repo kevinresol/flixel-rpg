@@ -1,6 +1,6 @@
 package flixel.rpg.damage;
-import flixel.util.FlxTimer;
 import flixel.rpg.entity.Entity;
+import flixel.util.FlxTimer;
 using Lambda;
 /**
  * A helper class that cause damage periodically to entities

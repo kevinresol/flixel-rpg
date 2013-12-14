@@ -1,5 +1,4 @@
 package flixel.rpg.ai;
-import flixel.FlxSprite;
 import flixel.rpg.entity.Entity;
 
 /**

@@ -1,9 +1,8 @@
 package flixel.rpg.damage;
 import flixel.FlxSprite;
-import flixel.rpg.data.Data;
-import flixel.rpg.weapon.Bullet;
-import game.entity.Enemy;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.system.HitBox;
+import flixel.rpg.weapon.Bullet;
 
 /**
  * ...
@@ -20,7 +19,7 @@ class BulletCallbacks
 		
 		callbackMap = new Map < Int, Dynamic->Dynamic->Void > ();
 		
-		for (wd in Data.weaponData)
+		for (wd in RpgEngine.data.weaponData)
 		{
 			var f = Reflect.getProperty(BulletCallbacks, wd.collideCallback);
 			callbackMap.set(wd.id, f);

@@ -1,8 +1,5 @@
 package flixel.rpg.entity;
 
-import flixel.addons.display.FlxExtendedSprite;
-import flixel.FlxObject;
-import flixel.util.FlxMath;
 using Lambda;
 
 /**

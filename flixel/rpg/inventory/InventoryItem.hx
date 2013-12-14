@@ -1,8 +1,5 @@
 package flixel.rpg.inventory;
-import flixel.util.FlxMath;
-import flixel.rpg.data.Data;
 import flixel.util.FlxPool;
-import haxe.Json;
 
 /**
  * An object representing the items that can be stored in an inventory

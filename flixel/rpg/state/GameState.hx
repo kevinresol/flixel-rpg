@@ -3,7 +3,6 @@ package flixel.rpg.state;
 import flixel.FlxState;
 import flixel.rpg.dialogue.DialogueActions;
 import flixel.rpg.dialogue.DialogueSystem;
-import flixel.rpg.display.lighting.Darkness;
 import flixel.rpg.display.lighting.LightingSystem;
 
 /**

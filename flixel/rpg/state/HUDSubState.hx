@@ -1,7 +1,5 @@
 package flixel.rpg.state;
 
-import flixel.FlxBasic;
-import flixel.FlxSprite;
 import flixel.FlxSubState;
 
 /**

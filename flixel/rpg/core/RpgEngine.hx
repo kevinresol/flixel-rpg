@@ -3,8 +3,6 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
 import flixel.rpg.display.DamageText;
-import flixel.rpg.entity.factory.Factory;
-import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.weapon.Bullet;
 
@@ -16,12 +14,14 @@ class RpgEngine
 {
 	public static var groups:GroupManager;
 	public static var factory:Factory;
+	public static var data:Data;
 	
 	public static function init(state:FlxState):Void
 	{
 		state.add(groups = new GroupManager());
 		DamageText.init(state);	
 		factory = new Factory();
+		data = new Data();
 	}
 
 	public static function collide():Void

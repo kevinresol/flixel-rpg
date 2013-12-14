@@ -1,4 +1,4 @@
-package flixel.rpg.entity.manager;
+package flixel.rpg.core;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup.FlxTypedGroup;
 import flixel.rpg.entity.Entity;

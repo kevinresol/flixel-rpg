@@ -1,4 +1,4 @@
-package flixel.rpg.data;
+package flixel.rpg.core;
 import haxe.Json;
 
 /**
@@ -8,16 +8,22 @@ import haxe.Json;
 class Data
 {
 
-	public static var weaponData:Array<WeaponData>;
-	public static var itemData:Array<InventoryItemData>;
-	public static var tradeData:Array<TradeData>;
+	public var weaponData:Array<WeaponData>;
+	public var itemData:Array<InventoryItemData>;
+	public var tradeData:Array<TradeData>;
 	
-	public static function loadWeaponData(data:String):Void
+	
+	public function new()
+	{
+		
+	}
+	
+	public function loadWeaponData(data:String):Void
 	{
 		weaponData = Json.parse(data);
 	}
 	
-	public static function getWeaponData(id:Int):WeaponData
+	public function getWeaponData(id:Int):WeaponData
 	{
 		if (weaponData == null)
 			throw "loadWeaponData first";
@@ -37,12 +43,12 @@ class Data
 	 * of StackItem.
 	 * @param	data
 	 */
-	public static function loadItemData(data:String):Void
+	public function loadItemData(data:String):Void
 	{
 		itemData = Json.parse(data);
 	}
 	
-	public static function getItemData(id:Int):InventoryItemData
+	public function getItemData(id:Int):InventoryItemData
 	{
 		if (itemData == null)
 			throw "loadItemData first";
@@ -55,12 +61,12 @@ class Data
 		return null;
 	}
 	
-	public static function loadTradeData(data:String):Void
+	public function loadTradeData(data:String):Void
 	{
 		tradeData = Json.parse(data);		
 	}
 	
-	public static function getTradeData(id:Int):TradeData
+	public function getTradeData(id:Int):TradeData
 	{
 		if (tradeData == null)
 			throw "loadTradeData first";

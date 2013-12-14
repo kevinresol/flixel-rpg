@@ -1,7 +1,6 @@
 package flixel.rpg.ai;
-import flixel.FlxSprite;
-import flixel.rpg.entity.Entity;
 import flixel.rpg.ai.AI;
+import flixel.rpg.entity.Entity;
 using Lambda;
 /**
  * A front end to control various AI for the entity
