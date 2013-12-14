@@ -1,4 +1,5 @@
 package flixel.rpg.ai;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.manager.GroupManager;
 import flixel.util.FlxMath;
 import flixel.util.FlxVelocity;
@@ -37,7 +38,7 @@ class AttackAI extends AI
 			if (entity.recoverState == Entity.STATE_NORMAL)
 			{
 				FlxVelocity.moveTowardsObject(entity, entity.target, Std.int(entity.maxVelocity.x));
-				if (FlxMath.isDistanceWithin(entity, GroupManager.player, attackRange))
+				if (FlxMath.isDistanceWithin(entity, RpgEngine.groups.player, attackRange))
 					entity.weapon.attack();
 			}
 		}

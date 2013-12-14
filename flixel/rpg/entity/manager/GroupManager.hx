@@ -8,80 +8,75 @@ import flixel.rpg.level.Level;
  * ...
  * @author Kevin
  */
-class GroupManager
+class GroupManager extends FlxGroup
 {
-	public static var groups:FlxGroup;
+	public var characters:FlxGroup;	
+	public var allies:FlxGroup;
+	public var enemies:FlxGroup;	
 	
-	public static var characters:FlxGroup;	
-	public static var allies:FlxGroup;
-	public static var enemies:FlxGroup;	
+	public var allyHitBoxes:FlxGroup;
+	public var enemyHitBoxes:FlxGroup;
 	
-	public static var allyHitBoxes:FlxGroup;
-	public static var enemyHitBoxes:FlxGroup;
+	public var bullets:FlxGroup;
+	public var allyBullets:FlxGroup;		
+	public var enemyBullets:FlxGroup;		
 	
-	public static var bullets:FlxGroup;
-	public static var allyBullets:FlxGroup;		
-	public static var enemyBullets:FlxGroup;		
+	public var objects:FlxGroup;		
 	
-	public static var objects:FlxGroup;		
+	public var pickups:PickupManager;
+	public var playerPickupBoxes:FlxGroup;
 	
-	public static var pickups:PickupManager;
-	public static var playerPickupBoxes:FlxGroup;
+	public var player:Entity;
 	
-	public static var player:Entity;
+	public var level:Level;
 	
-	public static var level:Level;
-	
-	public static function init(state:FlxState):Void
+	public function new():Void
 	{		
-		groups = new FlxGroup();
-		
-		groups.add(characters = new FlxGroup());
+		super();
+		add(characters = new FlxGroup());
 		characters.add(allies = new FlxGroup());
 		characters.add(enemies = new FlxGroup());
 		
-		groups.add(allyHitBoxes = new FlxGroup());
-		groups.add(enemyHitBoxes = new FlxGroup());
+		add(allyHitBoxes = new FlxGroup());
+		add(enemyHitBoxes = new FlxGroup());
 		
 		
-		groups.add(bullets = new FlxGroup());
+		add(bullets = new FlxGroup());
 		bullets.add(allyBullets = new FlxGroup());
 		bullets.add(enemyBullets = new FlxGroup());
 		
-		groups.add(objects = new FlxGroup());
+		add(objects = new FlxGroup());
 		
-		groups.add(pickups = new PickupManager());	
-		groups.add(playerPickupBoxes = new FlxGroup());	
-		
-		
-		state.add(groups);		
+		add(pickups = new PickupManager());	
+		add(playerPickupBoxes = new FlxGroup());		
+				
 	}
 	
-	public static function registerLevel(level:Level):Void
+	public function registerLevel(level:Level):Void
 	{
-		GroupManager.level = level;
-		groups.add(level);
+		this.level = level;
+		add(level);
 	}
 	
-	public static function registerPlayer(entity:Entity):Void
+	public function registerPlayer(entity:Entity):Void
 	{
 		registerAlly(entity);
-		GroupManager.player = entity;
-		GroupManager.playerPickupBoxes.add(entity.pickupBox);
+		player = entity;
+		playerPickupBoxes.add(entity.pickupBox);
 	}
 	
-	public static function registerEnemy(entity:Entity):Void
+	public function registerEnemy(entity:Entity):Void
 	{		
-		GroupManager.enemies.add(entity);
-		GroupManager.enemyHitBoxes.add(entity.hitBox);
-		GroupManager.enemyBullets.add(entity.weapon.group);
+		enemies.add(entity);
+		enemyHitBoxes.add(entity.hitBox);
+		enemyBullets.add(entity.weapon.group);
 	}
 	
-	public static function registerAlly(entity:Entity):Void
+	public function registerAlly(entity:Entity):Void
 	{		
-		GroupManager.allies.add(entity);
-		GroupManager.allyHitBoxes.add(entity.hitBox);
-		GroupManager.allyBullets.add(entity.weapon.group);
+		allies.add(entity);
+		allyHitBoxes.add(entity.hitBox);
+		allyBullets.add(entity.weapon.group);
 	}
 	
 }

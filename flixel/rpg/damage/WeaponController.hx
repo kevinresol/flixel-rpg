@@ -3,6 +3,7 @@ import flixel.addons.weapon.FlxBullet;
 import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.data.Data;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.manager.GroupManager;
@@ -81,7 +82,7 @@ class WeaponController
 		w.bulletDamage = wd.bulletDamage;
 		w.group.setAll("reloadTime", wd.bulletReloadTime);
 		
-		w.setBulletBounds(GroupManager.level.blocks.getBounds());
+		w.setBulletBounds(RpgEngine.groups.level.blocks.getBounds());
 		
 		group.add(w.group);
 	}	

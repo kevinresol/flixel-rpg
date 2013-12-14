@@ -13,30 +13,31 @@ import flixel.rpg.weapon.Bullet;
  */
 class RpgEngine
 {
+	public static var groups:GroupManager;
 	
 	public static function init(state:FlxState):Void
 	{
-		GroupManager.init(state);
+		state.add(groups = new GroupManager());
 		DamageText.init(state);	
 	}
 
 	public static function collide():Void
 	{		
 		//Don't walk into walls
-		FlxG.collide(GroupManager.characters, GroupManager.level.blocks);
+		FlxG.collide(groups.characters, groups.level.blocks);
 		
 		//Don't shoot through walls
-		FlxG.collide(GroupManager.bullets, GroupManager.level.blocks, bulletCollideWall);
+		FlxG.collide(groups.bullets, groups.level.blocks, bulletCollideWall);
 		
 		//Bullets should hit the target!
-		FlxG.overlap(GroupManager.allyBullets, GroupManager.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
-		FlxG.overlap(GroupManager.enemyBullets, GroupManager.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
+		FlxG.overlap(groups.allyBullets, groups.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
+		FlxG.overlap(groups.enemyBullets, groups.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
 		
 		//Pickup magnet
-		FlxG.overlap(GroupManager.playerPickupBoxes, GroupManager.pickups, Pickup.moveTowardsPlayer, returnTrue);		
+		FlxG.overlap(groups.playerPickupBoxes, groups.pickups, Pickup.moveTowardsPlayer, returnTrue);		
 		
 		//Take Pickups
-		FlxG.overlap(GroupManager.player, GroupManager.pickups, Pickup.picked , returnTrue);
+		FlxG.overlap(groups.player, groups.pickups, Pickup.picked , returnTrue);
 	}
 	
 	

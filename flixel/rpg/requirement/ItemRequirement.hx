@@ -1,4 +1,5 @@
 package flixel.rpg.requirement;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.manager.GroupManager;
 import flixel.rpg.inventory.Inventory;
 
@@ -46,9 +47,9 @@ class ItemRequirement implements IRequirement
 		//If inventory is not assigned, use the current player's inventory
 		if (inventory == null)
 		{
-			if (GroupManager.player == null)
+			if (RpgEngine.groups.player == null)
 				return false;
-			inventory = GroupManager.player.inventory;
+			inventory = RpgEngine.groups.player.inventory;
 		}
 			
 		//Final validation
