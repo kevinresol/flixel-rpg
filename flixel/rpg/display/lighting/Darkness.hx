@@ -4,8 +4,6 @@ import flash.display.BlendMode;
 import flash.geom.Rectangle;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.util.FlxColor;
 
 /**
  * The darkness to be used in the lighting system
@@ -56,8 +54,8 @@ class Darkness extends FlxSprite
 	
 	override public function destroy():Void 
 	{
-		super.destroy();
 		rect = null;
+		super.destroy();
 	}
 	
 	

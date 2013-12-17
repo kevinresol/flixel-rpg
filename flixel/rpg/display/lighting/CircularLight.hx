@@ -1,5 +1,4 @@
 package flixel.rpg.display.lighting;
-import flash.display.BitmapData;
 import flixel.util.FlxSpriteUtil;
 
 /**
