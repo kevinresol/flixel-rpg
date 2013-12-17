@@ -1,5 +1,5 @@
 package flixel.rpg.ai;
-import flixel.rpg.ai.AI;
+import flixel.rpg.ai.AI.IAI;
 import flixel.rpg.entity.Entity;
 using Lambda;
 /**
@@ -18,7 +18,7 @@ class AIController
 	 * @private
 	 * List of the added AI's
 	 */
-	private var aiList:Map<String, AI>;
+	private var aiList:Map<String, IAI>;
 	
 	/**
 	 * Contructor
@@ -34,12 +34,12 @@ class AIController
 	 * @param	aiName
 	 * @param	ai
 	 */
-	public function add(aiName:String, ai:AI):Void
+	public function add(aiName:String, ai:IAI):Void
 	{
 		ai.entity = entity;
 		
 		if (aiList == null)
-			aiList = new Map<String, AI>();
+			aiList = new Map<String, IAI>();
 			
 		if (aiList.exists(aiName))
 			throw "This name has already been used";
@@ -73,7 +73,7 @@ class AIController
 	 * @param	aiName
 	 * @return
 	 */
-	public function get(aiName:String):AI
+	public function get(aiName:String):IAI
 	{
 		if (aiList == null)
 			return null;

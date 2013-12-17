@@ -1,12 +1,27 @@
 package flixel.rpg.ai;
 import flixel.rpg.entity.Entity;
 
+
+
+
+/**
+ * Interface for AI
+ */
+
+interface IAI
+{
+	public var entity:Entity;
+	public function update():Void;
+	public function destroy():Void;
+}
+
+
 /**
  * This is the core AI class. Extend this to create real functional AI's
  * AI's are added through the AIController, which can be found in the Entity class as "ai"
  * @author Kevin
- */
-class AI
+ */ 
+class AI implements IAI
 {
 	/**
 	 * The parent entity
