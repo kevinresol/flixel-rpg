@@ -12,7 +12,7 @@ import flixel.rpg.display.lighting.LightingSystem;
 class GameState extends FlxState
 {
 	/**
-	 * The HUD sub-state. ALl UI should be added here
+	 * The HUD sub-state. All UI should be added here
 	 */
 	public var hud:HUDSubState;
 	
