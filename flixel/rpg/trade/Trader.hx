@@ -3,10 +3,10 @@ import flixel.rpg.core.Data;
 import flixel.rpg.inventory.Inventory;
 
 /**
- * A Vendor can trade items.
+ * A Trader can trade items.
  * @author Kevin
  */
-class Vendor
+class Trader
 {
 	private var tradeIds:Array<Int>;
 	
