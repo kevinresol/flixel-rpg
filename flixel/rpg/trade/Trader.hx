@@ -17,7 +17,8 @@ class Trader
 	/**
 	 * Create a new trader. If an inventory is provided, the trader will use that as his inventory.
 	 * Meaning that he will check this inventory to see if he is able to trade.
-	 * @param	?inventory
+	 * If no inventory is provided, the trader has unlimited trades
+	 * @param	?inventory optional inventory
 	 */
 	public function new(?inventory:Inventory)
 	{
@@ -31,9 +32,10 @@ class Trader
 	 * Trade items
 	 * @param	invetory
 	 * @param	id trade id (defined by loadTradeData)
+	 * @param	receiveCost true if this trader should receive the cost (ignored if this trader does not have an inventory)
 	 * @return	return true if the trade is successful
 	 */
-	public function trade(buyerInventory:Inventory, id:Int):Bool
+	public function trade(buyerInventory:Inventory, id:Int, receiveCost:Bool):Bool
 	{
 		var tradeData:TradeData = RpgEngine.data.getTradeData(id);
 		
@@ -49,8 +51,8 @@ class Trader
 		for (c in tradeData.cost)
 			buyerInventory.removeItem(c.id, c.count);
 		
-		// Add the traded items to buyer
-		// Remove the traded items from trader
+		// Add the rewrads to buyer
+		// Remove the rewards from trader
 		for (r in tradeData.reward)
 		{
 			buyerInventory.addItem(RpgEngine.factory.createInventoryItem(r.id, r.count));
@@ -59,8 +61,8 @@ class Trader
 				inventory.removeItem(r.id, r.count);
 		}
 		
-		// Add the cost to trader
-		if (inventory != null)		
+		// Add the costs to trader
+		if (receiveCost && inventory != null)		
 			for (c in tradeData.cost)
 				inventory.addItem(RpgEngine.factory.createInventoryItem(c.id, c.count));
 		
@@ -99,9 +101,11 @@ class Trader
 				if (!buyerInventory.has(c.id, c.count))
 					break;
 			
+			// Check if this trader has all the rewards
 			if (inventory != null)
 				for (r in tradeData.reward)
-					if(inventory.has(r.id, r.
+					if (!inventory.has(r.id, r.count))
+						break;
 			
 			// Passed
 			result.push(tradeData);
