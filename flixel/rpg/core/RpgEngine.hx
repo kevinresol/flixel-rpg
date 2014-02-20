@@ -1,4 +1,5 @@
 package flixel.rpg.core;
+import flixel.addons.plugin.FlxMouseControl;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
@@ -29,6 +30,11 @@ class RpgEngine
 		factory = new Factory();
 		data = new Data();
 		levels = new LevelManager();
+		
+		// Enable the FlxMouseControl plugin which is required for mouse interaction for Entity
+		if (FlxG.plugins.get(FlxMouseControl) == null)
+			FlxG.plugins.add(new FlxMouseControl());
+		
 	}
 
 	/**

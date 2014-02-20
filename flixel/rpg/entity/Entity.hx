@@ -1,6 +1,6 @@
 package flixel.rpg.entity;
+import flixel.addons.display.FlxExtendedSprite;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
@@ -15,7 +15,7 @@ import flixel.util.FlxTimer;
  * A basic entity in this RPG framework.
  * @author Kevin
  */
-class Entity extends FlxSprite
+class Entity extends FlxExtendedSprite
 {
 	/**
 	 * Hitbox for bullet collision
@@ -114,7 +114,10 @@ class Entity extends FlxSprite
 		
 		hitBox = new HitBox(this, 20, 20);
 		pickupBox = new HitBox(this, 70, 70);
-	}
+		
+		enableMouseClicks(true);
+		mouseReleasedCallback = function(e:FlxExtendedSprite, x, y) if (e.mouseOver) trace("Clicked");
+	}	
 	
 	/**
 	 * Enable weapon
