@@ -1,4 +1,5 @@
 package flixel.rpg.entity;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
@@ -109,29 +110,80 @@ class Entity extends FlxSprite
 	 */
 	public function new(x:Float = 0, y:Float = 0) 
 	{
-		super(x, y);
-		damageOverTime = new DamageOverTime();
-		weapon = new WeaponController(this);		
-		inventory = Inventory.create();			
-		equipments = Inventory.create();
-		trader = new Trader(inventory);
-		ai = new AIController(this);
-		stat = new StatController();
-		
+		super(x, y);		
 		
 		hitBox = new HitBox(this, 20, 20);
 		pickupBox = new HitBox(this, 70, 70);
 	}
 	
+	/**
+	 * Enable weapon
+	 */
+	public function enableWeapon():Void
+	{
+		weapon = new WeaponController(this);	
+	}
 	
+	/**
+	 * Enable DOT
+	 */
+	public function enableDamageOverTime():Void
+	{
+		damageOverTime = new DamageOverTime();	
+	}
+	
+	/**
+	 * Enable inventory
+	 */ 
+	public function enableInventory():Void
+	{
+		inventory = Inventory.create();			
+	}
+	
+	/**
+	 * Enable equipments
+	 */
+	public function enableEquipments():Void {
+		equipments = Inventory.create();
+	}
+	
+	/**
+	 * Enable trader
+	 * @param	hasInventory
+	 */
+	public function enableTrader(hasInventory:Bool):Void
+	{
+		if (hasInventory && inventory == null)
+			FlxG.log.warn("Entity.enableTrader: hasInventory is set to true but inventory is null");
+		
+		trader = new Trader(hasInventory ? inventory : null);
+	}
+	
+	/**
+	 * Enable AI
+	 */
+	public function enableAI():Void
+	{
+		ai = new AIController(this);
+	}
+	
+	/**
+	 * Enable Stat
+	 */
+	public function enableStat():Void
+	{
+		stat = new StatController();	
+	}
 	
 	/**
 	 * Override
 	 */
 	override public function update():Void 
 	{
-		super.update();			
-		ai.update();
+		super.update();
+		
+		if(ai != null)
+			ai.update();
 	}
 	
 	/**
