@@ -120,7 +120,8 @@ class GroupManager extends FlxGroup
 	 * Register a level
 	 * @param	level
 	 */
-	public function registerLevel(level:Level):Void
+	@:allow(flixel.rpg.level.LevelManager)
+	private function registerLevel(level:Level):Void
 	{
 		if (this.level != null)
 			remove(this.level);

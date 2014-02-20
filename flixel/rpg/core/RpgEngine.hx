@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Pickup;
+import flixel.rpg.level.LevelManager;
 import flixel.rpg.weapon.Bullet;
 
 /**
@@ -12,19 +13,29 @@ import flixel.rpg.weapon.Bullet;
  */
 class RpgEngine
 {
-	public static var groups:GroupManager;
-	public static var factory:Factory;
-	public static var data:Data;
+	public static var groups(default, null):GroupManager;
+	public static var factory(default, null):Factory;
+	public static var data(default, null):Data;
+	public static var levels(default, null):LevelManager;
 	
+	/**
+	 * Initialize the engine on a FlxState
+	 * @param	state
+	 */
 	public static function init(state:FlxState):Void
 	{
 		state.add(groups = new GroupManager());
 		DamageText.init(state);	
 		factory = new Factory();
 		data = new Data();
+		levels = new LevelManager();
 	}
 
-	public static function collide():Void
+	/**
+	 * The main collide function.
+	 * A collection of collide checks performed on various groups of objects
+	 */
+	public inline static function collide():Void
 	{		
 		//Don't walk into walls
 		FlxG.collide(groups.characters, groups.level.blocks);
@@ -44,13 +55,13 @@ class RpgEngine
 	}
 	
 	
-	private static function bulletCollideWall(bullet:Bullet, map):Void
+	private inline static function bulletCollideWall(bullet:Bullet, map):Void
 	{
 		bullet.kill();
 	}
 	
 	
-	private static function returnTrue(?p1, ?p2):Bool
+	private inline static function returnTrue(?p1, ?p2):Bool
 	{
 		return true;
 	}
