@@ -1,9 +1,21 @@
 package flixel.rpg.requirement;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.inventory.Inventory;
+import flixel.rpg.requirement.RequirementFactory.RequirementData;
 
 /**
  * A requirement that is fulfilled by possessing the specified item
+ * 
+ * The default RequirementFactory accepts the following JSON:
+	 * {
+	 * 		"type":"item", 
+	 * 		"params":
+	 * 		{
+	 * 			"id":1, 
+	 * 			"count":2,
+	 * 			"inventory":"inventory" (optional; possible values: "inventory" and "equipments")
+	 * 		}
+	 * }
  * @author Kevin
  */
 class ItemRequirement implements IRequirement
@@ -29,7 +41,7 @@ class ItemRequirement implements IRequirement
 	 * @param	count	Required amount of the item
 	 * @param	inventory	
 	 */
-	public function new(id:Int, count:Int, ?inventory:Inventory) 
+	public function new(id:Int, count:Int, inventory:Inventory) 
 	{
 		this.id = id;
 		this.count = count;
@@ -41,27 +53,13 @@ class ItemRequirement implements IRequirement
 	public function fulfilled():Bool 
 	{
 		if (count == 0)
-			return true;
+			return true;		
 			
-		//If inventory is not assigned, use the current player's inventory
-		if (inventory == null)
-		{
-			if (RpgEngine.groups.player == null)
-				return false;
-			inventory = RpgEngine.groups.player.inventory;
-		}
-			
-		//Final validation
+		// validation
 		if (inventory == null)
 			return false;		
 		
-		return inventory.countStack(id) >= count;
+		return inventory.has(id, count);
 	}
 	
-}
-
-typedef ItemRequirementData =
-{
-	id:Int,
-	count:Int
 }

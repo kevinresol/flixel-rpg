@@ -1,7 +1,8 @@
 package flixel.rpg.dialogue;
-import flixel.rpg.dialogue.DialogueSystem.RequirementData;
 import flixel.rpg.requirement.IRequirement;
+import flixel.rpg.requirement.IRequirementFactory;
 import flixel.rpg.requirement.ItemRequirement;
+import flixel.rpg.requirement.RequirementFactory;
 import haxe.Json;
 
 /**
@@ -38,7 +39,7 @@ class DialogueSystem
 		 * param: requirementData:Dynamic
 		 * return: IRequirement instance
 	 */
-	public var requirementFactory:Dynamic->IRequirement;
+	public var requirementFactory:IRequirementFactory;
 	
 	/**
 	 * Constructor
@@ -46,11 +47,11 @@ class DialogueSystem
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?onChange	callback on dialogue change
 	 */
-	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:Dynamic->IRequirement) 
+	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
 	{
 		this.onChange = onChange;
 		
-		this.requirementFactory = (requirementFactory == null ? createRequirement : requirementFactory);
+		this.requirementFactory = (requirementFactory == null ? new RequirementFactory() : requirementFactory);
 		
 		if (dialogueActionsClass == null)
 			dialogueActionsClass = DialogueActions;
@@ -87,7 +88,7 @@ class DialogueSystem
 				for (requirementData in responseData.requirements)
 				{					
 					//create and push the requirement object
-					var requirement = requirementFactory(requirementData);
+					var requirement = requirementFactory.create(requirementData);
 					requirements.push(requirement);
 				}
 				
@@ -132,21 +133,6 @@ class DialogueSystem
 	}
 	
 	
-	/**
-	 * @private
-	 * Internal function for creating a Requirement Object
-	 * @param	data
-	 * @return
-	 */
-	private function createRequirement(data:RequirementData):IRequirement
-	{		
-		switch(data.type)
-		{
-			case "item": 	return new ItemRequirement(data.id, data.count);
-			default: 		throw "Requriement type '" + data.type + "' not supported";				
-		}
-		
-	}
 }
 
 
@@ -165,12 +151,4 @@ typedef ResponseData =
 	action:String, 
 	actionParams:Array<Dynamic>,
 	requirements:Array<RequirementData>
-}
-
-typedef RequirementData = 
-{
-	//TODO: should this typedef only has "type" and "params"?
-	type:String,
-	?id:Int, //item id
-	?count:Int//item count
 }
