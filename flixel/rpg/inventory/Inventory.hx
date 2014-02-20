@@ -234,6 +234,11 @@ class Inventory
 		return total;
 	}
 	
+	public inline function has(id:Int, stack:Int):Bool
+	{
+		return countStack(id) >= stack;
+	}
+	
 	/**
 	 * Debug string
 	 */
@@ -253,39 +258,7 @@ class Inventory
 	}
 	
 	
-	/**
-	 * TODO
-	 * @param	cost
-	 * @param	reward
-	 * @return
-	 */
-	public function canTrade(cost:Array<TradeItemData>, reward:Array<TradeItemData>):Bool
-	{
-		var inventory = clone();
-		
-		//Try to remove the cost from the inventory
-		for (c in cost)
-		{
-			if (!inventory.removeItem(c.id, c.count))
-			{
-				inventory.recycle();
-				return false; //not enough
-			}
-		}		
-		
-		//Try to add the traded items to inventory
-		for (i in reward)
-		{
-			if (!inventory.addItem(RpgEngine.factory.createInventoryItem(i.id, i.count)))
-			{
-				inventory.recycle();
-				return false; //cannot add, not enough space
-			}
-		}
-		
-		inventory.recycle();
-		return true;		
-	}
+	
 	
 	/**
 	 * Clone this inventory and its containing items

@@ -7,6 +7,7 @@ import flixel.rpg.display.DamageText;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
 import flixel.rpg.system.HitBox;
+import flixel.rpg.trade.Trader;
 import flixel.util.FlxTimer;
 
 /**
@@ -62,6 +63,11 @@ class Entity extends FlxSprite
 	public var equipments:Inventory;
 	
 	/**
+	 * Trader
+	 */
+	public var trader:Trader;
+	
+	/**
 	 * DOT controller
 	 */
 	public var damageOverTime:DamageOverTime;
@@ -107,13 +113,17 @@ class Entity extends FlxSprite
 		damageOverTime = new DamageOverTime();
 		weapon = new WeaponController(this);		
 		inventory = Inventory.create();			
-		equipments = Inventory.create();		
+		equipments = Inventory.create();
+		trader = new Trader(inventory);
 		ai = new AIController(this);
 		stat = new StatController();
 		
+		
 		hitBox = new HitBox(this, 20, 20);
 		pickupBox = new HitBox(this, 70, 70);
-	}	
+	}
+	
+	
 	
 	/**
 	 * Override
