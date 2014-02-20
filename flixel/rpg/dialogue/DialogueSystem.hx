@@ -34,10 +34,7 @@ class DialogueSystem
 	public var current(default, null):Dialogue;
 	
 	/**
-	 * A function to create the requirement object from the data
-	 * Signature: 
-		 * param: requirementData:Dynamic
-		 * return: IRequirement instance
+	 * A requirement factory
 	 */
 	public var requirementFactory:IRequirementFactory;
 	
@@ -46,6 +43,7 @@ class DialogueSystem
 	 * @param	data	json data
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?onChange	callback on dialogue change
+	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
 	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
 	{
