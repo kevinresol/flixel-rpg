@@ -1,4 +1,5 @@
 package flixel.rpg.trade;
+import flixel.rpg.core.Data;
 import flixel.rpg.inventory.Inventory;
 
 /**
@@ -7,13 +8,21 @@ import flixel.rpg.inventory.Inventory;
  */
 class Vendor
 {
+	private var tradeIds:Array<Int>;
+	
+	public function new()
+	{
+		//TODO hardcoded
+		tradeIds = [1];
+	}
+	
 	/**
 	 * Trade items
 	 * @param	invetory
 	 * @param	id trade id (defined by loadTradeData)
 	 * @return	return true if the trade is successful
 	 */
-	public static function trade(inventory:Inventory, id:Int):Bool
+	public function trade(inventory:Inventory, id:Int):Bool
 	{
 		var tradeData:TradeData = Data.getTradeData(id);
 		
@@ -36,4 +45,23 @@ class Vendor
 		return true;
 	}
 	
+	public function getAllTrades():Array<TradeData>
+	{
+		var result = [];
+		for (id in tradeIds)
+			result.push(Data.getTradeData(id));
+		return result;
+	}
+	
+	public function getAvailableTrades(inventory:Inventory):Array<TradeData>
+	{
+		var result = [];
+		for (id in tradeIds)
+		{
+			var tradeData = Data.getTradeData(id);
+			if (inventory.canTrade(tradeData.cost, tradeData.reward))
+				result.push(tradeData);
+		}
+		return result;
+	}
 }
