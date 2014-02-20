@@ -113,10 +113,7 @@ class Entity extends FlxExtendedSprite
 		super(x, y);		
 		
 		hitBox = new HitBox(this, 20, 20);
-		pickupBox = new HitBox(this, 70, 70);
-		
-		enableMouseClicks(true);
-		mouseReleasedCallback = function(e:FlxExtendedSprite, x, y) if (e.mouseOver) trace("Clicked");
+		pickupBox = new HitBox(this, 70, 70);		
 	}	
 	
 	/**
@@ -146,7 +143,8 @@ class Entity extends FlxExtendedSprite
 	/**
 	 * Enable equipments
 	 */
-	public function enableEquipments():Void {
+	public function enableEquipments():Void
+	{
 		equipments = Inventory.create();
 	}
 	
