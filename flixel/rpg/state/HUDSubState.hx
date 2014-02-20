@@ -11,7 +11,7 @@ class HUDSubState extends FlxSubState
 
 	public function new() 
 	{
-		super(0, true);		
+		super();		
 	}
 	
 	
