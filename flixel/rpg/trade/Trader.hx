@@ -14,9 +14,14 @@ class Trader
 	private var tradeIds:Array<Int>;
 	private var inventory:Inventory;
 	
+	/**
+	 * Create a new trader. If an inventory is provided, the trader will use that as his inventory.
+	 * Meaning that he will check this inventory to see if he is able to trade.
+	 * @param	?inventory
+	 */
 	public function new(?inventory:Inventory)
 	{
-		//TODO hardcoded
+		// TODO hardcoded
 		tradeIds = [1];
 		
 		this.inventory = inventory;		
@@ -32,25 +37,40 @@ class Trader
 	{
 		var tradeData:TradeData = RpgEngine.data.getTradeData(id);
 		
+		// Test the buyer inventory
 		if (!buyerInventory.canTrade(tradeData.cost, tradeData.reward))
 			return false;
+			
+		// Test this trader's inventory (if any)
+		if (inventory != null && !inventory.canTrade(tradeData.reward, tradeData.cost))
+			return false;
 		
-		//Deduct the cost from inventory
+		// Deduct the cost from buyer
 		for (c in tradeData.cost)
-		{
-			trace(c.id, c.count);
 			buyerInventory.removeItem(c.id, c.count);
+		
+		// Add the traded items to buyer
+		// Remove the traded items from trader
+		for (r in tradeData.reward)
+		{
+			buyerInventory.addItem(RpgEngine.factory.createInventoryItem(r.id, r.count));
+			
+			if(inventory != null)
+				inventory.removeItem(r.id, r.count);
 		}
 		
-		//Add the traded items to inventory
-		for (i in tradeData.reward)
-		{
-			buyerInventory.addItem(RpgEngine.factory.createInventoryItem(i.id, i.count));
-		}
+		// Add the cost to trader
+		if (inventory != null)		
+			for (c in tradeData.cost)
+				inventory.addItem(RpgEngine.factory.createInventoryItem(c.id, c.count));
 		
 		return true;
 	}
 	
+	/**
+	 * Return a full list of trades of this trader
+	 * @return
+	 */
 	public function getAllTrades():Array<TradeData>
 	{
 		var result = [];
@@ -76,10 +96,12 @@ class Trader
 						
 			// Check if the buyer has all the costs for this trade
 			for (c in tradeData.cost)
-			{
 				if (!buyerInventory.has(c.id, c.count))
 					break;
-			}			
+			
+			if (inventory != null)
+				for (r in tradeData.reward)
+					if(inventory.has(r.id, r.
 			
 			// Passed
 			result.push(tradeData);
