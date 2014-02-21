@@ -14,16 +14,16 @@ class DialogueInitializer
 	
 	public function new() 
 	{
-		
+		initialDialogue = RpgEngine.dialogue.getDialogue("door_initial");
 	}
 	
 	public function start():Void
 	{
+		
 		RpgEngine.dialogue.display(initialDialogue.id);
 		
 		if(autoRespondFirstDialogue)
-			initialDialogue.respond(initialDialogue.availableResponses[0]);
-		
+			initialDialogue.respond(initialDialogue.availableResponses[0]);		
 	}
 	
 }
