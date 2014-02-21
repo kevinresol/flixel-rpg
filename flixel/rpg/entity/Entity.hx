@@ -91,6 +91,9 @@ class Entity extends FlxSprite
 	 */
 	public var dialogueInitializer:DialogueInitializer;
 	
+	/**
+	 * Mouse Handler
+	 */
 	public var mouse:MouseHandler;
 	
 	/**
@@ -112,11 +115,7 @@ class Entity extends FlxSprite
 	/**
 	 * Current recover state (hit or attack)
 	 */
-	public var recoverState:Int;	
-	
-	public static inline var STATE_NORMAL:Int = 0; 
-	public static inline var STATE_HIT_RECOVER:Int = 1; 
-	public static inline var STATE_ATTACK_RECOVER:Int = 2;
+	public var recoverState:RecoverState;		
 
 	/**
 	 * Constructor
@@ -274,7 +273,7 @@ class Entity extends FlxSprite
 		
 		if (hitRecoverTime > 0)
 		{
-			recoverState = STATE_HIT_RECOVER;
+			recoverState = RHit;
 			freeze(hitRecoverTime);
 		}
 		
@@ -301,7 +300,7 @@ class Entity extends FlxSprite
 	{
 		moves = true;
 		recoverTimer = null;
-		recoverState = STATE_NORMAL;
+		recoverState = RNormal;
 	}
 	
 	/**
@@ -322,4 +321,11 @@ class Entity extends FlxSprite
 	}
 	
 	
+}
+
+enum RecoverState
+{
+	RNormal;
+	RAttack;
+	RHit;
 }

@@ -126,7 +126,7 @@ class WeaponController
 		{
 			if (entity.attackRecoverTime > 0)
 			{
-				entity.recoverState = Entity.STATE_ATTACK_RECOVER;
+				entity.recoverState = RAttack;
 				entity.freeze(entity.attackRecoverTime);
 			}
 		}
