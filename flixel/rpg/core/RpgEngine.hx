@@ -37,11 +37,6 @@ class RpgEngine
 		factory = new Factory();
 		data = new Data();
 		levels = new LevelManager();
-		
-		// Enable the FlxMouseControl plugin which is required for mouse interaction for Entity
-		if (FlxG.plugins.get(FlxMouseControl) == null)
-			FlxG.plugins.add(new FlxMouseControl());
-		
 	}
 	
 	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void):Void

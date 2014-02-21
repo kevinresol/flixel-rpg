@@ -1,12 +1,13 @@
 package flixel.rpg.entity;
-import flixel.addons.display.FlxExtendedSprite;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
 import flixel.rpg.dialogue.DialogueInitializer;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.fsm.StateMachine;
+import flixel.rpg.interaction.MouseHandler;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
 import flixel.rpg.system.HitBox;
@@ -17,7 +18,7 @@ import flixel.util.FlxTimer;
  * A basic entity in this RPG framework.
  * @author Kevin
  */
-class Entity extends FlxExtendedSprite
+class Entity extends FlxSprite
 {
 	/**
 	 * Hitbox for bullet collision
@@ -89,6 +90,8 @@ class Entity extends FlxExtendedSprite
 	 * Dialogue Initializer
 	 */
 	public var dialogueInitializer:DialogueInitializer;
+	
+	public var mouse:MouseHandler;
 	
 	/**
 	 * Time to recover from a hit (in seconds)
@@ -212,6 +215,11 @@ class Entity extends FlxExtendedSprite
 	{
 		if (dialogueInitializer == null)
 			dialogueInitializer = new DialogueInitializer();
+	}
+	
+	private inline function enableMouse(pixelPerfect:Bool = false):Void
+	{
+		mouse = new MouseHandler(this, pixelPerfect);		
 	}
 	
 	/**
