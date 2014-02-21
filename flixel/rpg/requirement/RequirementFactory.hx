@@ -42,14 +42,8 @@ class RequirementFactory implements IRequirementFactory
 	}
 	
 	private function itemRequirementFactory(data:RequirementData):IRequirement
-	{
-		var inventory = switch(data.params.inventory)
-		{
-			case "inventory": RpgEngine.groups.player.inventory;
-			case "equipments": RpgEngine.groups.player.equipments;
-			default: throw 'Invalid requirement param - inventory:${data.params.inventory}';
-		}
-		return new ItemRequirement(data.params.id, data.params.count, inventory);
+	{		
+		return new ItemRequirement(data.params.id, data.params.count, data.params.inventory);
 	}
 }
 
