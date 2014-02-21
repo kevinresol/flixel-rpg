@@ -1,4 +1,5 @@
 package flixel.rpg.fsm;
+import flixel.rpg.entity.Entity;
 
 /**
  * ...
@@ -25,7 +26,7 @@ class StateMachineState
 		if (v == value) return v;
 		
 		if (onChange != null)
-			onChnage(value, v);
+			onChange(value, v);
 			
 		return value = v;
 	}

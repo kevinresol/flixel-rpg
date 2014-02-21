@@ -1,4 +1,5 @@
 package flixel.rpg.fsm;
+import flixel.rpg.entity.Entity;
 
 /**
  * ...
@@ -6,17 +7,19 @@ package flixel.rpg.fsm;
  */
 class StateMachine
 {
+	public var entity(default, null):Entity;
 	public var states:Map<String, StateMachineState>;
 	
-	public function new() 
+	public function new(entity) 
 	{
+		this.entity = entity;
 		states = new Map<String, StateMachineState>();
 	}
 	
 	public function set(type:String, state:StateMachineState):Void
 	{
 		if (states.exists(type))
-			throw '$name already set';
+			throw '$type already set';
 		else
 			states.set(type, state);
 	}

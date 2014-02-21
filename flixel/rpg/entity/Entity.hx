@@ -201,7 +201,7 @@ class Entity extends FlxExtendedSprite
 	public function enableStates():Void
 	{
 		if (states == null)
-			states = new StateMachine();
+			states = new StateMachine(this);			
 	}
 	
 	/**
