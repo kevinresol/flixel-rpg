@@ -1,12 +1,11 @@
 package flixel.rpg.dialogue;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
-import flixel.rpg.requirement.ItemRequirement;
 import flixel.rpg.requirement.RequirementFactory;
 import haxe.Json;
 
 /**
- * A dialogue system.
+ * A dialogue system. Usage: create instance then call display()
  * @author Kevin
  */
 class DialogueSystem

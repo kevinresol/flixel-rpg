@@ -4,7 +4,7 @@ package flixel.rpg.dialogue;
  * A set of functions meant to be used by dialogue responses.
  * This class only provide some basic/common response actions.
  * Can be extended but not meant to be instantialized by user.
- * Intended to be used in DialogueSystem's contructor
+ * Pass the class to DialogueSystem's contructor
  * @author Kevin
  */
 class DialogueActions

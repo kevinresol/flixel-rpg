@@ -1,8 +1,6 @@
 package flixel.rpg.state;
 
 import flixel.FlxState;
-import flixel.rpg.dialogue.DialogueActions;
-import flixel.rpg.dialogue.DialogueSystem;
 import flixel.rpg.display.lighting.LightingSystem;
 
 /**
@@ -20,12 +18,7 @@ class GameState extends FlxState
 	 * The Lighting object. Call enableLighting() before accessing this object
 	 */
 	private var lighting:LightingSystem;
-	
-	/**
-	 * The DialogueSystem object. Call enableDialogue() before accessing this object
-	 */
-	private var dialogueSystem:DialogueSystem;
-	
+		
 	/**
 	 * Contructor
 	 */
@@ -53,16 +46,6 @@ class GameState extends FlxState
 		lighting = new LightingSystem(this, color);
 	}
 	
-	/**
-	 * Enable the dialog system
-	 * @param	data
-	 * @param	dialogueActionsClass
-	 * @param	onChange
-	 */
-	private function enableDialogue(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void):Void
-	{
-		dialogueSystem = new DialogueSystem(data, dialogueActionsClass, onChange);
-	}
 	
 	/**
 	 * Override.

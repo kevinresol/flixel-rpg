@@ -3,6 +3,8 @@ import flixel.addons.plugin.FlxMouseControl;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
+import flixel.rpg.dialogue.DialogueActions;
+import flixel.rpg.dialogue.DialogueSystem;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.level.LevelManager;
@@ -20,6 +22,11 @@ class RpgEngine
 	public static var levels(default, null):LevelManager;
 	
 	/**
+	 * The DialogueSystem object. Call enableDialogue() before accessing this object
+	 */
+	public static var dialogue:DialogueSystem;
+	
+	/**
 	 * Initialize the engine on a FlxState
 	 * @param	state
 	 */
@@ -35,6 +42,11 @@ class RpgEngine
 		if (FlxG.plugins.get(FlxMouseControl) == null)
 			FlxG.plugins.add(new FlxMouseControl());
 		
+	}
+	
+	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void):Void
+	{
+		dialogue = new DialogueSystem(data, dialogueActionsClass, onChange);
 	}
 
 	/**
