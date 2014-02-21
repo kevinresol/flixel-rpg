@@ -4,7 +4,9 @@ import flixel.FlxG;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
+import flixel.rpg.dialogue.DialogueInitializer;
 import flixel.rpg.display.DamageText;
+import flixel.rpg.fsm.StateMachine;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
 import flixel.rpg.system.HitBox;
@@ -69,6 +71,11 @@ class Entity extends FlxExtendedSprite
 	public var trader:Trader;
 	
 	/**
+	 * State Machine
+	 */
+	public var states:StateMachine;
+	
+	/**
 	 * DOT controller
 	 */
 	public var damageOverTime:DamageOverTime;
@@ -77,6 +84,11 @@ class Entity extends FlxExtendedSprite
 	 * Weapon controller
 	 */
 	public var weapon:WeaponController;
+	
+	/**
+	 * Dialogue Initializer
+	 */
+	public var dialogueInitializer:DialogueInitializer;
 	
 	/**
 	 * Time to recover from a hit (in seconds)
@@ -113,7 +125,8 @@ class Entity extends FlxExtendedSprite
 		super(x, y);		
 		
 		hitBox = new HitBox(this, 20, 20);
-		pickupBox = new HitBox(this, 70, 70);		
+		pickupBox = new HitBox(this, 70, 70);
+		
 	}	
 	
 	/**
@@ -121,6 +134,7 @@ class Entity extends FlxExtendedSprite
 	 */
 	public function enableWeapon():Void
 	{
+		if (weapon == null)
 		weapon = new WeaponController(this);	
 	}
 	
@@ -129,7 +143,8 @@ class Entity extends FlxExtendedSprite
 	 */
 	public function enableDamageOverTime():Void
 	{
-		damageOverTime = new DamageOverTime();	
+		if (damageOverTime == null)
+			damageOverTime = new DamageOverTime();	
 	}
 	
 	/**
@@ -137,7 +152,8 @@ class Entity extends FlxExtendedSprite
 	 */ 
 	public function enableInventory():Void
 	{
-		inventory = Inventory.create();			
+		if (inventory == null)
+			inventory = Inventory.create();			
 	}
 	
 	/**
@@ -145,7 +161,8 @@ class Entity extends FlxExtendedSprite
 	 */
 	public function enableEquipments():Void
 	{
-		equipments = Inventory.create();
+		if (equipments == null)
+			equipments = Inventory.create();
 	}
 	
 	/**
@@ -165,7 +182,8 @@ class Entity extends FlxExtendedSprite
 	 */
 	public function enableAI():Void
 	{
-		ai = new AIController(this);
+		if (ai == null)
+			ai = new AIController(this);
 	}
 	
 	/**
@@ -173,7 +191,27 @@ class Entity extends FlxExtendedSprite
 	 */
 	public function enableStat():Void
 	{
-		stat = new StatController();	
+		if (stat == null)
+			stat = new StatController();	
+	}
+	
+	/**
+	 * Enable state machine
+	 */
+	public function enableStates():Void
+	{
+		if (states == null)
+			states = new StateMachine();
+	}
+	
+	/**
+	 * Enable Dialogue Initializer
+	 * After than you can call entity.dialogueInitializer.start();
+	 */
+	public function enableDialogueInitializer():Void
+	{
+		if (dialogueInitializer == null)
+			dialogueInitializer = new DialogueInitializer();
 	}
 	
 	/**
