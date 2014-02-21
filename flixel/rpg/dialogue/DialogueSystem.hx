@@ -129,6 +129,20 @@ class DialogueSystem
 		}
 	}
 	
+	/**
+	 * Get a dialogue instance by id
+	 * @param	id
+	 * @return
+	 */
+	public function getDialogue(id:String):Dialogue
+	{
+		var d = dialogues.get(id);
+		
+		if (d == null)
+			throw 'No dialogue is found for id:$id';
+			
+		return d;
+	}
 	
 }
 
