@@ -1,13 +1,14 @@
-package flixel.rpg.core;
+package flixel.rpg.data;
 import haxe.Json;
+import haxe.Unserializer;
 
 /**
  * ...
  * @author Kevin
  */
+@:build(flixel.rpg.data.DataMacro.build("assets/data"))
 class Data
 {
-
 	public var weaponData:Array<WeaponData>;
 	public var itemData:Array<InventoryItemData>;
 	public var tradeData:Array<TradeData>;
@@ -20,7 +21,8 @@ class Data
 	
 	public function loadWeaponData(data:String):Void
 	{
-		weaponData = Json.parse(data);
+		if (weaponData == null)
+			weaponData = Unserializer.run(data);
 	}
 	
 	public function getWeaponData(id:Int):WeaponData
@@ -39,13 +41,14 @@ class Data
 	
 	
 	/**
-	 * Load item data from json string. Call once and only once before any use 
+	 * Load item data from haxe-serialized string. Call once and only once before any use 
 	 * of StackItem.
 	 * @param	data
 	 */
 	public function loadItemData(data:String):Void
 	{
-		itemData = Json.parse(data);
+		if (itemData == null)
+			itemData = Unserializer.run(data);
 	}
 	
 	public function getItemData(id:Int):InventoryItemData
@@ -63,7 +66,8 @@ class Data
 	
 	public function loadTradeData(data:String):Void
 	{
-		tradeData = Json.parse(data);		
+		if (tradeData == null)
+			tradeData = Unserializer.run(data);
 	}
 	
 	public function getTradeData(id:Int):TradeData

@@ -2,7 +2,7 @@ package flixel.rpg.dialogue;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
 import flixel.rpg.requirement.RequirementFactory;
-import haxe.Json;
+import haxe.Unserializer;
 
 /**
  * A dialogue system. Usage: create instance then call display()
@@ -60,14 +60,14 @@ class DialogueSystem
 	}
 	
 	/**
-	 * Create dialogue objects from a data string (json)
+	 * Create dialogue objects from a data string (haxe-serialized)
 	 * @param	data
 	 */
 	private function load(data:String):Void
 	{
 		dialogues = new Map<String, Dialogue>();
 		
-		var data:Array<DialogueData> = Json.parse(data);
+		var data:Array<DialogueData> = Unserializer.run(data);
 		for (dialogueData in data)
 		{
 			//create the dialogue object

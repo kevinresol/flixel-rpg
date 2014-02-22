@@ -3,6 +3,7 @@ import flixel.addons.plugin.FlxMouseControl;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
+import flixel.rpg.data.Data;
 import flixel.rpg.dialogue.DialogueActions;
 import flixel.rpg.dialogue.DialogueSystem;
 import flixel.rpg.display.DamageText;
