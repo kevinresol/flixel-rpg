@@ -1,4 +1,5 @@
 package flixel.rpg.dialogue;
+import flixel.rpg.core.RpgScript;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
 import flixel.rpg.requirement.RequirementFactory;
@@ -37,6 +38,9 @@ class DialogueSystem
 	 */
 	public var requirementFactory:IRequirementFactory;
 	
+	@:allow(flixel.rpg.dialogue.Dialogue)
+	private var script:RpgScript;
+	
 	/**
 	 * Constructor
 	 * @param	data	json data
@@ -46,6 +50,7 @@ class DialogueSystem
 	 */
 	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
 	{
+		
 		this.onChange = onChange;
 		
 		this.requirementFactory = (requirementFactory == null ? new RequirementFactory() : requirementFactory);
@@ -55,6 +60,9 @@ class DialogueSystem
 		
 		dialogueActions = Type.createInstance(dialogueActionsClass, []);
 		dialogueActions.system = this;
+		
+		script = new RpgScript();
+		script.variables.set("action", dialogueActions);
 		
 		load(data);
 	}
@@ -71,14 +79,12 @@ class DialogueSystem
 		for (dialogueData in data)
 		{
 			//create the dialogue object
-			var dialogue = new Dialogue(dialogueData.id, dialogueData.name, dialogueData.text);			
+			var dialogue = new Dialogue(this, dialogueData.id, dialogueData.name, dialogueData.text);			
 			dialogues.set(dialogue.id, dialogue);
 			
 			//create the responses objects
 			for (responseData in dialogueData.responses)
 			{
-				//map the function object
-				var action = Reflect.field(dialogueActions, responseData.action);
 				
 				//create array of requirements
 				var requirements:Array<IRequirement> = [];
@@ -90,7 +96,7 @@ class DialogueSystem
 				}
 				
 				//create and push the response object
-				dialogue.responses.push(new DialogueResponse(responseData.text, action, responseData.actionParams, requirements));
+				dialogue.responses.push(new DialogueResponse(responseData.text, responseData.script, requirements));
 			}
 		}
 	}
@@ -159,7 +165,6 @@ typedef DialogueData =
 typedef ResponseData =
 {
 	text:String, 
-	action:String, 
-	actionParams:Array<Dynamic>,
+	script:String, 
 	requirements:Array<RequirementData>
 }

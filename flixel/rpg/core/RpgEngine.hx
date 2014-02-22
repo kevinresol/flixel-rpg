@@ -21,6 +21,7 @@ class RpgEngine
 	public static var factory(default, null):Factory;
 	public static var data(default, null):Data;
 	public static var levels(default, null):LevelManager;
+	public static var script(default, null):RpgScript;
 	
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
@@ -38,6 +39,9 @@ class RpgEngine
 		factory = new Factory();
 		data = new Data();
 		levels = new LevelManager();
+		
+		script = new RpgScript();
+		script.variables.set("RpgEngine", RpgEngine);
 	}
 	
 	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void):Void

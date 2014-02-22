@@ -8,15 +8,13 @@ import flixel.rpg.requirement.IRequirement;
 class DialogueResponse
 {
 	public var text:String;
-	public var action:Dynamic;
-	public var actionParams:Array<Dynamic>;
 	public var requirements:Array<IRequirement>;
+	public var script:String;
 
-	public function new(text:String, action:Dynamic, actionParams:Array<Dynamic>, ?requirements:Array<IRequirement>) 
+	public function new(text:String, script:String, ?requirements:Array<IRequirement>) 
 	{
 		this.text = text;
-		this.action = action;
-		this.actionParams = actionParams;
+		this.script = script;
 		this.requirements = requirements;
 	}
 	
