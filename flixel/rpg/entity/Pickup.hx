@@ -15,9 +15,7 @@ import flixel.util.FlxAngle;
  * @author Kevin
  */
 class Pickup extends Entity
-{
-	//TODO use Entity to wrap an InventoryItem, as a object representation in game world
-	
+{	
 	public var item(default, null):InventoryItem;
 	public var followAI(default, null):FollowAI;
 	
