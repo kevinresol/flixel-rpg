@@ -50,7 +50,6 @@ class RequirementFactory implements IRequirementFactory
 
 typedef RequirementData = 
 {
-	//TODO: should this typedef only has "type" and "params"?
 	type:String,
 	params:Dynamic
 }

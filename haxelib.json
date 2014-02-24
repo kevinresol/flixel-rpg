@@ -8,6 +8,7 @@
   "releasenote": "Initial release, everything is working correctly",
   "contributors": ["KevinResoL"],
   "dependencies": {
-    "flixel": ""
+    "flixel": "",
+	"hscript": ""
   }
 }
