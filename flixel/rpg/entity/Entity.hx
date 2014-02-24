@@ -128,7 +128,7 @@ class Entity extends FlxSprite
 		
 		hitBox = new HitBox(this, 20, 20);
 		pickupBox = new HitBox(this, 70, 70);
-		
+		recoverState = RNormal;
 	}	
 	
 	/**

@@ -1,47 +1,39 @@
 package flixel.rpg.entity;
 
 import flixel.FlxSprite;
+import flixel.rpg.ai.FollowAI;
 import flixel.rpg.inventory.InventoryItem;
 import flixel.rpg.system.HitBox;
 import flixel.util.FlxAngle;
 
 /**
- * ...
+ * A pickup is an physical repsentation of an InventoryItem in the game world.
+ * Pickup extends Entity with a FollowAI enabled by default. Use one of the 
+ * following code to change the behavior of the FollowAI:
+	 * pickup.followAI.accelerationMode = AAccelerate(1000, 1000);
+	 * pickup.followAI.accelerationMode = AInstant;
  * @author Kevin
  */
-class Pickup extends FlxSprite
+class Pickup extends Entity
 {
-	private var item:InventoryItem;
+	//TODO use Entity to wrap an InventoryItem, as a object representation in game world
 	
-	public var id(get, null):Int;
-	private inline function get_id():Int { return item.id; }	
-	
-	public var slotType(get, null):Int;
-	private inline function get_slotType():Int { return item.slotType; }
-	
-	public var displayName(get, null):String;
-	private inline function get_displayName():String { return item.displayName; }
-	
-	public var stack(get, null):Int;
-	private inline function get_stack():Int { return item.stack; }
-	
-	public var maxStack(get, null):Int;
-	private inline function get_maxStack():Int { return item.maxStack;}
+	public var item(default, null):InventoryItem;
+	public var followAI(default, null):FollowAI;
 	
 	public function new(x:Float = 0, y:Float = 0) 
 	{
-		super(x, y);
+		super(x, y);		
 		
-		makeGraphic(5, 5);
-		
-		drag.set(600, 600);
-		maxVelocity.set(100, 100);
+		enableAI();
+		followAI = new FollowAI();
+		ai.add("follow", followAI);		
 	}
 	
 	override public function update():Void 
 	{
 		super.update();
-		acceleration.x = acceleration.y = 0;
+		target = null;
 	}
 	
 	override public function kill():Void 
@@ -60,13 +52,10 @@ class Pickup extends FlxSprite
 		var inventory = pickupBox.parent.inventory;
 		
 		//The player does not have slot to hold this item. Don't chase him
-		if (inventory.getNonFullItemSlot(pickup.id) == null && inventory.getEmptySlot(pickup.slotType) == null)
-			return;
-		
-		//Otherwise chase him la!
-		var a:Float = FlxAngle.angleBetween(pickup, cast(pickupBox.parent));		
-		pickup.acceleration.x = Std.int(Math.cos(a) * 1000);
-		pickup.acceleration.y = Std.int(Math.sin(a) * 1000);	
+		if (inventory.getNonFullItemSlot(pickup.item.id) == null && inventory.getEmptySlot(pickup.item.slotType) == null)
+			pickup.target = null;
+		else
+			pickup.target = pickupBox.parent;	
 	}
 	
 	public static function picked(entity:Entity, pickup:Pickup):Void
@@ -74,5 +63,6 @@ class Pickup extends FlxSprite
 		if(entity.inventory.addItem(pickup.item))
 			pickup.kill();
 	}
+	
 	
 }

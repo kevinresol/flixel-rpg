@@ -33,11 +33,10 @@ class AttackAI extends AI
 		
 		if (entity.target != null)
 		{
-			//Follow & attack target if engaged
+			//Attack target if engaged and in range
 			switch(entity.recoverState)
 			{
 				case RNormal:
-					FlxVelocity.moveTowardsObject(entity, entity.target, Std.int(entity.maxVelocity.x));
 					if (FlxMath.isDistanceWithin(entity, RpgEngine.groups.player, attackRange))
 						entity.weapon.attack();
 				default:

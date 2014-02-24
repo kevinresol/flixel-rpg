@@ -33,8 +33,9 @@ class AIController
 	 * Add an AI
 	 * @param	aiName
 	 * @param	ai
+	 * @return	the added AI
 	 */
-	public function add(aiName:String, ai:IAI):Void
+	public function add(aiName:String, ai:IAI):IAI
 	{
 		ai.entity = entity;
 		
@@ -48,6 +49,8 @@ class AIController
 			throw "This AI has already been added";
 		
 		aiList.set(aiName, ai);
+		
+		return ai;
 	}
 	
 	/**
