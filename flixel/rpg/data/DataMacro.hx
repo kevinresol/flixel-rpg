@@ -8,7 +8,7 @@ import sys.FileSystem;
 import sys.io.File;
  
 using haxe.macro.ExprTools;
-
+using StringTools;
 
 
 class DataMacro
@@ -19,8 +19,16 @@ class DataMacro
 	{
 		var fields = Context.getBuildFields();
 		
+		var outputFolder = folderPath + "/output/";		
+		
+		if (!FileSystem.exists(outputFolder))	
+			FileSystem.createDirectory(outputFolder);
+		
 		for (f in FileSystem.readDirectory(folderPath))
 		{
+			if (f.indexOf(".hxon") == -1)
+				continue;
+				
 			var filePath = folderPath + "/" + f;
 			var e = parseFile(filePath);
 			validateExpr(e);
@@ -28,8 +36,12 @@ class DataMacro
 			var s = Serializer.run(v);
 			var pos = Context.currentPos();
 			
-			var tstr = TPath( { pack : [], name : "String", params : [], sub : null } );
-			fields.push({ name : f.split(".")[0], doc : null, meta : [], access : [APublic], kind : FVar(tstr, macro $v{s}), pos : pos });
+			//var tstr = TPath( { pack : [], name : "String", params : [], sub : null } );
+			//fields.push( { name : f.split(".")[0], doc : null, meta : [], access : [APublic], kind : FVar(tstr, macro $v { s } ), pos : pos } );
+			
+			var o = File.write(outputFolder + f.replace("hxon", "txt"), false);
+			o.writeString(s);
+			o.close();
 		}
 		
 		
