@@ -39,10 +39,16 @@ class DialogueSystem
 	 */
 	public var requirementFactory:IRequirementFactory;
 	
-	public var initializer:DialogueInitializer;
+	/**
+	 * The initialized which initialized the current dialogue. Can be null.
+	 */
+	public var currentInitializer:DialogueInitializer;
 	
-	@:allow(flixel.rpg.dialogue.Dialogue)
-	private var script:RpgScript;
+	/**
+	 * The scripting engine used by the dialogue system.
+	 * Use script.variables.set() to set variables
+	 */
+	public var script(default, null):RpgScript;
 	
 	/**
 	 * Constructor
@@ -104,8 +110,8 @@ class DialogueSystem
 	 */
 	public function display(id:String):Void
 	{
-		if (initializer != null && !script.variables.exists("entity"))
-			script.variables.set("entity", initializer.entity);
+		if (currentInitializer != null && !script.variables.exists("entity"))
+			script.variables.set("entity", currentInitializer.entity);
 			
 		setCurrent(dialogues.get(id));
 	}
@@ -116,7 +122,7 @@ class DialogueSystem
 	public function end():Void
 	{
 		setCurrent(null);
-		initializer = null;
+		currentInitializer = null;
 		script.variables.remove("entity");
 	}
 	

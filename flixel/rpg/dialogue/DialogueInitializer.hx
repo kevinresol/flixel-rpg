@@ -23,7 +23,7 @@ class DialogueInitializer
 	public function start():Void
 	{
 		// Let the system know that this dialogue is started by a initializer
-		RpgEngine.dialogue.initializer = this;
+		RpgEngine.dialogue.currentInitializer = this;
 		RpgEngine.dialogue.display(initialDialogue.id);
 		
 		if(autoRespondFirstDialogue)
