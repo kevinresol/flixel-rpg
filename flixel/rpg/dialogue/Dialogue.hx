@@ -84,6 +84,7 @@ class Dialogue
 			{
 				for (requirementScript in response.requirementScripts)
 				{
+					// Create the IRequirement instance from script
 					var requirement = system.script.execute(requirementScript);
 					
 					if (!requirement.fulfilled())
