@@ -11,5 +11,5 @@ interface IRequirementFactory
 	 * @param	data
 	 * @return
 	 */
-	function create(data:RequirementData):IRequirement;
+	function create(type:String, params:Dynamic):IRequirement;
 }

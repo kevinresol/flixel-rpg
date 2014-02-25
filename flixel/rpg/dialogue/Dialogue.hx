@@ -79,12 +79,18 @@ class Dialogue
 		{
 			var fulfilled:Bool = true;
 			
-			for (requirement in response.requirements)
+			// Check if all requirements fulfilled
+			if (response.requirementScripts != null)
 			{
-				if (!requirement.fulfilled())
+				for (requirementScript in response.requirementScripts)
 				{
-					fulfilled = false;
-					break;
+					var requirement = system.script.execute(requirementScript);
+					
+					if (!requirement.fulfilled())
+					{
+						fulfilled = false;
+						break;
+					}
 				}
 			}
 			

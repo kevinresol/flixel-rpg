@@ -1,4 +1,5 @@
 package flixel.rpg.dialogue;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScript;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
@@ -38,6 +39,8 @@ class DialogueSystem
 	 */
 	public var requirementFactory:IRequirementFactory;
 	
+	public var initializer:DialogueInitializer;
+	
 	@:allow(flixel.rpg.dialogue.Dialogue)
 	private var script:RpgScript;
 	
@@ -58,11 +61,16 @@ class DialogueSystem
 		if (dialogueActionsClass == null)
 			dialogueActionsClass = DialogueActions;
 		
+		// Create the DialogueAction object
 		dialogueActions = Type.createInstance(dialogueActionsClass, []);
 		dialogueActions.system = this;
 		
+		// Create the scripting engine and allow the DialogueAction object
+		// to be accessed as "action"
 		script = new RpgScript();
 		script.variables.set("action", dialogueActions);
+		script.variables.set("requirementFactory", this.requirementFactory);
+		script.variables.set("RpgEngine", RpgEngine);
 		
 		load(data);
 	}
@@ -74,7 +82,6 @@ class DialogueSystem
 	private function load(data:String):Void
 	{
 		dialogues = new Map<String, Dialogue>();
-		
 		var data:Array<DialogueData> = Unserializer.run(data);
 		for (dialogueData in data)
 		{
@@ -84,19 +91,9 @@ class DialogueSystem
 			
 			//create the responses objects
 			for (responseData in dialogueData.responses)
-			{
-				
-				//create array of requirements
-				var requirements:Array<IRequirement> = [];
-				for (requirementData in responseData.requirements)
-				{					
-					//create and push the requirement object
-					var requirement = requirementFactory.create(requirementData);
-					requirements.push(requirement);
-				}
-				
+			{		
 				//create and push the response object
-				dialogue.responses.push(new DialogueResponse(responseData.text, responseData.script, requirements));
+				dialogue.responses.push(new DialogueResponse(responseData.text, responseData.script, responseData.requirementScripts));
 			}
 		}
 	}
@@ -107,8 +104,10 @@ class DialogueSystem
 	 */
 	public function display(id:String):Void
 	{
-		setCurrent(dialogues.get(id));
+		if (initializer != null && !script.variables.exists("entity"))
+			script.variables.set("entity", initializer.entity);
 			
+		setCurrent(dialogues.get(id));
 	}
 	
 	/**
@@ -117,6 +116,8 @@ class DialogueSystem
 	public function end():Void
 	{
 		setCurrent(null);
+		initializer = null;
+		script.variables.remove("entity");
 	}
 	
 	/**
@@ -166,5 +167,5 @@ typedef ResponseData =
 {
 	text:String, 
 	script:String, 
-	requirements:Array<RequirementData>
+	requirementScripts:Array<String>
 }

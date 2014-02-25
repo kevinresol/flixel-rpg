@@ -1,5 +1,6 @@
 package flixel.rpg.requirement;
 import flixel.rpg.core.RpgEngine;
+import flixel.rpg.inventory.Inventory;
 
 /**
  * ...
@@ -7,11 +8,11 @@ import flixel.rpg.core.RpgEngine;
  */
 class RequirementFactory implements IRequirementFactory
 {
-	private var factories:Map<String, RequirementData->IRequirement>;
+	private var factories:Map<String, Dynamic->IRequirement>;
 
 	public function new() 
 	{
-		factories = new Map < String, RequirementData->IRequirement > ();
+		factories = new Map < String, Dynamic->IRequirement > ();
 		
 		// Default factories
 		registerFactory("item", itemRequirementFactory);		
@@ -23,7 +24,7 @@ class RequirementFactory implements IRequirementFactory
 	 * @param	type
 	 * @param	factory
 	 */
-	public function registerFactory(type:String, factory:RequirementData->IRequirement)
+	public function registerFactory(type:String, factory:Dynamic->IRequirement)
 	{
 		factories.set(type, factory);
 	}
@@ -31,26 +32,21 @@ class RequirementFactory implements IRequirementFactory
 	/**
 	 * @copy flixel.rpg.requirement.IRequirementFactory#create()
 	 */
-	public function create(data:RequirementData):IRequirement
+	public function create(type:String, params:Dynamic):IRequirement
 	{
-		var factory = factories.get(data.type);
+		var factory = factories.get(type);
 		
 		if (factory == null)
-			throw 'Requirement factory not set for ${data.type}';
+			throw 'Requirement factory not set for $type';
 			
-		return factory(data);		
+		return factory(params);		
 	}
 	
-	private function itemRequirementFactory(data:RequirementData):IRequirement
+	private function itemRequirementFactory(params:Dynamic):IRequirement
 	{		
-		return new ItemRequirement(data.params.id, data.params.count, data.params.inventory);
+		return new ItemRequirement(params.id, params.count, params.inventory);
 	}
 }
 
 
-typedef RequirementData = 
-{
-	type:String,
-	params:Dynamic
-}
 

@@ -1,5 +1,6 @@
 package flixel.rpg.dialogue;
 import flixel.rpg.core.RpgEngine;
+import flixel.rpg.entity.Entity;
 
 /**
  * A component of Entity, to initialize a dialogue when 
@@ -8,6 +9,8 @@ import flixel.rpg.core.RpgEngine;
  */
 class DialogueInitializer
 {
+	public var entity:Entity;
+	
 	private var initialDialogue:Dialogue;
 
 	public var autoRespondFirstDialogue:Bool = true;
@@ -18,7 +21,9 @@ class DialogueInitializer
 	}
 	
 	public function start():Void
-	{		
+	{
+		// Let the system know that this dialogue is started by a initializer
+		RpgEngine.dialogue.initializer = this;
 		RpgEngine.dialogue.display(initialDialogue.id);
 		
 		if(autoRespondFirstDialogue)

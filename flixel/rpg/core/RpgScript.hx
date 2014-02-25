@@ -25,7 +25,10 @@ class RpgScript
 		return interp.execute(ast);
 	}
 	
-	private function get_variables():Map<String, Dynamic> return interp.variables;
+	private function get_variables():Map<String, Dynamic> 
+	{
+		return interp.variables;
+	}
 		
 	
 }

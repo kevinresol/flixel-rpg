@@ -1,7 +1,6 @@
 package flixel.rpg.requirement;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.inventory.Inventory;
-import flixel.rpg.requirement.RequirementFactory.RequirementData;
 
 /**
  * A requirement that is fulfilled by possessing the specified item
@@ -31,7 +30,7 @@ class ItemRequirement implements IRequirement
 	public var count:Int;
 
 	
-	private var inventoryType:String;
+	private var inventory:Inventory;
 	
 	/**
 	 * Constructor 
@@ -39,11 +38,11 @@ class ItemRequirement implements IRequirement
 	 * @param	count	Required amount of the item
 	 * @param	inventory	
 	 */
-	public function new(id:Int, count:Int, inventoryType:String) 
+	public function new(id:Int, count:Int, inventory:Inventory) 
 	{
 		this.id = id;
 		this.count = count;
-		this.inventoryType = inventoryType;
+		this.inventory = inventory;
 	}
 	
 	/* INTERFACE flixel.rpg.requirement.IRequirement */
@@ -51,14 +50,7 @@ class ItemRequirement implements IRequirement
 	public function fulfilled():Bool 
 	{
 		if (count == 0)
-			return true;		
-		
-		var inventory = switch(inventoryType)
-		{
-			case "inventory": RpgEngine.groups.player.inventory;
-			case "equipments": RpgEngine.groups.player.equipments;
-			default: throw 'Invalid requirement param - inventory:$inventoryType';
-		}
+			return true;
 		
 		// validation
 		if (inventory == null)
