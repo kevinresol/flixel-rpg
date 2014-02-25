@@ -249,10 +249,18 @@ class Entity extends FlxSprite
 	override public function destroy():Void 
 	{		
 		super.destroy();
-		ai.destroy();		
-		hitBox.destroy();
-		pickupBox.destroy();
-		weapon.destroy();
+		
+		if (ai != null)
+			ai.destroy();
+			
+		if (hitBox != null)	
+			hitBox.destroy();
+			
+		if (pickupBox != null)
+			pickupBox.destroy();
+			
+		if (weapon != null)
+			weapon.destroy();
 	}
 	
 	/**
@@ -261,8 +269,12 @@ class Entity extends FlxSprite
 	override public function kill():Void 
 	{
 		super.kill();
-		hitBox.kill();
-		pickupBox.kill();
+		
+		if (hitBox != null)
+			hitBox.kill();
+			
+		if (pickupBox != null)
+			pickupBox.kill();
 	}
 	
 	/**
@@ -271,8 +283,12 @@ class Entity extends FlxSprite
 	override public function revive():Void 
 	{
 		super.revive();
-		hitBox.revive();
-		pickupBox.revive();
+		
+		if (hitBox != null)
+			hitBox.revive();
+		
+		if (pickupBox != null)
+			pickupBox.revive();
 	}		
 	
 	/**
