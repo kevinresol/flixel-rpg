@@ -5,10 +5,10 @@ import flixel.rpg.entity.Entity;
  * ...
  * @author Kevin
  */
-class StateMachine
+class FiniteStateMachine<T:EnumValue>
 {
 	public var entity(default, null):Entity;
-	public var states:Map<String, StateMachineState>;
+	public var currentState:T;
 	
 	public function new(entity) 
 	{

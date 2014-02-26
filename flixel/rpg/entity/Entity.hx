@@ -6,7 +6,6 @@ import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
 import flixel.rpg.dialogue.DialogueInitializer;
 import flixel.rpg.display.DamageText;
-import flixel.rpg.fsm.StateMachine;
 import flixel.rpg.interaction.MouseHandler;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
@@ -71,10 +70,11 @@ class Entity extends FlxSprite
 	 */
 	public var trader:Trader;
 	
+	
 	/**
 	 * State Machine
 	 */
-	public var states:StateMachine;
+	//TODO public var states:FiniteStateMachine;
 	
 	/**
 	 * DOT controller
@@ -211,11 +211,11 @@ class Entity extends FlxSprite
 	/**
 	 * Enable state machine
 	 */
-	public function enableStates():Void
+	/*public function enableStates():Void
 	{
 		if (states == null)
-			states = new StateMachine(this);			
-	}
+			states = new FiniteStateMachine(this);			
+	}*/
 	
 	/**
 	 * Enable Dialogue Initializer
