@@ -124,23 +124,21 @@ class Entity extends FlxSprite
 	 */
 	public function new(x:Float = 0, y:Float = 0) 
 	{
-		super(x, y);		
-		
-		
+		super(x, y);				
 		
 		recoverState = RNormal;
 	}
 	
-	public function enableHitBox():Void 
+	public function enableHitBox(width:Int, height:Int):Void 
 	{
 		if (hitBox == null)		
-			hitBox = new HitBox(this, 20, 20);
+			hitBox = new HitBox(this, width, height);
 	}
 	
-	public function enablePickupBox():Void 
+	public function enablePickupBox(width:Int, height:Int):Void 
 	{
 		if (pickupBox == null)	
-			pickupBox = new HitBox(this, 70, 70);
+			pickupBox = new HitBox(this, width, height);
 	}
 	/**
 	 * Enable weapon

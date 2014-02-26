@@ -4,21 +4,18 @@ using Lambda;
  * ...
  * @author Kevin
  */
-class StateSwitchGroup extends StateSwitch
+class StateSwitchGroup<T:EnumValue> extends StateSwitch<T>
 {
-	public var switches:Array<StateSwitch>;
+	public var switches:Array<StateSwitch<T>>;
 	
-	public var groupMode:Int;
+	public var groupMode:GroupMode;
 	
-	public static inline var GROUP_MODE_AND:Int = 0;
-	public static inline var GROUP_MODE_OR:Int = 1;
-	
-	public var targetState:Int = 0;
+	public var defaultState:T;
+	public var targetState:T;
 
-	public function new(x:Float=0, y:Float=0, numState:Int = 2) 
-	{
-		
-		super(x, y, numStates);		
+	public function new(entity:Entity) 
+	{		
+		super(entity);		
 		switches = [];
 	}
 	
@@ -26,7 +23,7 @@ class StateSwitchGroup extends StateSwitch
 	 * Add a StateSwitch to this group
 	 * @param	stateSwitch
 	 */
-	public function addSwitch(stateSwitch:StateSwitch):Void
+	public function addSwitch(stateSwitch:StateSwitch<T>):Void
 	{
 		var index = switches.indexOf(stateSwitch);
 		if (index == -1)
@@ -40,7 +37,7 @@ class StateSwitchGroup extends StateSwitch
 	 * Remove a StateSwitch from this group
 	 * @param	stateSwitch
 	 */
-	public function removeSwitch(stateSwitch:StateSwitch):Void
+	public function removeSwitch(stateSwitch:StateSwitch<T>):Void
 	{
 		switches.remove(stateSwitch);
 		stateSwitch.groups.remove(this);
@@ -50,42 +47,46 @@ class StateSwitchGroup extends StateSwitch
 	 * Check all child switches and determine the state of this group
 	 */
 	public function checkSwitches():Void
-	{
-		//AND mode: all switches have to have the same state
-		if (groupMode == GROUP_MODE_AND)
+	{		
+		switch (groupMode) 
 		{
-			var prevSwitch:StateSwitch = null;
-			
-			for (s in switches)
-			{					
-				if (prevSwitch != null && prevSwitch.state != s.state)	
-				{
-					//Switch off if all of them are different
-					switchState(0);
-					return;
+			case GAnd:
+				var prevSwitch:StateSwitch<T> = null;
+				
+				for (s in switches)
+				{					
+					if (prevSwitch != null && prevSwitch.state != s.state)	
+					{
+						//Switch off if all of them are different
+						switchState(defaultState);
+						return;
+					}
+						
+					prevSwitch = s;
 				}
-					
-				prevSwitch = s;
-			}
-			
-			switchState(prevSwitch.state);				
-		}
-		//OR mode: Any switches has the targetState
-		else if (groupMode == GROUP_MODE_OR)
-		{
-			for (s in switches)
-			{
-				if (s.state == targetState)
+				
+				switchState(prevSwitch.state);
+				
+			case GOr:
+				for (s in switches)
 				{
-					switchState(targetState);
-					return;
+					if (s.state == targetState)
+					{
+						switchState(targetState);
+						return;
+					}
 				}
-			}
-			//switch off if none of the children are at targetState
-			switchState(0);
-		}		
+				//switch off if none of the children are at targetState
+				switchState(defaultState);	
+		}	
 	}
 	
 	
 	
+}
+
+enum GroupMode 
+{
+	GAnd;//AND mode: all switches have to have the same state
+	GOr; //OR mode: Any switches has the targetState
 }

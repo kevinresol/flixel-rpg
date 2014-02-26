@@ -5,53 +5,46 @@ using Lambda;
  * ...
  * @author Kevin
  */
-class StateSwitch extends FlxExtendedSprite
+class StateSwitch<T:EnumValue>
 {
-
-	public static inline var SWITCH_MODE_INSTANT:Int = 0;
-	public static inline var SWITCH_MODE_ANIMATION_END:Int = 1;	
+	public var entity:Entity;
 	
-	public static inline var CONNECT_MODE_TOGGLE:Int = 0;
-	public static inline var CONNECT_MODE_SYNC:Int = 1;
+	public var switchMode:SwitchMode;
 	
-	public var switchMode:Int = SWITCH_MODE_ANIMATION_END;
-	
-	public var state(default, null):Int; 
-	public var numStates:Int;
+	public var state(default, null):T;
 	
 	/**
 	 * List of callbacks to be called when the state is changed
 	 */
-	private var callbacks:Map <Int, StateSwitch->Void> ;
+	private var callbacks:Map <T, StateSwitch<T>->Void> ;
 	
 	/**
 	 * A StateSwitchGroup can contain serveral StateSwitches
 	 * And a StateSwitch can be conatined by serveral StateSwitchGroups
 	 * This array stores the groups containing [this]
 	 */
-	public var groups:Array<StateSwitchGroup>;
+	public var groups:Array<StateSwitchGroup<T>>;
 	
 	
 	/**
 	 * An array of connected toggles.
 	 */
-	private var connected:Array<StateSwitch>;
+	private var connected:Array<StateSwitch<T>>;
 	
-	private var connectModes:Map<StateSwitch, Int>;
+	private var connectModes:Map<StateSwitch<T>, ConnectMode>;
 	
 	/**
 	 * Constructor
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(x:Float=0, y:Float=0, numStates:Int) 
+	public function new(entity:Entity) 
 	{
-		super(x, y);
-		this.numStates = numStates;
-		
-		animation.callback = animationCallback;		
-		connectModes = new Map<StateSwitch, Int>();
-		callbacks = new Map < Int, StateSwitch->Void > ();
+		this.entity = entity;
+		switchMode = SInstant;
+		entity.animation.callback = animationCallback;		
+		connectModes = new Map<StateSwitch<T>, ConnectMode>();
+		callbacks = new Map < T, StateSwitch<T>->Void > ();
 		connected = [];
 		groups = [];
 	}
@@ -62,7 +55,7 @@ class StateSwitch extends FlxExtendedSprite
 	 * switchState(2+3). Auto loop if the state+delta is out of range.
 	 * @param	delta
 	 */
-	public function jumpState(delta:Int):Void
+	/*public function jumpState(delta:Int):Void
 	{
 		var toState = state + delta;
 		
@@ -73,39 +66,45 @@ class StateSwitch extends FlxExtendedSprite
 			toState -= numStates;
 			
 		switchState(toState);
-	}
+	}*/
 	
 	/**
 	 * Switch the state. State changes and the corresponding callback is called
 	 * immediately if switchMode is SWITCH_MODE_INSTANT. Otherwise the actual 
 	 * switching will happen at the end of the animation.
 	 */
-	public function switchState(state:Int):Void
+	public function switchState(state:T):Void
 	{
 		if (this.state == state)
 			return;
 		
 		//play animation
 		var animationName = getAnimationName(this.state, state);		
-		if (animation.get(animationName) == null)
+		if (entity.animation.get(animationName) == null)
 		{
 			//SWITCH_MODE_ANIMATION_END requires an animation
-			if (switchMode == SWITCH_MODE_ANIMATION_END)
-				throw "Animation named '" + animationName + "' must be set if toggleMode == TOGGLE_MODE_ANIMATION_END";
+			switch (switchMode) 
+			{
+				case SAnimationEnd: throw "Animation named '" + animationName + "' must be set if toggleMode == TOGGLE_MODE_ANIMATION_END";					
+				default:					
+			}				
 		}
 		else
-			animation.play(animationName);
+			entity.animation.play(animationName);
 			
 		//Switch the state immediately
-		if (switchMode == SWITCH_MODE_INSTANT)
-			internalSwitchState(state);		
+		switch (switchMode) 
+		{
+			case SInstant: internalSwitchState(state);	
+			default:					
+		}		
 	}	
 	
 	/**
 	 * @private
 	 * Actually switch the state.
 	 */
-	private inline function internalSwitchState(state:Int):Void
+	private inline function internalSwitchState(state:T):Void
 	{
 		//Change the state
 		this.state = state;
@@ -127,24 +126,38 @@ class StateSwitch extends FlxExtendedSprite
 	 * @param	currentFrameIndex
 	 */
 	private function animationCallback(animationName:String, currentFrame:Int, currentFrameIndex:Int):Void
-	{		
-		if (animation.get(animationName).finished)
-		{			
-			if (switchMode == SWITCH_MODE_ANIMATION_END)
+	{
+		
+		if (animationName != null && entity.animation.get(animationName).finished)
+		{
+			switch (switchMode) 
 			{
-				var toState = Std.parseInt(animationName.split("->")[1]);
-				internalSwitchState(toState);	
-			}				
-			
+				case SAnimationEnd:
+					var toState:T = cast Type.resolveEnum(animationName.split("->")[1]);
+					internalSwitchState(toState);
+				default:					
+			}			
 		}		
-	}	
+	}
+	
+	public function addAnimation(fromState:T, toState:T, frames:Array<Int>, frameRate:Int, reverse:Bool = false):Void
+	{
+		entity.animation.add(getAnimationName(fromState, toState), frames, frameRate, false);
+		
+		
+		if (reverse)
+		{
+			var revseredFrames = [for (i in 0...frames.length) frames[frames.length - i - 1]];
+			entity.animation.add(getAnimationName(toState, fromState), revseredFrames, frameRate, false);
+		}
+	}
 	
 	/**
 	 * Connect another stateSwitch to this stateSwitch.
 	 * @param	stateSwitch
 	 * @param	connectMode
 	 */
-	public function connect(stateSwitch:StateSwitch, connectMode:Int):Void
+	public function connect(stateSwitch:StateSwitch<T>, connectMode:ConnectMode):Void
 	{		
 		var index = connected.indexOf(stateSwitch);
 		
@@ -159,7 +172,7 @@ class StateSwitch extends FlxExtendedSprite
 	 * Disconnect a connected stateSwitch.
 	 * @param	stateSwitch
 	 */
-	public function disconnect(stateSwitch:StateSwitch):Void
+	public function disconnect(stateSwitch:StateSwitch<T>):Void
 	{
 		if (connected.remove(stateSwitch))
 			connectModes.remove(stateSwitch);
@@ -171,14 +184,14 @@ class StateSwitch extends FlxExtendedSprite
 	 * @param	state
 	 * @param	callback
 	 */
-	public inline function setCallback(state:Int, callback:StateSwitch->Void):Void
+	public inline function setCallback(state:T, callback:StateSwitch<T>->Void):Void
 	{
 		callbacks.set(state, callback);
 	}
 	
-	public inline function getAnimationName(fromState:Int, toState:Int):String
+	public inline function getAnimationName(fromState:T, toState:T):String
 	{
-		return fromState + "->" + toState;
+		return Std.string(fromState) + "->" + Std.string(toState);
 	}
 	
 	/**
@@ -189,4 +202,16 @@ class StateSwitch extends FlxExtendedSprite
 		for (g in groups)
 			g.checkSwitches();
 	}
+}
+
+enum SwitchMode 
+{
+	SInstant;
+	SAnimationEnd;
+}
+
+enum ConnectMode 
+{
+	CSync;
+	CToggle;
 }

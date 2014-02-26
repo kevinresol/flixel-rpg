@@ -6,27 +6,25 @@ using Lambda;
  * A 2-state StateSwitch
  * @author Kevin
  */
-class Toggle extends StateSwitch
-{
-	public static inline var ON:Int = 1;
-	public static inline var OFF:Int = 0;
-	
-	public static inline var CONNECT_MODE_TOGGLE:Int = 0;
-	public static inline var CONNECT_MODE_SYNC:Int = 1;		
-	
+class Toggle extends StateSwitch<ToggleState>
+{	
 	/**
 	 * Constructor
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(x:Float=0, y:Float=0) 
+	public function new(entity:Entity) 
 	{
-		super(x, y, 2);
+		super(entity);
 	}
 	
 	public inline function toggle():Void
 	{
-		jumpState(1);
+		switch(this.state)
+		{
+			case TOn: switchState(TOff);
+			case TOff: switchState(TOn);				
+		}
 	}
 	
 	/**
@@ -44,4 +42,10 @@ class Toggle extends StateSwitch
 		}
 	}	*/	
 	
+}
+
+enum ToggleState 
+{
+	TOn;
+	TOff;
 }
