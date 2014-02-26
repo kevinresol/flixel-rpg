@@ -1,5 +1,5 @@
 package flixel.rpg.requirement;
-import flixel.rpg.fsm.StateMachine;
+import flixel.rpg.fsm.FiniteStateMachine;
 
 /**
  * ...
@@ -7,13 +7,13 @@ import flixel.rpg.fsm.StateMachine;
  */
 class StateRequirement implements IRequirement
 {
-	private var stateMachine:StateMachine;
+	private var stateMachine:FiniteStateMachine;
 	
 	private var type:String;
 	
 	private var value:String;
 
-	public function new(type:String, value:Dynamic, stateMachine:StateMachine) 
+	public function new(type:String, value:Dynamic, stateMachine:FiniteStateMachine) 
 	{
 		this.type = type;
 		this.value = value;
