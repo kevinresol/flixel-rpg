@@ -30,8 +30,12 @@ class GameState extends FlxState
 	override public function create():Void 
 	{
 		super.create();
+		
+		persistentUpdate = true;
+		persistentDraw = true;
+		
 		hud = new HUDSubState();
-		setSubState(hud);
+		this.openSubState(hud);
 	}
 	
 	/**
@@ -59,6 +63,13 @@ class GameState extends FlxState
 		super.update();
 	}
 	
+	public override function destroy():Void 
+	{
+		if (lighting != null)
+			lighting.destroy();
+		
+		super.destroy();
+	}
 	
 	/**
 	 * Set to true to pause the game. The HUD will still work.
