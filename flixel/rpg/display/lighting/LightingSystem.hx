@@ -85,5 +85,10 @@ class LightingSystem
 		
 	}
 	
+	public function destroy():Void
+	{
+		//TODO
+	}
+	
 	
 }
