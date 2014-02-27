@@ -2,15 +2,23 @@ package flixel.rpg.entity;
 import flixel.addons.display.FlxExtendedSprite;
 using Lambda;
 /**
- * ...
+ * Connect: 2-way communication (Not fully implemented)
+ * Group Add: 1-way communication
  * @author Kevin
  */
 class StateSwitch<T:EnumValue>
 {
 	public var entity:Entity;
-	
+		
+	/**
+	 * Switch mode
+	 */
 	public var switchMode:SwitchMode;
 	
+	
+	/**
+	 * Current state
+	 */
 	public var state(default, null):T;
 	
 	/**
@@ -28,32 +36,69 @@ class StateSwitch<T:EnumValue>
 	 * And a StateSwitch can be conatined by serveral StateSwitchGroups
 	 * This array stores the groups containing [this]
 	 */
-	public var groups:Array<StateSwitchGroup<T>>;
+	public var groups:Array<StateSwitch<T>>;
 	
 	
 	/**
 	 * An array of connected toggles.
 	 */
-	private var connected:Array<StateSwitch<T>>;
+	private var connected:Array<StateSwitch<T>>; //TODO
 	
-	private var connectModes:Map<StateSwitch<T>, ConnectMode>;
+	private var connectModes:Map < StateSwitch<T>, ConnectMode > ;
+	
+	
+	/**
+	 * 
+	 */
+	public var groupMode:GroupMode;
+	
+	/**
+	 * Contained switches (only relevant when groupMode != GNone)
+	 */
+	public var switches:Array<StateSwitch<T>>;	
+	
+	/**
+	 * Default state (only relevant when groupMode != GNone)
+	 */
+	public var defaultState:T;
+	
+	/**
+	 * Target state (only relevant when groupMode != GNone)
+	 */
+	public var targetState:T;
 	
 	/**
 	 * Constructor
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(entity:Entity, initialState:T) 
+	public function new(entity:Entity, defaultState:T, ?targetState:T, ?groupMode:GroupMode) 
 	{
 		this.entity = entity;
+		
 		switchMode = SInstant;
-		state = initialState;
+		
+		state = defaultState;
 		stateType = Type.getEnum(state);
+		
+		this.groupMode = (groupMode == null ? GNone : groupMode);
+		
 		entity.animation.callback = animationCallback;		
 		connectModes = new Map<StateSwitch<T>, ConnectMode>();
-		callbacks = new Map < T, StateSwitch<T>->Void > ();
+		callbacks = new Map<T, StateSwitch<T>->Void>();
+			
 		connected = [];
 		groups = [];
+		
+		// Some group-mode-only settings
+		switch(this.groupMode)
+		{
+			case GNone:
+			default:
+				switches = [];
+				this.targetState = targetState;
+				this.defaultState = defaultState;
+		}
 	}
 	
 	
@@ -165,14 +210,14 @@ class StateSwitch<T:EnumValue>
 	 * @param	connectMode
 	 */
 	public function connect(stateSwitch:StateSwitch<T>, connectMode:ConnectMode):Void
-	{		
-		var index = connected.indexOf(stateSwitch);
+	{
+		if (connected.indexOf(stateSwitch) >= 0)
+			return;
+			
+		connected.push(stateSwitch);
+		connectModes.set(stateSwitch, connectMode);
 		
-		if (index == -1)
-		{
-			connected.push(stateSwitch);
-			connectModes.set(stateSwitch, connectMode);
-		}
+		stateSwitch.connect(this, connectMode);		
 	}
 	
 	/**
@@ -180,10 +225,13 @@ class StateSwitch<T:EnumValue>
 	 * @param	stateSwitch
 	 */
 	public function disconnect(stateSwitch:StateSwitch<T>):Void
-	{
-		if (connected.remove(stateSwitch))
-			connectModes.remove(stateSwitch);
-		
+	{		
+		if (!connected.remove(stateSwitch))
+			return;
+			
+		connectModes.remove(stateSwitch);
+			
+		stateSwitch.disconnect(this);	
 	}
 	
 	/**
@@ -209,6 +257,78 @@ class StateSwitch<T:EnumValue>
 		for (g in groups)
 			g.checkSwitches();
 	}
+	
+	/**
+	 * Notify the groups containing [this]. Called when state actually changed.
+	 */
+	public function notifyConnected():Void
+	{
+		
+	}
+	
+	/**
+	 * Add a StateSwitch to this group
+	 * @param	stateSwitch
+	 */
+	public function addSwitch(stateSwitch:StateSwitch<T>):Void
+	{
+		var index = switches.indexOf(stateSwitch);
+		if (index == -1)
+		{
+			switches.push(stateSwitch);
+			stateSwitch.groups.push(this);
+		}
+	}
+	
+	/**
+	 * Remove a StateSwitch from this group
+	 * @param	stateSwitch
+	 */
+	public function removeSwitch(stateSwitch:StateSwitch<T>):Void
+	{
+		switches.remove(stateSwitch);
+		stateSwitch.groups.remove(this);
+	}
+	
+	/**
+	 * Check all child switches and determine the state of this group
+	 */
+	public function checkSwitches():Void
+	{		
+		switch (groupMode) 
+		{
+			case GNone:
+			case GAnd:
+				var prevSwitch:StateSwitch<T> = null;
+				
+				for (s in switches)
+				{					
+					if (prevSwitch != null && prevSwitch.state != s.state)	
+					{
+						//Switch off if all of them are different
+						switchState(defaultState);
+						return;
+					}
+						
+					prevSwitch = s;
+				}
+				
+				switchState(prevSwitch.state);
+				
+			case GOr:
+				for (s in switches)
+				{
+					if (s.state == targetState)
+					{
+						switchState(targetState);
+						return;
+					}
+				}
+				//switch off if none of the children are at targetState
+				switchState(defaultState);	
+		}	
+	}
+	
 }
 
 enum SwitchMode 
@@ -221,4 +341,11 @@ enum ConnectMode
 {
 	CSync;
 	CToggle;
+}
+
+enum GroupMode 
+{
+	GNone; //Not a group
+	GAnd;//AND mode: all switches have to have the same state
+	GOr; //OR mode: Any switches has the targetState
 }
