@@ -1,9 +1,11 @@
 package flixel.rpg.core;
+import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup.FlxTypedGroup;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.level.Level;
+import flixel.util.FlxSort;
 
 /**
  * A manager to manage various groups. These groups are then used by RpgEngine to handle collisions
@@ -113,7 +115,7 @@ class GroupManager extends FlxGroup
 		
 		add(pickups = new FlxTypedGroup<Pickup>());	
 		add(playerPickupBoxes = new FlxGroup());		
-				
+		
 	}
 	
 	/**
@@ -128,8 +130,15 @@ class GroupManager extends FlxGroup
 			
 		this.level = level;
 		add(level);
+		
+		sort(
+				function(order:Int, o1:FlxBasic, o2:FlxBasic)
+					return FlxSort.byValues(order, o1 == level ? 1 : 0, o2 == level ? 1 : 0),
+				FlxSort.DESCENDING
+			);
 	}
 	
+	//TODO allow more players?
 	/**
 	 * Register a player. Currently only one player is allowed
 	 * @param	entity
