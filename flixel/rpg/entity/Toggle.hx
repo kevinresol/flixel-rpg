@@ -15,7 +15,7 @@ class Toggle extends StateSwitch<ToggleState>
 	 */
 	public function new(entity:Entity) 
 	{
-		super(entity);
+		super(entity, TOff);
 	}
 	
 	public inline function toggle():Void

@@ -13,9 +13,12 @@ class StateSwitchGroup<T:EnumValue> extends StateSwitch<T>
 	public var defaultState:T;
 	public var targetState:T;
 
-	public function new(entity:Entity) 
+	public function new(entity:Entity, defaultState:T, targetState:T, groupMode:GroupMode) 
 	{		
-		super(entity);		
+		super(entity, defaultState);
+		this.defaultState = defaultState;
+		this.targetState = targetState;
+		this.groupMode = groupMode;
 		switches = [];
 	}
 	

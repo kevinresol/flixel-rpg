@@ -14,6 +14,11 @@ class StateSwitch<T:EnumValue>
 	public var state(default, null):T;
 	
 	/**
+	 * Runtime value of T
+	 */
+	private var stateType:Enum<Dynamic>;
+	
+	/**
 	 * List of callbacks to be called when the state is changed
 	 */
 	private var callbacks:Map <T, StateSwitch<T>->Void> ;
@@ -38,10 +43,12 @@ class StateSwitch<T:EnumValue>
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(entity:Entity) 
+	public function new(entity:Entity, initialState:T) 
 	{
 		this.entity = entity;
 		switchMode = SInstant;
+		state = initialState;
+		stateType = Type.getEnum(state);
 		entity.animation.callback = animationCallback;		
 		connectModes = new Map<StateSwitch<T>, ConnectMode>();
 		callbacks = new Map < T, StateSwitch<T>->Void > ();
@@ -133,7 +140,7 @@ class StateSwitch<T:EnumValue>
 			switch (switchMode) 
 			{
 				case SAnimationEnd:
-					var toState:T = cast Type.resolveEnum(animationName.split("->")[1]);
+					var toState:T = cast Type.createEnum(stateType, animationName.split("->")[1]);
 					internalSwitchState(toState);
 				default:					
 			}			
