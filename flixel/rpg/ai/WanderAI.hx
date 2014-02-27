@@ -16,23 +16,11 @@ class WanderAI extends AI
 	 * Time interval between wanders. In seconds.
 	 */
 	public var timeInterval(default, set):Float = 5;
-	private function set_timeInterval(v:Float):Float
-	{
-		timeInterval = v;
-		setNextWanderInterval();
-		return v;
-	}
 	
 	/**
 	 * A random number applied to the time interval
 	 */
 	public var timeIntervalRandomRange(default, set):Float = 1;
-	private function set_timeIntervalRandomRange(v:Float):Float
-	{
-		timeIntervalRandomRange = v;
-		setNextWanderInterval();
-		return v;
-	}
 	
 	/**
 	 * The movement speed of the wandering
@@ -45,16 +33,13 @@ class WanderAI extends AI
 	public var radius:Float = 25;
 	
 	/**
-	 * @private
-	 * Flag to indicate if the entity is in wandering mode. Basically it means
-	 * that the entity is not "actively" moving. Note that the entity may be standing still
-	 * even isWandering == true, because there is a pause between each wander moves. 
+	 * State of wandering
 	 */
-	private var isWandering:Bool;
+	private var wanderState:WanderState;
 	
 	/**
 	 * @private
-	 * The time interval to next wander move
+	 * The time interval to next wander move = timeInterval + random
 	 */
 	private var nextWanderInterval:Float;
 	
@@ -69,21 +54,7 @@ class WanderAI extends AI
 	 * The elpased time since last wander move. Used with nextWanderInterval to
 	 * trigger next mvoe
 	 */
-	private var timeSinceLastMove:Float = 0;	
-	
-	/**
-	 * @private
-	 * X location of previous frame. Used to determine if the entity is moving.
-	 * Used by timeSinceLastMove
-	 */
-	private var prevX:Float;
-	
-	/**
-	 * @private
-	 * Y location of previous frame. Used to determine if the entity is moving.
-	 * Used by timeSinceLastMove
-	 */
-	private var prevY:Float;
+	private var idledTime:Float = 0;		
 	
 	/**
 	 * @private
@@ -103,6 +74,8 @@ class WanderAI extends AI
 	public function new() 
 	{
 		super();
+		wanderState = WNone;
+		
 		setNextWanderInterval();
 		targetLocation = new FlxPoint();
 		wanderCenter = new FlxPoint();
@@ -115,62 +88,66 @@ class WanderAI extends AI
 	{
 		super.update();
 		
-		//No need to wander if there is a target
-		if (isWandering != (entity.target == null))
+		// Check if entity has an target
+		switch (wanderState) 
 		{
-			//Flip the boolean
-			isWandering = !isWandering;
-			
-			//Just started wandering
-			if (isWandering)
-			{				
-				//Set a wander center, the entity will wander around this point
-				wanderCenter.set(entity.x + entity.origin.x, entity.y + entity.origin.y);
-			}			
-			else //Just stopped wandering
-			{
-				//Clear the stop timer
-				if (stopTimer != null)
-				{				
-					stopTimer.abort();
-					stopTimer = null;
+			case WNone:
+				// Let's start wandering if the entity has no target
+				if (entity.target == null)
+				{
+					// Set state to idle
+					wanderState = WIdle;
+					
+					// Set a wander center, the entity will wander around this point
+					wanderCenter.set(entity.x + entity.origin.x, entity.y + entity.origin.y);					
 				}
-			}
+				
+			case WIdle | WMove:
+				// Stop wandering if entity has target
+				if (entity.target != null)
+				{
+					// Set state to none
+					wanderState = WNone;
+					
+					// Clear the stop timer
+					if (stopTimer != null)
+					{				
+						stopTimer.abort();
+						stopTimer = null;
+					}
+				}				
 		}
 		
-		//No need to proceed if not wandering
-		if (!isWandering)
-			return;		
-		
-		//Count time if it is not moving
-		if (entity.x == prevX && entity.y == prevY)
+		switch (wanderState) 
 		{
-			timeSinceLastMove += FlxG.elapsed;
-		}
-		else //It is still moving
-		{
-			timeSinceLastMove = 0;
-			prevX = entity.x;
-			prevY = entity.y;
-		}
-		
-		//Have been standing still for some time, lets move a bit
-		if (timeSinceLastMove > nextWanderInterval)
-		{			
-			var toX = wanderCenter.x + FlxRandom.floatRanged( -radius, radius);
-			var toY = wanderCenter.y + FlxRandom.floatRanged( -radius, radius);
-			
-			var dx = toX - entity.x - entity.origin.x;
-			var dy = toY - entity.y - entity.origin.y;
-						
-			//Set velocity of the entity
-			targetLocation.set(toX, toY);
-			FlxVelocity.moveTowardsPoint(entity, targetLocation, speed);
-			
-			//Use a timer to stop the entity when it reaches the target position
-			stopTimer = FlxTimer.start(Math.sqrt(dx * dx + dy * dy) / speed, stopWander);
-		}
-		
+			case WNone | WMove:
+				// do nothing
+			case WIdle:
+				idledTime += FlxG.elapsed;
+				
+				// Have been resting for some time, should start moving
+				if (idledTime > nextWanderInterval)
+				{
+					// Set state to move
+					wanderState = WMove;
+					
+					// Set a random destination
+					var toX = wanderCenter.x + FlxRandom.floatRanged( -radius, radius);
+					var toY = wanderCenter.y + FlxRandom.floatRanged( -radius, radius);
+					
+					// Calculate the distance and duration of the move
+					var dx = toX - entity.x - entity.origin.x;
+					var dy = toY - entity.y - entity.origin.y;
+					var dt = Math.sqrt(dx * dx + dy * dy) / speed;
+								
+					// Set velocity of the entity
+					targetLocation.set(toX, toY);
+					FlxVelocity.moveTowardsPoint(entity, targetLocation, speed);
+					
+					// Use a timer to stop the entity when it reaches the target position
+					stopTimer = FlxTimer.start(dt, stopWander);
+				}				
+		}	
 	}
 	
 	/**
@@ -179,8 +156,15 @@ class WanderAI extends AI
 	 */
 	private function stopWander(timer:FlxTimer):Void
 	{
-		entity.velocity.set();
+		// Set state to idle again
+		wanderState = WIdle;		
+		
+		// Reset timer
+		idledTime = 0;
 		stopTimer = null;
+		
+		// Stop moving
+		entity.velocity.set();
 	}
 	
 	/**
@@ -192,4 +176,26 @@ class WanderAI extends AI
 	}
 	
 	
+	private function set_timeIntervalRandomRange(v:Float):Float
+	{
+		timeIntervalRandomRange = v;
+		setNextWanderInterval();
+		return v;
+	}
+	
+	
+	private function set_timeInterval(v:Float):Float
+	{
+		timeInterval = v;
+		setNextWanderInterval();
+		return v;
+	}
+	
+}
+
+enum WanderState
+{
+	WIdle; // should wander, just taking a rest right now
+	WMove; // actually wandering (moving)
+	WNone; // not wander at all (actively moving)
 }
