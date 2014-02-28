@@ -34,7 +34,8 @@ class HitBox extends FlxObject
 	override public function update():Void 
 	{
 		super.update();
-		setPosition(parent.x + (parent.width - width) * 0.5, parent.y + (parent.height - height) * 0.5);
+		
+		setPosition(parent.x + (parent.width - width - parent.offset.x) * 0.5, parent.y + (parent.height - height - parent.offset.y) * 0.5);
 	}
 	
 }
