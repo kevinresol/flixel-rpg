@@ -54,5 +54,5 @@ class FollowAI extends AI
 enum AccelerationMode
 {
 	AInstant;
-	AAccelerate(maxX:Float, maxY:Float);
+	AAccelerate(x:Float, y:Float);
 }
