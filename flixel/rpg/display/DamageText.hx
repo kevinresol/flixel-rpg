@@ -7,6 +7,8 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxEase.EaseFunction;
 import flixel.tweens.FlxTween;
+import flixel.tweens.misc.ColorTween;
+import flixel.tweens.motion.LinearMotion;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 
@@ -14,12 +16,12 @@ import flixel.util.FlxTimer;
  * ...
  * @author Kevin
  */
-class DamageText extends FlxTypedGroup<FlxText>
+class DamageText extends FlxText //FlxTypedGroup<FlxText>
 {
-	private static var motionTweenOptions:TweenOptions;	
-	private static var alphaTweenOptions:TweenOptions;
+	private static var group:FlxTypedGroup<DamageText>;
 	
-	private static var damageText:DamageText;
+	private var motionTween:LinearMotion;
+	private var alphaTween:ColorTween;
 	
 	/**
 	 * Call this function once before using DamageText.showAtObject()
@@ -27,8 +29,8 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	public static function init(state:FlxState):Void
 	{
-		if (damageText == null)
-			state.add(damageText = new DamageText());
+		if (group == null)
+			state.add(group = new FlxTypedGroup<DamageText>());
 	}
 	
 	/**
@@ -36,11 +38,16 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	public function new()
 	{
-		super();
+		super(0, 0, 30);		
+		alignment = "center";		
 		
-		//Prepare the tween objects
-		motionTweenOptions = { complete:onMotionTweenComplete, type:FlxTween.ONESHOT, ease:FlxEase.expoOut };		
-		alphaTweenOptions = { complete:onAlphaTweenComplete, type:FlxTween.ONESHOT, ease:FlxEase.quartOut };		
+		motionTween = new LinearMotion(onMotionTweenComplete,FlxTween.PERSIST);
+		motionTween.setObject(this);
+		FlxTween.manager.add(motionTween);
+		
+		alphaTween = new ColorTween(onAlphaTweenComplete, FlxTween.PERSIST);
+		FlxTween.manager.add(alphaTween);
+		
 	}
 	
 	/**
@@ -50,11 +57,11 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	public static function showAtObject(object:FlxObject, value:String):Void
 	{
-		var textBox = damageText.getFirstAvailable();
+		var textBox = group.getFirstAvailable();
 		
 		if (textBox == null)
 		{
-			damageText.add(textBox = createTextBox());
+			group.add(textBox = new DamageText());
 		}
 				
 		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.intRanged( -10, 10);
@@ -66,16 +73,9 @@ class DamageText extends FlxTypedGroup<FlxText>
 		textBox.setPosition(fromX, fromY);
 		textBox.exists = true;
 		
-		var motionTween = FlxTween.linearMotion(textBox, fromX, fromY, fromX, toY, 1, true, motionTweenOptions);
-		motionTween.userData = textBox;		
+		textBox.motionTween.setMotion(fromX, fromY, fromX, toY, 1, true, FlxEase.expoOut);
 	}
 	
-	private static inline function createTextBox():FlxText 
-	{
-		var textBox = new FlxText(0, 0, 30);
-		textBox.alignment = "center";
-		return textBox;
-	}
 	
 	/**
 	 * Complete callback for the motionTween. Starts fading out the text.
@@ -83,9 +83,7 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	private function onMotionTweenComplete(motionTween:FlxTween):Void
 	{
-		var textBox:FlxText = motionTween.userData;
-		var alphaTween = FlxTween.color(textBox, 0.5, textBox.color, textBox.color, 1, 0, alphaTweenOptions);
-		alphaTween.userData = textBox;
+		alphaTween.tween(0.5, color, color, 1, 0, FlxEase.quartOut, this);
 	}
 	
 	/**
@@ -94,6 +92,6 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	private function onAlphaTweenComplete(alphaTween:FlxTween):Void
 	{
-		cast(alphaTween.userData, FlxText).exists = false;
+		exists = false;
 	}
 }
