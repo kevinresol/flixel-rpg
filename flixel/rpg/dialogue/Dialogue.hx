@@ -31,6 +31,8 @@ class Dialogue
 	 */
 	public var availableResponses(get, null):Array<DialogueResponse>;
 	
+	public var autoRespond:Bool = false;
+	
 	private var system:DialogueSystem;
 	
 	/**
@@ -39,13 +41,14 @@ class Dialogue
 	 * @param	name
 	 * @param	text
 	 */
-	public function new(system:DialogueSystem, id:String, name:String, text:String) 
+	public function new(system:DialogueSystem, id:String, name:String, text:String, ?autoRespond:Bool) 
 	{
 		this.system = system;
 		this.id = id;
 		this.name = name;
 		this.text = text;
 		this.responses = [];
+		this.autoRespond = autoRespond;
 	}
 	
 	/**

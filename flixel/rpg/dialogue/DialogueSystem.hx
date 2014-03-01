@@ -92,7 +92,7 @@ class DialogueSystem
 		for (dialogueData in data)
 		{
 			//create the dialogue object
-			var dialogue = new Dialogue(this, dialogueData.id, dialogueData.name, dialogueData.text);			
+			var dialogue = new Dialogue(this, dialogueData.id, dialogueData.name, dialogueData.text, dialogueData.autoRespond);			
 			dialogues.set(dialogue.id, dialogue);
 			
 			//create the responses objects
@@ -138,7 +138,10 @@ class DialogueSystem
 			current = dialogue;
 			
 			if (onChange != null)
-				onChange();	
+				onChange();
+			
+			if (dialogue != null && dialogue.autoRespond)
+				dialogue.respond(dialogue.availableResponses[0]);
 		}
 	}
 	
@@ -165,8 +168,8 @@ typedef DialogueData =
 	id:String,
 	name:String,
 	text:String,
-	responses:Array<ResponseData>
-	
+	responses:Array<ResponseData>,
+	?autoRespond:Bool
 }
 
 typedef ResponseData =
