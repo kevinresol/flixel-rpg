@@ -8,19 +8,18 @@ import openfl.Assets;
  * ...
  * @author Kevin
  */
-class Level extends FlxGroup
+class Level
 {
-	public var blocks:FlxTilemap;
-	public var overlays:FlxTilemap;
+	public var background:FlxTilemap;	
+	public var obstacles(default, null):FlxTilemap;
+	public var overlay:FlxTilemap;
 
 	public function new() 
 	{
-		super();		
 		
-		blocks = new FlxTilemap();
-		add(blocks);
-		
-		overlays = new FlxTilemap();
+		background = new FlxTilemap();
+		obstacles = new FlxTilemap();		
+		overlay = new FlxTilemap();
 		//add(overlays);
 	}
 	

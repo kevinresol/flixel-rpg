@@ -97,8 +97,11 @@ class GroupManager extends FlxGroup
 	 * Constructor
 	 */
 	public function new():Void
-	{		
-		super();
+	{
+		//TODO layers: background, entities, foreground
+		
+		super();		
+		
 		add(characters = new FlxGroup());
 		characters.add(allies = new FlxGroup());
 		characters.add(enemies = new FlxGroup());
@@ -114,7 +117,7 @@ class GroupManager extends FlxGroup
 		add(objects = new FlxGroup());
 		
 		add(pickups = new FlxTypedGroup<Pickup>());	
-		add(playerPickupBoxes = new FlxGroup());		
+		add(playerPickupBoxes = new FlxGroup());
 		
 	}
 	
@@ -126,16 +129,31 @@ class GroupManager extends FlxGroup
 	private function registerLevel(level:Level):Void
 	{
 		if (this.level != null)
-			remove(this.level);
+		{
+			//remove(this.level.background);
+			remove(this.level.obstacles);
+			//remove(this.level.overlay);
+		}
 			
 		this.level = level;
-		add(level);
+		//add(level.background);
+		add(level.obstacles);
+		//add(level.overlay);
 		
 		sort(
 				function(order:Int, o1:FlxBasic, o2:FlxBasic)
-					return FlxSort.byValues(order, o1 == level ? 1 : 0, o2 == level ? 1 : 0),
+					return FlxSort.byValues(order, getLayer(o1), getLayer(o2)),
 				FlxSort.DESCENDING
 			);
+	}
+	
+	private inline function getLayer(b:FlxBasic):Int
+	{
+		return
+			if (b == level.background) 1
+			else if (b == level.obstacles) 4
+			else if (b == level.overlay) 5
+			else 3;
 	}
 	
 	//TODO allow more players?

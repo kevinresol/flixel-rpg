@@ -56,10 +56,13 @@ class RpgEngine
 	public inline static function collide():Void
 	{		
 		//Don't walk into walls
-		FlxG.collide(groups.characters, groups.level.blocks);
+		FlxG.collide(groups.characters, groups.level.obstacles);
+		
+		//Don't walk into objects
+		FlxG.collide(groups.characters, groups.objects);
 		
 		//Don't shoot through walls
-		FlxG.collide(groups.bullets, groups.level.blocks, bulletCollideWall);
+		FlxG.collide(groups.bullets, groups.level.obstacles, bulletCollideWall);
 		
 		//Bullets should hit the target!
 		FlxG.overlap(groups.allyBullets, groups.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
