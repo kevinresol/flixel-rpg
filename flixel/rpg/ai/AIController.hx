@@ -20,6 +20,8 @@ class AIController
 	 */
 	private var aiList:Map<String, IAI>;
 	
+	private var aiArray:Array<IAI>;
+	
 	/**
 	 * Contructor
 	 * @param	entity
@@ -27,6 +29,9 @@ class AIController
 	public function new(entity:Entity) 
 	{
 		this.entity = entity;
+		
+		aiList = new Map<String, IAI>();
+		aiArray = [];
 	}
 	
 	/**
@@ -39,8 +44,6 @@ class AIController
 	{
 		ai.entity = entity;
 		
-		if (aiList == null)
-			aiList = new Map<String, IAI>();
 			
 		if (aiList.exists(aiName))
 			throw "This name has already been used";
@@ -49,6 +52,7 @@ class AIController
 			throw "This AI has already been added";
 		
 		aiList.set(aiName, ai);
+		aiArray.push(ai);
 		
 		return ai;
 	}
@@ -58,16 +62,14 @@ class AIController
 	 * @param	aiName
 	 */
 	public function remove(aiName:String):Void
-	{		
-		if (aiList == null)
-			return;			
-		
+	{
 		var ai = aiList.get(aiName);
 		
 		if (ai != null)
 		{
 			ai.entity = null;		
 			aiList.remove(aiName);
+			aiArray.remove(ai);
 		}
 	}
 	
@@ -88,11 +90,8 @@ class AIController
 	 * Called by the entity's update() function
 	 */
 	public function update():Void
-	{
-		if (aiList == null)
-			return;			
-			
-		for (ai in aiList)
+	{		
+		for (ai in aiArray)
 			ai.update();
 	}
 	
@@ -101,13 +100,11 @@ class AIController
 	 */
 	public function destroy():Void
 	{
-		if (aiList == null)
-			return;	
-			
-		for (ai in aiList)
+		for (ai in aiArray)
 			ai.destroy();
 		
 		aiList = null;
+		aiArray = null;
 	}
 	
 }
