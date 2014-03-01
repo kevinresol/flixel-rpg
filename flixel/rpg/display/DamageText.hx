@@ -56,9 +56,7 @@ class DamageText extends FlxTypedGroup<FlxText>
 		
 		if (textBox == null)
 		{
-			textBox = new FlxText(0, 0, 30);
-			textBox.alignment = "center";
-			damageText.add(textBox);
+			damageText.add(textBox = createTextBox());
 		}
 				
 		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.intRanged( -10, 10);
@@ -70,8 +68,15 @@ class DamageText extends FlxTypedGroup<FlxText>
 		textBox.setPosition(fromX, fromY);
 		textBox.exists = true;
 		
-		var motionTween = FlxTween.multiVar(textBox, { y:toY }, 1, motionTweenOptions );
+		var motionTween = FlxTween.linearMotion(textBox, fromX, fromY, fromX, toY, 1, true, motionTweenOptions);
 		motionTween.userData = textBox;		
+	}
+	
+	private static inline function createTextBox():FlxText 
+	{
+		var textBox = new FlxText(0, 0, 30);
+		textBox.alignment = "center";
+		return textBox;
 	}
 	
 	/**
@@ -80,8 +85,9 @@ class DamageText extends FlxTypedGroup<FlxText>
 	 */
 	private function onMotionTweenComplete(motionTween:FlxTween):Void
 	{
-		var alphaTween = FlxTween.multiVar(motionTween.userData, alphaTweenValues, 0.5, alphaTweenOptions);
-		alphaTween.userData = motionTween.userData;
+		var textBox:FlxText = motionTween.userData;
+		var alphaTween = FlxTween.color(textBox, 0.5, textBox.color, textBox.color, 1, 0, alphaTweenOptions);
+		alphaTween.userData = textBox;
 	}
 	
 	/**
