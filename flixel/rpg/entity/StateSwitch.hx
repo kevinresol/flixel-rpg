@@ -27,9 +27,9 @@ class StateSwitch<T:EnumValue>
 	private var stateType:Enum<Dynamic>;
 	
 	/**
-	 * List of callbacks to be called when the state is changed
+	 * A function to be called when state changed
 	 */
-	private var callbacks:Map <T, StateSwitch<T>->Void> ;
+	public var onStateSwitched:StateSwitch<T>->Void;
 	
 	/**
 	 * A StateSwitchGroup can contain serveral StateSwitches
@@ -85,7 +85,6 @@ class StateSwitch<T:EnumValue>
 		
 		entity.animation.callback = animationCallback;		
 		connectModes = new Map<StateSwitch<T>, ConnectMode>();
-		callbacks = new Map<T, StateSwitch<T>->Void>();
 			
 		connected = [];
 		groups = [];
@@ -161,10 +160,9 @@ class StateSwitch<T:EnumValue>
 		//Change the state
 		this.state = state;
 		
-		//Callbacks
-		var cb = callbacks.get(state);		
-		if (cb != null)
-			cb(this);
+		//Callback	
+		if (onStateSwitched != null)
+			onStateSwitched(this);
 		
 		//Tell groups that my state is changed
 		notifyGroups();
@@ -234,15 +232,6 @@ class StateSwitch<T:EnumValue>
 		stateSwitch.disconnect(this);	
 	}
 	
-	/**
-	 * A callback to be called when the state is actually changed to [state]
-	 * @param	state
-	 * @param	callback
-	 */
-	public inline function setCallback(state:T, callback:StateSwitch<T>->Void):Void
-	{
-		callbacks.set(state, callback);
-	}
 	
 	public inline function getAnimationName(fromState:T, toState:T):String
 	{
