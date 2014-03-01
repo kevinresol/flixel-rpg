@@ -18,6 +18,8 @@ class FollowAI extends AI
 		accelerationMode = AInstant;
 	}
 	
+	//TODO need some pathfinding to get pass obstacles
+	
 	override public function update():Void 
 	{
 		super.update();
