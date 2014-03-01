@@ -18,7 +18,6 @@ class DamageText extends FlxTypedGroup<FlxText>
 {
 	private static var motionTweenOptions:TweenOptions;	
 	private static var alphaTweenOptions:TweenOptions;
-	private static var alphaTweenValues:Dynamic;	
 	
 	private static var damageText:DamageText;
 	
@@ -41,8 +40,7 @@ class DamageText extends FlxTypedGroup<FlxText>
 		
 		//Prepare the tween objects
 		motionTweenOptions = { complete:onMotionTweenComplete, type:FlxTween.ONESHOT, ease:FlxEase.expoOut };		
-		alphaTweenOptions = { complete:onAlphaTweenComplete, type:FlxTween.ONESHOT, ease:FlxEase.quartOut };
-		alphaTweenValues = { alpha:0 };		
+		alphaTweenOptions = { complete:onAlphaTweenComplete, type:FlxTween.ONESHOT, ease:FlxEase.quartOut };		
 	}
 	
 	/**
