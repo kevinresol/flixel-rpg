@@ -1,10 +1,9 @@
 package flixel.rpg.entity;
 
-import flixel.FlxSprite;
+import flixel.group.FlxTypedGroup;
 import flixel.rpg.ai.FollowAI;
 import flixel.rpg.inventory.InventoryItem;
 import flixel.rpg.system.HitBox;
-import flixel.util.FlxAngle;
 
 /**
  * A pickup is an physical repsentation of an InventoryItem in the game world.
@@ -15,9 +14,24 @@ import flixel.util.FlxAngle;
  * @author Kevin
  */
 class Pickup extends Entity
-{	
+{
+	public static var group(default, null):FlxTypedGroup<Pickup>;
+	
 	public var item(default, null):InventoryItem;
 	public var followAI(default, null):FollowAI;
+	
+	
+	public static function create(x:Float, y:Float, id:Int, stack:Int):Pickup
+	{
+		if (group == null)
+			group = new FlxTypedGroup<Pickup>();
+			
+		var pickup = group.recycle(Pickup);
+			
+		pickup.setPosition(x, y);
+		pickup.assignItem(InventoryItem.create(id, stack));
+		return pickup;
+	}
 	
 	public function new(x:Float = 0, y:Float = 0) 
 	{

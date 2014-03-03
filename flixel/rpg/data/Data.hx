@@ -1,5 +1,4 @@
 package flixel.rpg.data;
-import haxe.Json;
 import haxe.Unserializer;
 
 /**
@@ -101,8 +100,10 @@ typedef TradeItemData =
 typedef InventoryItemData =
 {
 	id:Int,
+	type:Int,
 	displayName:String,
-	maxStack:Int
+	maxStack:Int,
+	tooltip:String
 }
 
 typedef WeaponData = 

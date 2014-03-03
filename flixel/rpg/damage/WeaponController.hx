@@ -80,7 +80,7 @@ class WeaponController
 		w.bulletDamage = wd.bulletDamage;
 		w.group.setAll("reloadTime", wd.bulletReloadTime);
 		
-		w.setBulletBounds(RpgEngine.groups.level.obstacles.getBounds());
+		w.setBulletBounds(RpgEngine.levels.current.obstacles.getBounds());
 		
 		group.add(w.group);
 	}	

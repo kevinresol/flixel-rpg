@@ -1,7 +1,7 @@
 package flixel.rpg.trade;
 import flixel.rpg.data.Data.TradeItemData;
-import flixel.rpg.core.RpgEngine;
 import flixel.rpg.inventory.Inventory;
+import flixel.rpg.inventory.InventoryItem;
 
 /**
  * ...
@@ -35,7 +35,7 @@ class TraderTools
 		//Try to add the traded items to inventory
 		for (i in reward)
 		{
-			if (!tempInventory.addItem(RpgEngine.factory.createInventoryItem(i.id, i.count))) //cannot add, not enough space
+			if (!tempInventory.addItem(InventoryItem.create(i.id, i.count))) //cannot add, not enough space
 			{
 				tempInventory.recycle();
 				return false; 

@@ -1,5 +1,4 @@
 package flixel.rpg.core;
-import flixel.addons.plugin.FlxMouseControl;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
@@ -8,7 +7,6 @@ import flixel.rpg.dialogue.DialogueActions;
 import flixel.rpg.dialogue.DialogueSystem;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Pickup;
-import flixel.rpg.level.LevelManager;
 import flixel.rpg.weapon.Bullet;
 
 /**
@@ -17,10 +15,8 @@ import flixel.rpg.weapon.Bullet;
  */
 class RpgEngine
 {
-	public static var groups(default, null):GroupManager;
-	public static var factory(default, null):Factory;
-	public static var data(default, null):Data;
 	public static var levels(default, null):LevelManager;
+	public static var data(default, null):Data;
 	public static var script(default, null):RpgScript;
 	
 	/**
@@ -34,11 +30,9 @@ class RpgEngine
 	 */
 	public static function init(state:FlxState):Void
 	{
-		state.add(groups = new GroupManager());
-		DamageText.init(state);	
-		factory = new Factory();
+		levels = new LevelManager(state);
+		DamageText.init();	
 		data = new Data();
-		levels = new LevelManager();
 		
 		script = new RpgScript();
 		script.variables.set("RpgEngine", RpgEngine);
@@ -59,23 +53,23 @@ class RpgEngine
 		var overlap = FlxG.overlap;
 		
 		//Don't walk into walls
-		collide(groups.characters, groups.level.obstacles);
+		collide(levels.current.characters, levels.current.obstacles);
 		
 		//Don't walk into objects
-		collide(groups.characters, groups.objects);
+		collide(levels.current.characters, levels.current.objects);
 		
 		//Don't shoot through walls
-		collide(groups.bullets, groups.level.obstacles, bulletCollideWall);
+		collide(levels.current.bullets, levels.current.obstacles, bulletCollideWall);
 		
 		//Bullets should hit the target!
-		overlap(groups.allyBullets, groups.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
-		overlap(groups.enemyBullets, groups.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
+		overlap(levels.current.allyBullets, levels.current.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
+		overlap(levels.current.enemyBullets, levels.current.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
 		
 		//Pickup magnet
-		overlap(groups.playerPickupBoxes, groups.pickups, Pickup.moveTowardsPlayer, returnTrue);		
+		overlap(levels.current.playerPickupBoxes, levels.current.pickups, Pickup.moveTowardsPlayer, returnTrue);		
 		
 		//Take Pickups
-		overlap(groups.player, groups.pickups, Pickup.picked , returnTrue);
+		overlap(levels.current.player, levels.current.pickups, Pickup.picked , returnTrue);
 	}
 	
 	

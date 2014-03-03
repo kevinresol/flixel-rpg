@@ -3,6 +3,7 @@ package flixel.rpg.display;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
+import flixel.rpg.core.RpgEngine;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxEase.EaseFunction;
@@ -18,7 +19,7 @@ import flixel.util.FlxTimer;
  */
 class DamageText extends FlxText //FlxTypedGroup<FlxText>
 {
-	private static var group:FlxTypedGroup<DamageText>;
+	public static var group(default, null):FlxTypedGroup<DamageText>;
 	
 	private var motionTween:LinearMotion;
 	private var alphaTween:ColorTween;
@@ -27,10 +28,10 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 	 * Call this function once before using DamageText.showAtObject()
 	 * @param	state
 	 */
-	public static function init(state:FlxState):Void
+	public static function init():Void
 	{
 		if (group == null)
-			state.add(group = new FlxTypedGroup<DamageText>());
+			group = new FlxTypedGroup<DamageText>();
 	}
 	
 	/**
@@ -46,8 +47,7 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 		FlxTween.manager.add(motionTween);
 		
 		alphaTween = new ColorTween(onAlphaTweenComplete, FlxTween.PERSIST);
-		FlxTween.manager.add(alphaTween);
-		
+		FlxTween.manager.add(alphaTween);		
 	}
 	
 	/**
@@ -61,7 +61,7 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 		
 		if (textBox == null)
 		{
-			group.add(textBox = new DamageText());
+			RpgEngine.levels.current.add(textBox = new DamageText());
 		}
 				
 		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.intRanged( -10, 10);

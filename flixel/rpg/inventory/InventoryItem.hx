@@ -1,4 +1,5 @@
 package flixel.rpg.inventory;
+import flixel.rpg.core.RpgEngine;
 import flixel.util.FlxPool;
 
 /**
@@ -35,15 +36,20 @@ class InventoryItem
 	 * @param	tooltip
 	 * @return
 	 */
-	public static function create(id:Int, displayName:String, slotType:Int, maxStack:Int, stack:Int = 1, tooltip:String = ""):InventoryItem
+	public static function create(id:Int, stack:Int = 1):InventoryItem
 	{
+		var data = RpgEngine.data.getItemData(id);
+		
+		if (data == null)
+			throw "ID not exist";		
+		
 		var item = pool.get();
 		item.id = id;
-		item.displayName = displayName;
-		item.slotType = slotType;
-		item.maxStack = maxStack;
 		item.stack = stack;
-		item.tooltip = tooltip; 
+		item.displayName = data.displayName;
+		item.slotType = data.type;
+		item.maxStack = data.maxStack;
+		item.tooltip = data.tooltip; 
 		return item;
 	}
 	
@@ -86,7 +92,7 @@ class InventoryItem
 		if (stack >= amount)
 		{
 			stack -= amount;
-			return InventoryItem.create(id, displayName, slotType, maxStack, amount);
+			return InventoryItem.create(id, amount);
 		}
 		else 
 			return null;		
@@ -98,7 +104,7 @@ class InventoryItem
 	 */
 	public function clone():InventoryItem
 	{
-		return InventoryItem.create(id, displayName, slotType, maxStack, stack, tooltip);
+		return InventoryItem.create(id, stack);
 	}
 	
 	/**

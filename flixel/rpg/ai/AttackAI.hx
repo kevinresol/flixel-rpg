@@ -37,7 +37,7 @@ class AttackAI extends AI
 			switch(entity.recoverState)
 			{
 				case RNormal:
-					if (FlxMath.isDistanceWithin(entity, RpgEngine.groups.player, attackRange))
+					if (FlxMath.isDistanceWithin(entity, RpgEngine.levels.current.player, attackRange))
 						entity.weapon.attack();
 				default:
 			}

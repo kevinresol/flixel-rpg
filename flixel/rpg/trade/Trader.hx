@@ -1,8 +1,8 @@
 package flixel.rpg.trade;
-import flixel.rpg.data.Data;
-import flixel.rpg.core.Factory;
 import flixel.rpg.core.RpgEngine;
+import flixel.rpg.data.Data.TradeData;
 import flixel.rpg.inventory.Inventory;
+import flixel.rpg.inventory.InventoryItem;
 
 using flixel.rpg.trade.TraderTools;
 /**
@@ -55,7 +55,7 @@ class Trader
 		// Remove the rewards from trader
 		for (r in tradeData.reward)
 		{
-			buyerInventory.addItem(RpgEngine.factory.createInventoryItem(r.id, r.count));
+			buyerInventory.addItem(InventoryItem.create(r.id, r.count));
 			
 			if(inventory != null)
 				inventory.removeItem(r.id, r.count);
@@ -64,7 +64,7 @@ class Trader
 		// Add the costs to trader
 		if (receiveCost && inventory != null)		
 			for (c in tradeData.cost)
-				inventory.addItem(RpgEngine.factory.createInventoryItem(c.id, c.count));
+				inventory.addItem(InventoryItem.create(c.id, c.count));
 		
 		return true;
 	}
