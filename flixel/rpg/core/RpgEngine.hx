@@ -54,25 +54,28 @@ class RpgEngine
 	 * A collection of collide checks performed on various groups of objects
 	 */
 	public inline static function collide():Void
-	{		
+	{
+		var collide = FlxG.collide;
+		var overlap = FlxG.overlap;
+		
 		//Don't walk into walls
-		FlxG.collide(groups.characters, groups.level.obstacles);
+		collide(groups.characters, groups.level.obstacles);
 		
 		//Don't walk into objects
-		FlxG.collide(groups.characters, groups.objects);
+		collide(groups.characters, groups.objects);
 		
 		//Don't shoot through walls
-		FlxG.collide(groups.bullets, groups.level.obstacles, bulletCollideWall);
+		collide(groups.bullets, groups.level.obstacles, bulletCollideWall);
 		
 		//Bullets should hit the target!
-		FlxG.overlap(groups.allyBullets, groups.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
-		FlxG.overlap(groups.enemyBullets, groups.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
+		overlap(groups.allyBullets, groups.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
+		overlap(groups.enemyBullets, groups.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
 		
 		//Pickup magnet
-		FlxG.overlap(groups.playerPickupBoxes, groups.pickups, Pickup.moveTowardsPlayer, returnTrue);		
+		overlap(groups.playerPickupBoxes, groups.pickups, Pickup.moveTowardsPlayer, returnTrue);		
 		
 		//Take Pickups
-		FlxG.overlap(groups.player, groups.pickups, Pickup.picked , returnTrue);
+		overlap(groups.player, groups.pickups, Pickup.picked , returnTrue);
 	}
 	
 	
