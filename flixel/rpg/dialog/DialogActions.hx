@@ -1,4 +1,4 @@
-package flixel.rpg.dialogue;
+package flixel.rpg.dialog;
 
 /**
  * A set of functions meant to be used by dialogue responses.
@@ -7,12 +7,12 @@ package flixel.rpg.dialogue;
  * Pass the class to DialogueSystem's contructor
  * @author Kevin
  */
-class DialogueActions
+class DialogActions
 {
 	/**
 	 * A reference to the dialogue system. (To call its methods)
 	 */
-	public var system:DialogueSystem;
+	public var system:DialogSystem;
 	
 	/**
 	 * Contructor.
@@ -26,7 +26,7 @@ class DialogueActions
 	 * Display a dialogue.
 	 * @param	id
 	 */
-	public function displayDialogue(id:String):Void
+	public function displayDialog(id:String):Void
 	{
 		system.display(id);
 	}
@@ -34,7 +34,7 @@ class DialogueActions
 	/**
 	 * End the dialogue
 	 */
-	public function endDialogue():Void
+	public function endDialog():Void
 	{
 		system.end();
 	}

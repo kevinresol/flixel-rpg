@@ -1,4 +1,4 @@
-package flixel.rpg.dialogue;
+package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.Entity;
 
@@ -7,7 +7,7 @@ import flixel.rpg.entity.Entity;
  * a player interacts with the Entity (or by any means)
  * @author Kevin
  */
-class DialogueInitializer
+class DialogInitializer
 {
 	public var entity:Entity;
 	
@@ -21,8 +21,8 @@ class DialogueInitializer
 	public function start():Void
 	{
 		// Let the system know that this dialogue is started by a initializer
-		RpgEngine.dialogue.currentInitializer = this;
-		RpgEngine.dialogue.display(dialogueId);			
+		RpgEngine.dialog.currentInitializer = this;
+		RpgEngine.dialog.display(dialogueId);			
 	}
 	
 }

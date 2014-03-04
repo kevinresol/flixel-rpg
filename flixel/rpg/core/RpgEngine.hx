@@ -3,8 +3,8 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.damage.BulletCallbacks;
 import flixel.rpg.data.Data;
-import flixel.rpg.dialogue.DialogueActions;
-import flixel.rpg.dialogue.DialogueSystem;
+import flixel.rpg.dialog.DialogActions;
+import flixel.rpg.dialog.DialogSystem;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.weapon.Bullet;
@@ -22,7 +22,7 @@ class RpgEngine
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
 	 */
-	public static var dialogue:DialogueSystem;
+	public static var dialog:DialogSystem;
 	
 	/**
 	 * Initialize the engine on a FlxState
@@ -38,9 +38,9 @@ class RpgEngine
 		script.variables.set("RpgEngine", RpgEngine);
 	}
 	
-	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void):Void
+	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogActions>, ?onChange:Void->Void):Void
 	{
-		dialogue = new DialogueSystem(data, dialogueActionsClass, onChange);
+		dialog = new DialogSystem(data, dialogueActionsClass, onChange);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package flixel.rpg.dialogue;
+package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScript;
 import flixel.rpg.requirement.IRequirement;
@@ -10,19 +10,19 @@ import haxe.Unserializer;
  * A dialogue system. Usage: create instance then call display()
  * @author Kevin
  */
-class DialogueSystem
+class DialogSystem
 {
 	/**
 	 * @private
 	 * A reference to the DialogueAction object
 	 */
-	private var dialogueActions:DialogueActions;
+	private var dialogActions:DialogActions;
 	
 	/**
 	 * @private
 	 * A list of dialogues
 	 */
-	private var dialogues:Map<String, Dialogue>;
+	private var dialogs:Map<String, Dialog>;
 	
 	/**
 	 * A callback to be called when a dialogue changes
@@ -32,7 +32,7 @@ class DialogueSystem
 	/**
 	 * The current dialogue
 	 */
-	public var current(default, null):Dialogue;
+	public var current(default, null):Dialog;
 	
 	/**
 	 * A requirement factory
@@ -42,7 +42,7 @@ class DialogueSystem
 	/**
 	 * The initialized which initialized the current dialogue. Can be null.
 	 */
-	public var currentInitializer:DialogueInitializer;
+	public var currentInitializer:DialogInitializer;
 	
 	/**
 	 * The scripting engine used by the dialogue system.
@@ -57,24 +57,24 @@ class DialogueSystem
 	 * @param	?onChange	callback on dialogue change
 	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
-	public function new(data:String, ?dialogueActionsClass:Class<DialogueActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
+	public function new(data:String, ?dialogActionsClass:Class<DialogActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
 	{
 		
 		this.onChange = onChange;
 		
 		this.requirementFactory = (requirementFactory == null ? new RequirementFactory() : requirementFactory);
 		
-		if (dialogueActionsClass == null)
-			dialogueActionsClass = DialogueActions;
+		if (dialogActionsClass == null)
+			dialogActionsClass = DialogActions;
 		
 		// Create the DialogueAction object
-		dialogueActions = Type.createInstance(dialogueActionsClass, []);
-		dialogueActions.system = this;
+		dialogActions = Type.createInstance(dialogActionsClass, []);
+		dialogActions.system = this;
 		
 		// Create the scripting engine and allow the DialogueAction object
 		// to be accessed as "action"
 		script = new RpgScript();
-		script.variables.set("action", dialogueActions);
+		script.variables.set("action", dialogActions);
 		script.variables.set("requirementFactory", this.requirementFactory);
 		script.variables.set("RpgEngine", RpgEngine);
 		
@@ -87,19 +87,19 @@ class DialogueSystem
 	 */
 	private function load(data:String):Void
 	{
-		dialogues = new Map<String, Dialogue>();
-		var data:Array<DialogueData> = Unserializer.run(data);
-		for (dialogueData in data)
+		dialogs = new Map<String, Dialog>();
+		var data:Array<DialogData> = Unserializer.run(data);
+		for (dialogData in data)
 		{
 			//create the dialogue object
-			var dialogue = new Dialogue(this, dialogueData.id, dialogueData.name, dialogueData.text, dialogueData.autoRespond);			
-			dialogues.set(dialogue.id, dialogue);
+			var dialog = new Dialog(this, dialogData.id, dialogData.name, dialogData.text, dialogData.autoRespond);			
+			dialogs.set(dialog.id, dialog);
 			
 			//create the responses objects
-			for (responseData in dialogueData.responses)
+			for (responseData in dialogData.responses)
 			{		
 				//create and push the response object
-				dialogue.responses.push(new DialogueResponse(responseData.text, responseData.script, responseData.requirementScripts));
+				dialog.responses.push(new DialogResponse(responseData.text, responseData.script, responseData.requirementScripts));
 			}
 		}
 	}
@@ -113,7 +113,7 @@ class DialogueSystem
 		if (currentInitializer != null && !script.variables.exists("entity"))
 			script.variables.set("entity", currentInitializer.entity);
 			
-		setCurrent(dialogues.get(id));
+		setCurrent(dialogs.get(id));
 	}
 	
 	/**
@@ -131,17 +131,17 @@ class DialogueSystem
 	 * Internal function to set the current dialogue, will call the onChange callback if there is a change
 	 * @param	dialogue
 	 */
-	private inline function setCurrent(dialogue:Dialogue):Void
+	private inline function setCurrent(dialog:Dialog):Void
 	{		
-		if (current != dialogue)
+		if (current != dialog)
 		{			
-			current = dialogue;
+			current = dialog;
 			
 			if (onChange != null)
 				onChange();
 			
-			if (dialogue != null && dialogue.autoRespond)
-				dialogue.respond(dialogue.availableResponses[0]);
+			if (dialog != null && dialog.autoRespond)
+				dialog.respond(dialog.availableResponses[0]);
 		}
 	}
 	
@@ -150,12 +150,12 @@ class DialogueSystem
 	 * @param	id
 	 * @return
 	 */
-	public function getDialogue(id:String):Dialogue
+	public function getDialog(id:String):Dialog
 	{
-		var d = dialogues.get(id);
+		var d = dialogs.get(id);
 		
 		if (d == null)
-			throw 'No dialogue is found for id:$id';
+			throw 'No dialog is found for id:$id';
 			
 		return d;
 	}
@@ -163,7 +163,7 @@ class DialogueSystem
 }
 
 
-typedef DialogueData = 
+typedef DialogData = 
 {
 	id:String,
 	name:String,

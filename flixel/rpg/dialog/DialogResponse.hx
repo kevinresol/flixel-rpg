@@ -1,11 +1,11 @@
-package flixel.rpg.dialogue;
+package flixel.rpg.dialog;
 import flixel.rpg.requirement.IRequirement;
 
 /**
  * ...
  * @author Kevin
  */
-class DialogueResponse
+class DialogResponse
 {
 	public var text:String;
 	public var requirementScripts:Array<String>;

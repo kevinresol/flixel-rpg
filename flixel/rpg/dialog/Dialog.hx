@@ -1,10 +1,10 @@
-package flixel.rpg.dialogue;
+package flixel.rpg.dialog;
 using flixel.util.FlxArrayUtil;
 /**
  * ...
  * @author Kevin
  */
-class Dialogue
+class Dialog
 {
 	/**
 	 * ID is good
@@ -24,16 +24,16 @@ class Dialogue
 	/**
 	 * Array of all responses associated with this dialogue
 	 */
-	public var responses:Array<DialogueResponse>;
+	public var responses:Array<DialogResponse>;
 	
 	/**
 	 * Array of available responses. i.e. the requirements are fulfilled
 	 */
-	public var availableResponses(get, null):Array<DialogueResponse>;
+	public var availableResponses(get, null):Array<DialogResponse>;
 	
 	public var autoRespond:Bool = false;
 	
-	private var system:DialogueSystem;
+	private var system:DialogSystem;
 	
 	/**
 	 * Constructor
@@ -41,7 +41,7 @@ class Dialogue
 	 * @param	name
 	 * @param	text
 	 */
-	public function new(system:DialogueSystem, id:String, name:String, text:String, ?autoRespond:Bool) 
+	public function new(system:DialogSystem, id:String, name:String, text:String, ?autoRespond:Bool) 
 	{
 		this.system = system;
 		this.id = id;
@@ -55,7 +55,7 @@ class Dialogue
 	 * Respond to this dialogue
 	 * @param	response	A DialogueResponse object. Must belong to this dialogue object.
 	 */
-	public function respond(response:DialogueResponse):Void
+	public function respond(response:DialogResponse):Void
 	{		
 		if (responses.indexOf(response) == -1)
 			throw "The specified response object does not belongs to this dialogue object";
@@ -74,7 +74,7 @@ class Dialogue
 	}
 	
 	
-	private function get_availableResponses():Array<DialogueResponse>
+	private function get_availableResponses():Array<DialogResponse>
 	{
 		var result = [];
 		

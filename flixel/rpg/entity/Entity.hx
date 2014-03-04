@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.damage.DamageOverTime;
 import flixel.rpg.damage.WeaponController;
-import flixel.rpg.dialogue.DialogueInitializer;
+import flixel.rpg.dialog.DialogInitializer;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.interaction.MouseHandler;
 import flixel.rpg.inventory.Inventory;
@@ -89,7 +89,7 @@ class Entity extends FlxSprite
 	/**
 	 * Dialogue Initializer
 	 */
-	public var dialogueInitializer:DialogueInitializer;
+	public var dialogueInitializer:DialogInitializer;
 	
 	/**
 	 * Mouse Handler
@@ -222,7 +222,7 @@ class Entity extends FlxSprite
 	public function enableDialogueInitializer():Void
 	{
 		if (dialogueInitializer == null)
-			dialogueInitializer = new DialogueInitializer();
+			dialogueInitializer = new DialogInitializer();
 	}
 	
 	private inline function enableMouse(pixelPerfect:Bool = false):Void
