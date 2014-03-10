@@ -53,8 +53,8 @@ class Light extends FlxSprite
 	{
 		super();		
 		blend = BlendMode.SCREEN;
-		screenXY = new FlxPoint();
-		prevScreenXY = new FlxPoint();
+		screenXY = FlxPoint.get();
+		prevScreenXY = FlxPoint.get();
 	}
 	
 	/**
