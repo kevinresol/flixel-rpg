@@ -15,12 +15,12 @@ class WanderAI extends AI
 	/**
 	 * Time interval between wanders. In seconds.
 	 */
-	public var timeInterval(default, set):Float;
+	public var timeInterval:Float;
 	
 	/**
 	 * A random number applied to the time interval
 	 */
-	public var timeIntervalRandomRange(default, set):Float;
+	public var timeIntervalRandomRange:Float;
 	
 	/**
 	 * The movement speed of the wandering
@@ -78,11 +78,13 @@ class WanderAI extends AI
 		
 		this.timeInterval = interval;
 		this.timeIntervalRandomRange = intervalRandom;
+		setNextWanderInterval();
+		
 		this.speed = speed;
 		this.radius = radius;		
 		
-		targetLocation = new FlxPoint();
-		wanderCenter = new FlxPoint();
+		targetLocation = FlxPoint.get();
+		wanderCenter = FlxPoint.get();
 	}
 	
 	/**
@@ -179,21 +181,6 @@ class WanderAI extends AI
 		nextWanderInterval = timeInterval + FlxRandom.floatRanged( -timeIntervalRandomRange / 2, timeIntervalRandomRange / 2);
 	}
 	
-	
-	private function set_timeIntervalRandomRange(v:Float):Float
-	{
-		timeIntervalRandomRange = v;
-		setNextWanderInterval();
-		return v;
-	}
-	
-	
-	private function set_timeInterval(v:Float):Float
-	{
-		timeInterval = v;
-		setNextWanderInterval();
-		return v;
-	}
 	
 }
 
