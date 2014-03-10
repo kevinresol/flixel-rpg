@@ -1,4 +1,5 @@
 package flixel.rpg.inventory;
+import flixel.interfaces.IFlxDestroyable;
 import flixel.rpg.core.RpgEngine;
 import flixel.util.FlxPool;
 
@@ -9,9 +10,9 @@ import flixel.util.FlxPool;
  * @see flixel.rpg.inventory.InventorySlot
  * 
  */
-class InventoryItem
+class InventoryItem implements IFlxDestroyable
 {
-	private static var pool:FlxPool<InventoryItem> = new FlxPool<InventoryItem>();
+	private static var pool:FlxPool<InventoryItem> = new FlxPool<InventoryItem>(InventoryItem);
 	
 	public var id(default, null):Int;
 	public var displayName(default, null):String;

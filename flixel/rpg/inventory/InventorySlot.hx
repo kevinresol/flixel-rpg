@@ -1,4 +1,5 @@
 package flixel.rpg.inventory;
+import flixel.interfaces.IFlxDestroyable;
 import flixel.util.FlxPool;
 
 /**
@@ -7,10 +8,10 @@ import flixel.util.FlxPool;
  * @see flixel.rpg.inventory.InventoryItem
  * @see flixel.rpg.inventory.Inventory
  */
-class InventorySlot
+class InventorySlot implements IFlxDestroyable
 {
 	
-	private static var pool:FlxPool<InventorySlot> = new FlxPool<InventorySlot>();
+	private static var pool:FlxPool<InventorySlot> = new FlxPool<InventorySlot>(InventorySlot);
 	/**
 	 * Type of this slot. Only matched Item can be put in this slot
 	 * Type = 0 is a special case, any items can be put.
