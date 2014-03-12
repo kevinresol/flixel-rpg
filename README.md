@@ -1,11 +1,12 @@
 ## About
 
 An RPG framework based on HaxeFlixel, including a set of essential components to build an RPG such as:
-- item/inventory/equipment system
-- trade system
+- Item/inventory/equipment system
+- Trade system
 - AI system
-- stats (attributes) system
-- dialog system
+- Stats (attributes) system
+- Dialog system
+
 ... and more (maybe multiplayer in the future)
 
 ## Install
@@ -22,6 +23,11 @@ functionalities of the framework.
 Very basic example:
 	
 ```haxe
+
+import flixel.rpg.state.GameState;
+import flixel.rpg.core.RpgEngine;
+import flixel.rpg.entity.Entity;
+
 class PlayState extends GameState
 {	
 	override public function create():Void
