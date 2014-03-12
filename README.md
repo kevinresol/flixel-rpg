@@ -1,6 +1,6 @@
 ## About
 
-An RPG framework based on HaxeFlixel, including a set of essential components to build an RPG such as:
+An RPG framework based on [HaxeFlixel], including a set of essential components to build an RPG such as:
 - Item/inventory/equipment system
 - Trade system
 - AI system
@@ -55,3 +55,5 @@ class PlayState extends GameState
 	}
 }
 ```
+
+[HaxeFlixel]: https://github.com/HaxeFlixel/flixel
