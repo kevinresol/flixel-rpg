@@ -10,7 +10,7 @@ import flixel.rpg.entity.Pickup;
 import flixel.rpg.weapon.Bullet;
 
 /**
- * ...
+ * The core of the RPG framework.
  * @author Kevin
  */
 class RpgEngine

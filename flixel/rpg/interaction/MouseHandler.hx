@@ -4,7 +4,7 @@ import flixel.plugin.MouseEventManager;
 import flixel.rpg.entity.Entity;
 
 /**
- * ...
+ * Provide mouse interactions to an Entity using MouseEventManager
  * @author Kevin
  */
 class MouseHandler
@@ -19,7 +19,7 @@ class MouseHandler
 
 	public function new(entity:Entity, pixelPerfect:Bool = false):Void
 	{
-		MouseEventManager.addSprite(entity, onMouseDown, onMouseUp, onMouseOver, onMouseOut , false, true, pixelPerfect);
+		MouseEventManager.add(entity, onMouseDown, onMouseUp, onMouseOver, onMouseOut , false, true, pixelPerfect);
 	}
 	
 	private function onMouseDown(s:FlxSprite)

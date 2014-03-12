@@ -6,12 +6,12 @@ import flixel.util.FlxTimer;
 import flixel.util.FlxVelocity;
 
 /**
- * An AI that allows the entity to wander (move randomly) around. Stop for a moment, and wanders again
+ * An AI that allows the entity to wander (move randomly) around. 
+ * Supports discrete wandering, i.e. after wandering, the entity stops for a moment, and then wanders again
  * @author Kevin
  */
 class WanderAI extends AI
-{
-	
+{	
 	/**
 	 * Time interval between wanders. In seconds.
 	 */

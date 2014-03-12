@@ -2,7 +2,7 @@ package flixel.rpg.entity;
 import flixel.rpg.entity.StateSwitch.GroupMode;
 
 /**
- * ...
+ * An entity with a stateSwitch
  * @author Kevin
  */
 class StateSwitchEntity<T:EnumValue> extends Entity

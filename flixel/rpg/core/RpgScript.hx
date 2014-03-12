@@ -3,7 +3,7 @@ import hscript.Interp;
 import hscript.Parser;
 
 /**
- * ...
+ * Scripting Engine
  * @author Kevin
  */
 class RpgScript

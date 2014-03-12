@@ -14,15 +14,15 @@ import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 
 /**
- * ...
+ * A popup text displaying damage numbers
  * @author Kevin
  */
 class DamageText extends FlxText //FlxTypedGroup<FlxText>
 {
 	public static var group(default, null):FlxTypedGroup<DamageText>;
 	
-	private var motionTween:LinearMotion;
-	private var alphaTween:ColorTween;
+	private var motionTweenOptions:TweenOptions;
+	private var alphaTweenOptions:TweenOptions;
 	
 	/**
 	 * Call this function once before using DamageText.showAtObject()
@@ -41,13 +41,8 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 	{
 		super(0, 0, 30);		
 		alignment = "center";		
-		
-		motionTween = new LinearMotion(onMotionTweenComplete,FlxTween.PERSIST);
-		motionTween.setObject(this);
-		FlxTween.manager.add(motionTween);
-		
-		alphaTween = new ColorTween(onAlphaTweenComplete, FlxTween.PERSIST);
-		FlxTween.manager.add(alphaTween);		
+		motionTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, complete:onMotionTweenComplete };
+		alphaTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, complete:onAlphaTweenComplete };			
 	}
 	
 	/**
@@ -71,9 +66,9 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 		textBox.alpha = 1;
 		textBox.text = value;
 		textBox.setPosition(fromX, fromY);
-		textBox.exists = true;
+		textBox.exists = true;		
 		
-		textBox.motionTween.setMotion(fromX, fromY, fromX, toY, 1, true, FlxEase.expoOut);
+		FlxTween.linearMotion(textBox, fromX, fromY, fromX, toY, 1, true, textBox.motionTweenOptions);
 	}
 	
 	
@@ -83,7 +78,7 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 	 */
 	private function onMotionTweenComplete(motionTween:FlxTween):Void
 	{
-		alphaTween.tween(0.5, color, color, 1, 0, FlxEase.quartOut, this);
+		FlxTween.num(1, 0, 0.5, alphaTweenOptions, tweenAlpha);
 	}
 	
 	/**
@@ -93,5 +88,10 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 	private function onAlphaTweenComplete(alphaTween:FlxTween):Void
 	{
 		exists = false;
+	}
+	
+	private function tweenAlpha(v:Float):Void
+	{
+		alpha = v;
 	}
 }

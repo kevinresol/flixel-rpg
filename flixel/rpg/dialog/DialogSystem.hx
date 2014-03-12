@@ -7,7 +7,8 @@ import flixel.rpg.requirement.RequirementFactory;
 import haxe.Unserializer;
 
 /**
- * A dialogue system. Usage: create instance then call display()
+ * A dialogue system. 
+ * Usage: RpgEngine.dialog.display("some_dialog_id");
  * @author Kevin
  */
 class DialogSystem

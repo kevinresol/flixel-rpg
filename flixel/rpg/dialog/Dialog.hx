@@ -1,7 +1,7 @@
 package flixel.rpg.dialog;
 using flixel.util.FlxArrayUtil;
 /**
- * ...
+ * A dialog includes the dialog texts and list of responses
  * @author Kevin
  */
 class Dialog

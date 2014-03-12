@@ -2,7 +2,7 @@ package flixel.rpg.dialog;
 import flixel.rpg.requirement.IRequirement;
 
 /**
- * ...
+ * A response to a dialog
  * @author Kevin
  */
 class DialogResponse

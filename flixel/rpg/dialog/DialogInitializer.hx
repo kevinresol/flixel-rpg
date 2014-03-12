@@ -11,7 +11,7 @@ class DialogInitializer
 {
 	public var entity:Entity;
 	
-	public var dialogueId:String;
+	public var dialogId:String;
 	
 	public function new() 
 	{
@@ -22,7 +22,7 @@ class DialogInitializer
 	{
 		// Let the system know that this dialogue is started by a initializer
 		RpgEngine.dialog.currentInitializer = this;
-		RpgEngine.dialog.display(dialogueId);			
+		RpgEngine.dialog.display(dialogId);			
 	}
 	
 }

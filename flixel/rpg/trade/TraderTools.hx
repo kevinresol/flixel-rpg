@@ -4,7 +4,7 @@ import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
 
 /**
- * ...
+ * Supporting tools for Trader
  * @author Kevin
  */
 class TraderTools

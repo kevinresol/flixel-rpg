@@ -5,7 +5,7 @@ import flixel.util.FlxPoint;
 import flixel.util.FlxVelocity;
 
 /**
- * ...
+ * Follow the entity's target
  * @author Kevin
  */
 class FollowAI extends AI

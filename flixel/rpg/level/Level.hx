@@ -8,7 +8,7 @@ import flixel.tile.FlxTilemap;
 import openfl.Assets;
 
 /**
- * ...
+ * A Level is a FlxGroup that holds all the tilemap and entities
  * @author Kevin
  */
 class Level extends FlxGroup

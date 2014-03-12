@@ -8,7 +8,7 @@ import flixel.rpg.entity.Entity;
 import flixel.rpg.weapon.Bullet;
 
 /**
- * ...
+ * Allows an entity to has different weapons and provides functions to switch between them.
  * @author Kevin
  */
 class WeaponController

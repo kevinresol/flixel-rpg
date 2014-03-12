@@ -5,7 +5,7 @@ import flixel.rpg.system.HitBox;
 import flixel.rpg.weapon.Bullet;
 
 /**
- * ...
+ * A set of callbacks to be called when a bullet overlaps an enemy
  * @author Kevin
  */
 class BulletCallbacks

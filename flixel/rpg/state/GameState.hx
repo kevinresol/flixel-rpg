@@ -4,7 +4,7 @@ import flixel.FlxState;
 import flixel.rpg.display.lighting.LightingSystem;
 
 /**
- * ...
+ * A FlxState with a HUD sub-state and a lighting system
  * @author Kevin
  */
 class GameState extends FlxState

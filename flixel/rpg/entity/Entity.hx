@@ -15,6 +15,18 @@ import flixel.util.FlxTimer;
 
 /**
  * A basic entity in this RPG framework.
+ * Has the following built-in components which can be enabled at will:
+	 * hitBox 		(for bullet collision)
+	 * pickupBox 	(a range that will "attact" pickups, imagine Terraria)
+	 * ai 			(plugins to define the behavior of this entity)
+	 * stat 		(attributes of this entity)
+	 * inventory 	(hold some items)
+	 * equipments 	(a special inventory)
+	 * trader 		(trade items with other entities such as NPC, chests...)
+	 * DOT 			(damage over time)
+	 * weapon 		(allow this entity to do some attack)
+	 * dialog 		(bring up a dialog section)
+	 * mouse 		(mouse interaction with this entity)
  * @author Kevin
  */
 class Entity extends FlxSprite
@@ -89,7 +101,7 @@ class Entity extends FlxSprite
 	/**
 	 * Dialogue Initializer
 	 */
-	public var dialogueInitializer:DialogInitializer;
+	public var dialogInitializer:DialogInitializer;
 	
 	/**
 	 * Mouse Handler
@@ -221,8 +233,8 @@ class Entity extends FlxSprite
 	 */
 	public function enableDialogueInitializer():Void
 	{
-		if (dialogueInitializer == null)
-			dialogueInitializer = new DialogInitializer();
+		if (dialogInitializer == null)
+			dialogInitializer = new DialogInitializer();
 	}
 	
 	private inline function enableMouse(pixelPerfect:Bool = false):Void
