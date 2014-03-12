@@ -14,7 +14,7 @@ class Darkness extends FlxSprite
 	/**
 	 * Fill color of this darkness
 	 */
-	private var fillColor:UInt;
+	public var fillColor:UInt;
 	
 	/**
 	 * Helper rect for fill()

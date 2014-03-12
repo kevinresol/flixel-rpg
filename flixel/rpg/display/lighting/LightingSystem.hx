@@ -55,7 +55,7 @@ class LightingSystem
 		
 		darkness.needToDraw = needToDraw;
 	}
-		
+	
 	/**
 	 * Add a light to this lighting system
 	 */
