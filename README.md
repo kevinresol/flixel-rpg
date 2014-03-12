@@ -1,8 +1,12 @@
-flixel-rpg
-==========
+## About
 
-An RPG framework based on HaxeFlixel, including a set of essential components to build an RPG such as 
-inventory, items, equipments, trade, AI, stats (attributes), dialog, etc.
+An RPG framework based on HaxeFlixel, including a set of essential components to build an RPG such as:
+- item/inventory/equipment system
+- trade system
+- AI system
+- stats (attributes) system
+- dialog system
+... and more (maybe multiplayer in the future)
 
 ## Install
 
