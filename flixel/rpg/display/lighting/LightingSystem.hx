@@ -47,13 +47,19 @@ class LightingSystem
 		for (l in dynamicLights)
 		{
 			if (l.moved)
+			{
 				needToDraw = true;
+				break;
+			}
 		}
 		
-		for (l in dynamicLights)
-			l.needToDraw = needToDraw;
+		if (needToDraw)
+		{
+			for (l in dynamicLights)
+				l.needToDraw = needToDraw;
 		
-		darkness.needToDraw = needToDraw;
+			darkness.needToDraw = needToDraw;
+		}
 	}
 	
 	/**

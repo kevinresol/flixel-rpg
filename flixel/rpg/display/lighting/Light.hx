@@ -90,8 +90,11 @@ class Light extends FlxSprite
 	 */
 	override public function draw():Void 
 	{
-		if(needToDraw)		
+		if (needToDraw)
+		{
 			darkness.stamp(this, Std.int(screenXY.x - halfWidth), Std.int(screenXY.y - halfHeight));
+			needToDraw = false;
+		}
 		
 	}
 	

@@ -46,8 +46,11 @@ class Darkness extends FlxSprite
 	 */
 	override public function draw():Void 
 	{		
-		if(needToDraw)		
+		if (needToDraw)
+		{
 			pixels.fillRect(rect, fillColor);
+			needToDraw = false;
+		}
 		
 		super.draw();
 	}
