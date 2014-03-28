@@ -20,5 +20,13 @@ class HUDSubState extends FlxUISubState
 	{
 		super.create();
 		forceScrollFactor(0, 0);
-	}	
+	}
+	
+	public override function add(Object:FlxBasic):FlxBasic 
+	{
+		if (Std.is(Object, FlxObject))
+			cast(Object, FlxObject).scrollFactor.set();
+		
+		return super.add(Object);
+	}
 }
