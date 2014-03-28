@@ -9,9 +9,9 @@ class StateSwitchEntity<T:EnumValue> extends Entity
 {
 	public var stateSwitch(default, null):StateSwitch<T>;
 
-	public function new(x:Float=0, y:Float=0, defaultState:T, ?targetState:T, ?groupMode:GroupMode) 
+	public function new(x:Float=0, y:Float=0, defaultState:T, ?groupMode:GroupMode<T>) 
 	{
 		super(x, y);
-		stateSwitch = new StateSwitch<T>(this, defaultState, targetState, groupMode);
+		stateSwitch = new StateSwitch<T>(this, defaultState, groupMode);
 	}	
 }

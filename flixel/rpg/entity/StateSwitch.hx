@@ -50,7 +50,7 @@ class StateSwitch<T:EnumValue>
 	/**
 	 * 
 	 */
-	public var groupMode:GroupMode;
+	public var groupMode:GroupMode<T>;
 	
 	/**
 	 * Contained switches (only relevant when groupMode != GNone)
@@ -60,19 +60,14 @@ class StateSwitch<T:EnumValue>
 	/**
 	 * Default state (only relevant when groupMode != GNone)
 	 */
-	public var defaultState:T;
-	
-	/**
-	 * Target state (only relevant when groupMode != GNone)
-	 */
-	public var targetState:T;
+	public var defaultState:T;	
 	
 	/**
 	 * Constructor
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(entity:Entity, defaultState:T, ?targetState:T, ?groupMode:GroupMode) 
+	public function new(entity:Entity, defaultState:T, ?groupMode:GroupMode<T>) 
 	{
 		this.entity = entity;
 		
@@ -95,7 +90,6 @@ class StateSwitch<T:EnumValue>
 			case GNone:
 			default:
 				switches = [];
-				this.targetState = targetState;
 				this.defaultState = defaultState;
 		}
 	}
@@ -304,7 +298,7 @@ class StateSwitch<T:EnumValue>
 				
 				switchState(prevSwitch.state);
 				
-			case GOr:
+			case GOr(targetState):
 				for (s in switches)
 				{
 					if (s.state == targetState)
@@ -314,7 +308,10 @@ class StateSwitch<T:EnumValue>
 					}
 				}
 				//switch off if none of the children are at targetState
-				switchState(defaultState);	
+				switchState(defaultState);
+				
+			case GPattern(pattern, targetState):
+				//TODO pattern
 		}	
 	}
 	
@@ -332,9 +329,10 @@ enum ConnectMode
 	CToggle;
 }
 
-enum GroupMode 
+enum GroupMode<T>
 {
-	GNone; //Not a group
-	GAnd;//AND mode: all switches have to have the same state
-	GOr; //OR mode: Any switches has the targetState
+	GNone; // Not a group
+	GAnd; // AND mode: all switches have to have the same state
+	GOr(targetState:T); // OR mode: Any switches has the targetState
+	GPattern(pattern:Array<T>, targetState:T); // Pattern mode: switch to target state if the pattern is fulfilled
 }
