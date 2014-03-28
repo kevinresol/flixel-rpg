@@ -21,6 +21,11 @@ class LightingSystem
 	 * Array of currently active lights
 	 */
 	private var dynamicLights:Array<Light>;
+	
+	/**
+	 * Array of currently active lights
+	 */
+	private var staticLights:Array<Light>;
 
 	/**
 	 * Constructor
@@ -35,6 +40,7 @@ class LightingSystem
 		state.add(darkness);
 		
 		dynamicLights = [];
+		staticLights = [];
 	}
 	
 	/**
@@ -44,7 +50,18 @@ class LightingSystem
 	public function update():Void
 	{
 		var needToDraw:Bool = false;
+		
 		for (l in dynamicLights)
+		{
+			if (l.moved)
+			{
+				needToDraw = true;
+				break;
+			}
+		}
+		
+		if (!needToDraw)
+		for (l in staticLights)
 		{
 			if (l.moved)
 			{
@@ -67,28 +84,40 @@ class LightingSystem
 	 */
 	public function addDynamicLight(light:Light):Void
 	{
-		dynamicLights.push(light);		
+		addLight(dynamicLights, light);
+	}
+	
+	public function removeDynamicLight(light:Light):Void
+	{
+		removeLight(dynamicLights, light);
+	}
+	
+	public function addStaticLight(light:Light):Void
+	{
+		addLight(staticLights, light);
+	}
+	
+	public function removeStaticLight(light:Light):Void
+	{
+		removeLight(staticLights, light);
+	}
+	
+	private inline function addLight(to:Array<Light>, light:Light):Void
+	{
+		to.push(light);		
 		light.darkness = darkness;
 		
 		state.remove(darkness);
 		state.add(light);
 		state.add(darkness);
-		
-	}
+	}	
 	
-	public function removeDynamicLight(light:Light):Void
+	private inline function removeLight(from:Array<Light>, light:Light):Void
 	{
+		from.remove(light);		
+		light.darkness = null;
 		
-	}
-	
-	public function addStaticLight(light:Light):Void
-	{
-		
-	}
-	
-	public function removeStaticLight(light:Light):Void
-	{
-		
+		state.remove(light);
 	}
 	
 	public function destroy():Void
