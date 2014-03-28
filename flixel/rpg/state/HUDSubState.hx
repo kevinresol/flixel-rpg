@@ -1,14 +1,14 @@
 package flixel.rpg.state;
 
+import flixel.addons.ui.FlxUISubState;
 import flixel.FlxBasic;
 import flixel.FlxObject;
-import flixel.FlxSubState;
 
 /**
  * Any objects added to a HUD will have their scrollFactor set to 0
  * @author Kevin
  */
-class HUDSubState extends FlxSubState
+class HUDSubState extends FlxUISubState
 {
 
 	public function new() 
@@ -16,14 +16,9 @@ class HUDSubState extends FlxSubState
 		super();		
 	}
 	
-	public override function add(Object:FlxBasic):FlxBasic 
+	public override function create():Void 
 	{
-		if (Std.is(Object, FlxObject))
-		{
-			cast(Object, FlxObject).scrollFactor.set();
-		}
-		return super.add(Object);
-	}
-	
-	
+		super.create();
+		forceScrollFactor(0, 0);
+	}	
 }
