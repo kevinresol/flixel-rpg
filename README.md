@@ -17,7 +17,7 @@ flixel-rpg is still under development thus not available on haxelib yet. You may
 
 ## Basic Usage
 
-The core of the framework `RpgEngine`, and the most important class is `Entity` which includes most of the 
+The core of the framework is `RpgEngine`, and the most important class is `Entity` which includes most of the 
 functionalities of the framework.
 
 Very basic example:
@@ -39,11 +39,23 @@ class PlayState extends GameState
 		RpgEngine.levels.switchTo("Level 1");
 		
 		var e = new Entity();
+		e.enableAI();
+		e.ai.add(new SomeAI()); // SomeAI implments IAI
+		
 		e.enableInventory();		
-		e.enableEquipments();
+		e.inventory.createEmptySlots(0, 4); // Create 4 slots of type 0
+		
+		e.enableEquipments(); // Equipment Slots (just another Inventory instance)
+		e.enableEquipments.createEmptySlots(1); // Create a slot of type 1
+		e.enableEquipments.createEmptySlots(2); // Create a slot of type 2
+		e.enableEquipments.createEmptySlots(3); // Create a slot of type 3
+		
 		e.enableWeapon();		
 		e.enableStat();
-		e.enableDialogueInitializer();
+		
+		e.enableDialogueInitializer();		
+		e.dialogInitializer.dialogId = "some_dialog_id";
+		
 		RpgEngine.levels.current.registerPlayer(e);
 	}
 	
