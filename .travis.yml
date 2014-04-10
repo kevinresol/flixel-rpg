@@ -1,0 +1,25 @@
+language: java
+
+before_script:
+  - sudo add-apt-repository ppa:eyecreate/haxe -y
+  - sudo apt-get update
+  - sudo apt-get install haxe -y
+  - sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
+  - mkdir ~/haxelib
+  - haxelib -notimeout setup ~/haxelib 
+  - haxelib -notimeout install munit
+  - haxelib -notimeout install lime
+  - haxelib -notimeout install lime-tools
+  - haxelib -notimeout run lime install openfl
+  - haxelib -notimeout install systools
+  - haxelib -notimeout install spinehx
+  - haxelib -notimeout install nape
+  - haxelib -notimeout install task
+  - haxelib git flixel https://github.com/HaxeFlixel/flixel dev
+  - haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons dev
+  - haxelib git flixel-ui https://github.com/HaxeFlixel/flixel-ui dev
+  - haxelib dev flixel-rpg .
+
+script:
+  - cd ./tests
+  - haxe test.hxml
