@@ -1,5 +1,6 @@
 package flixel.rpg.entity;
 import flixel.addons.display.FlxExtendedSprite;
+import flixel.util.FlxSignal;
 using Lambda;
 /**
  * Connect: 2-way communication (Not fully implemented)
@@ -60,7 +61,10 @@ class StateSwitch<T:EnumValue>
 	/**
 	 * Default state (only relevant when groupMode != GNone)
 	 */
-	public var defaultState:T;	
+	public var defaultState:T;
+	
+	//TODO signal
+	public var changed(default, null):FlxSignal;
 	
 	/**
 	 * Constructor
@@ -85,7 +89,7 @@ class StateSwitch<T:EnumValue>
 		groups = [];
 		
 		// Some group-mode-only settings
-		switch(this.groupMode)
+		switch (this.groupMode)
 		{
 			case GNone:
 			default:
