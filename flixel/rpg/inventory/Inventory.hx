@@ -131,7 +131,7 @@ class Inventory implements IFlxDestroyable
 	 */
 	public function removeItem(id:Int, amount:Int):Bool
 	{
-		if (countStack(id) < amount)
+		if (countItem(id) < amount)
 			return false;
 		
 		var slot:InventorySlot;		
@@ -220,7 +220,7 @@ class Inventory implements IFlxDestroyable
 	 * @param	id
 	 * @return	total stack
 	 */
-	public function countStack(id:Int):Int
+	public function countItem(id:Int):Int
 	{
 		var total:Int = 0;
 		
@@ -235,7 +235,7 @@ class Inventory implements IFlxDestroyable
 	
 	public inline function has(id:Int, stack:Int):Bool
 	{
-		return countStack(id) >= stack;
+		return countItem(id) >= stack;
 	}
 	
 	/**

@@ -7,11 +7,7 @@ import massive.munit.Assert;
 import massive.munit.async.AsyncFactory;
 import massive.munit.util.Timer;
 
-/**
-* Auto generated ExampleTest for MassiveUnit. 
-* This is an example test class can be used as a template for writing normal and async tests 
-* Refer to munit command line tool for more information (haxelib run munit)
-*/
+
 class InventoryTest 
 {
 	private var timer:Timer;
@@ -27,7 +23,10 @@ class InventoryTest
 	@BeforeClass
 	public function beforeClass():Void
 	{
+		var data = [{id:1, type:0, displayName:"Key Card", maxStack:1}];
+		var dataString = Serializer.run(data);
 		
+		InventoryItem.loadData(dataString);
 	}
 	
 	@AfterClass
@@ -37,12 +36,7 @@ class InventoryTest
 	
 	@Before
 	public function setup():Void
-	{
-		var data = [{id:1, type:0, displayName:"Key Card", maxStack:1}];
-		var dataString = Serializer.run(data);
-		
-		InventoryItem.loadData(dataString);
-		
+	{		
 		inventory = Inventory.get();
 		item = InventoryItem.get(1, 1);
 	}
@@ -79,12 +73,27 @@ class InventoryTest
 	}
 	
 	@Test
-	public function testCount():Void
+	public function testCountItem():Void
 	{
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);		
 		
-		Assert.isTrue(inventory.countStack(1) == 1);
+		Assert.isTrue(inventory.countItem(1) == 1);
+	}
+	
+	@Test
+	public function testCountEmptySlot():Void
+	{
+		Assert.isTrue(inventory.countEmptySlot(1) == 0);
+		
+		inventory.createEmptySlots(1);
+		Assert.isTrue(inventory.countEmptySlot(1) == 1);
+		
+		inventory.addItem(item);
+		Assert.isTrue(inventory.countEmptySlot(1) == 0);
+		
+		inventory.removeItem(1, 1);
+		Assert.isTrue(inventory.countEmptySlot(1) == 1);
 	}
 	
 	
@@ -109,36 +118,9 @@ class InventoryTest
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);
 		Assert.isFalse(inventory.removeItem(1, 2));
-		//Assert.isTrue(inventory.has(1, 1));
+		Assert.isTrue(inventory.has(1, 1));
 	}
 	
 	
-	@Test
-	public function testExample():Void
-	{
-		Assert.isTrue(true);
-	}
-	
-	@AsyncTest
-	public function testAsyncExample(factory:AsyncFactory):Void
-	{
-		var handler:Dynamic = factory.createHandler(this, onTestAsyncExampleComplete, 300);
-		timer = Timer.delay(handler, 200);
-	}
-	
-	private function onTestAsyncExampleComplete():Void
-	{
-		Assert.isFalse(false);
-	}
-	
-	
-	/**
-	* test that only runs when compiled with the -D testDebug flag
-	*/
-	@TestDebug
-	public function testExampleThatOnlyRunsWithDebugFlag():Void
-	{
-		Assert.isTrue(true);
-	}
 
 }
