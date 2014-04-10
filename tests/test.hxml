@@ -1,11 +1,16 @@
 ## Flash 9+
 -main TestMain
--lib munit
--lib hamcrest
 -cp src
 
--cp src
--swf-version 11
+-lib munit
+-lib flixel-rpg
+-lib openfl
+
+-D FLX_RENDER_BLIT
+
+-D doc
+
+-swf-version 11.8
 -swf build/as3_test.swf
 
 --next

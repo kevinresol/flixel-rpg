@@ -1,2 +1,3 @@
 tests/build/
 tests/report/
+tests/.temp/

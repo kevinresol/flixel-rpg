@@ -9,7 +9,6 @@ import haxe.Unserializer;
 class Data
 {
 	public var weaponData:Array<WeaponData>;
-	public var itemData:Array<InventoryItemData>;
 	public var tradeData:Array<TradeData>;
 	
 	
@@ -37,31 +36,6 @@ class Data
 		return null;
 	}
 	
-	
-	
-	/**
-	 * Load item data from haxe-serialized string. Call once and only once before any use 
-	 * of StackItem.
-	 * @param	data
-	 */
-	public function loadItemData(data:String):Void
-	{
-		if (itemData == null)
-			itemData = Unserializer.run(data);
-	}
-	
-	public function getItemData(id:Int):InventoryItemData
-	{
-		if (itemData == null)
-			throw "loadItemData first";
-			
-		for (d in itemData)
-		{
-			if (d.id == id)
-				return d;
-		}			
-		return null;
-	}
 	
 	public function loadTradeData(data:String):Void
 	{
@@ -97,14 +71,7 @@ typedef TradeItemData =
 	count:Int
 }
 
-typedef InventoryItemData =
-{
-	id:Int,
-	type:Int,
-	displayName:String,
-	maxStack:Int,
-	tooltip:String
-}
+
 
 typedef WeaponData = 
 {

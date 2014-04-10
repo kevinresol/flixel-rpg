@@ -1,10 +1,11 @@
-package;
+package flixel.rpg.inventory;
 
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
-import massive.munit.util.Timer;
+import haxe.Serializer;
 import massive.munit.Assert;
 import massive.munit.async.AsyncFactory;
+import massive.munit.util.Timer;
 
 /**
 * Auto generated ExampleTest for MassiveUnit. 
@@ -26,8 +27,7 @@ class InventoryTest
 	@BeforeClass
 	public function beforeClass():Void
 	{
-		inventory = new Inventory();
-		item = new InventoryItem(
+		
 	}
 	
 	@AfterClass
@@ -38,18 +38,80 @@ class InventoryTest
 	@Before
 	public function setup():Void
 	{
+		var data = [{id:1, type:0, displayName:"Key Card", maxStack:1}];
+		var dataString = Serializer.run(data);
+		
+		InventoryItem.loadData(dataString);
+		
+		inventory = Inventory.get();
+		item = InventoryItem.get(1, 1);
 	}
 	
 	@After
 	public function tearDown():Void
 	{
+		
 	}
 	
-	@Test public function testInventoryAdd():Void
+	@Test
+	public function testAddWithoutSlot():Void
 	{
-		inventory.addItem(
-		Assert.isTrue(true);
+		Assert.isFalse(inventory.addItem(item));
 	}
+	
+	@Test
+	public function testAddWithSlot():Void
+	{
+		inventory.createEmptySlots(1);		
+		Assert.isTrue(inventory.addItem(item));		
+	}
+	
+	
+	@Test
+	public function testHas():Void
+	{
+		inventory.createEmptySlots(1);		
+		inventory.addItem(item);		
+		
+		Assert.isTrue(inventory.has(1, 1));
+		Assert.isFalse(inventory.has(1, 2));
+		Assert.isFalse(inventory.has(2, 1));
+	}
+	
+	@Test
+	public function testCount():Void
+	{
+		inventory.createEmptySlots(1);		
+		inventory.addItem(item);		
+		
+		Assert.isTrue(inventory.countStack(1) == 1);
+	}
+	
+	
+	@Test
+	public function testRemove():Void
+	{
+		inventory.createEmptySlots(1);		
+		inventory.addItem(item);		
+		
+		Assert.isTrue(inventory.removeItem(1, 1));		
+	}
+	
+	@Test
+	public function testRemoveWithoutAdd():Void
+	{		
+		Assert.isFalse(inventory.removeItem(1, 1));		
+	}
+	
+	@Test
+	public function testOverRemove():Void
+	{
+		inventory.createEmptySlots(1);		
+		inventory.addItem(item);
+		Assert.isFalse(inventory.removeItem(1, 2));
+		//Assert.isTrue(inventory.has(1, 1));
+	}
+	
 	
 	@Test
 	public function testExample():Void
