@@ -92,11 +92,6 @@ class Level extends FlxGroup
 	public var playerPickupBoxes:FlxGroup;
 	
 	/**
-	 * Current level
-	 */
-	public var level:Level;
-	
-	/**
 	 * Constructor
 	 */
 	public function new()
