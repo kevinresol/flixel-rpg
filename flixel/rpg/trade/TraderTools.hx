@@ -27,7 +27,7 @@ class TraderTools
 		{
 			if (!tempInventory.removeItem(c.id, c.count)) //not enough
 			{
-				tempInventory.recycle();
+				tempInventory.put();
 				return false; 
 			}
 		}		
@@ -35,14 +35,14 @@ class TraderTools
 		//Try to add the traded items to inventory
 		for (i in reward)
 		{
-			if (!tempInventory.addItem(InventoryItem.create(i.id, i.count))) //cannot add, not enough space
+			if (!tempInventory.addItem(InventoryItem.get(i.id, i.count))) //cannot add, not enough space
 			{
-				tempInventory.recycle();
+				tempInventory.put();
 				return false; 
 			}
 		}
 		
-		tempInventory.recycle();
+		tempInventory.put();
 		return true;		
 	}
 }

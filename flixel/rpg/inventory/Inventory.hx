@@ -21,7 +21,7 @@ class Inventory implements IFlxDestroyable
 		slots = []; 		
 	}
 	
-	public static function create():Inventory
+	public static function get():Inventory
 	{
 		var inventory = pool.get();
 		inventory.slots = [];
@@ -31,10 +31,10 @@ class Inventory implements IFlxDestroyable
 	/**
 	 * Put this back into the recycle pool
 	 */
-	public function recycle():Void
+	public function put():Void
 	{
 		for (s in slots)
-			s.recycle();		
+			s.put();		
 		
 		pool.put(this);
 	}
@@ -57,7 +57,7 @@ class Inventory implements IFlxDestroyable
 	{
 		for (i in 0...count)
 		{
-			var slot = InventorySlot.create(type);
+			var slot = InventorySlot.get(type);
 			addSlot(slot);
 		}
 	}
@@ -267,7 +267,7 @@ class Inventory implements IFlxDestroyable
 	 */
 	public function clone():Inventory
 	{
-		var inventory = Inventory.create();
+		var inventory = Inventory.get();
 		
 		for (s in slots)
 			inventory.addSlot(s.clone());

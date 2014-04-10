@@ -29,7 +29,7 @@ class Pickup extends Entity
 		var pickup = group.recycle(Pickup);
 			
 		pickup.setPosition(x, y);
-		pickup.assignItem(InventoryItem.create(id, stack));
+		pickup.assignItem(InventoryItem.get(id, stack));
 		return pickup;
 	}
 	

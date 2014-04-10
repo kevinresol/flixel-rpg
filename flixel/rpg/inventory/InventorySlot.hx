@@ -34,7 +34,7 @@ class InventorySlot implements IFlxDestroyable
 	 * Do not use this contructor to create an instance.
 	 * Use InventorySlot.create instead.
 	 */
-	public function new() 
+	private function new() 
 	{
 		
 	}
@@ -44,7 +44,7 @@ class InventorySlot implements IFlxDestroyable
 	 * @param	type
 	 * @return
 	 */
-	public static function create(type:Int):InventorySlot
+	public static function get(type:Int):InventorySlot
 	{
 		var slot = pool.get();
 		slot.type = type;
@@ -54,10 +54,10 @@ class InventorySlot implements IFlxDestroyable
 	/**
 	 * Put this back into the recycle pool
 	 */
-	public function recycle():Void
+	public function put():Void
 	{
 		if(item != null)
-			item.recycle();
+			item.put();
 		
 		pool.put(this);
 	}
@@ -109,7 +109,7 @@ class InventorySlot implements IFlxDestroyable
 	 */
 	public function clone():InventorySlot
 	{
-		var slot = InventorySlot.create(type);
+		var slot = InventorySlot.get(type);
 		
 		if (item != null)
 			slot.hold(item.clone());

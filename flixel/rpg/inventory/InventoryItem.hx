@@ -22,7 +22,7 @@ class InventoryItem implements IFlxDestroyable
 	public var tooltip(default, null):String;
 	
 
-	public function new() 
+	private function new() 
 	{
 		
 	}
@@ -37,7 +37,7 @@ class InventoryItem implements IFlxDestroyable
 	 * @param	tooltip
 	 * @return
 	 */
-	public static function create(id:Int, stack:Int = 1):InventoryItem
+	public static function get(id:Int, stack:Int = 1):InventoryItem
 	{
 		var data = RpgEngine.data.getItemData(id);
 		
@@ -57,7 +57,7 @@ class InventoryItem implements IFlxDestroyable
 	/**
 	 * Put this back into the recycle pool
 	 */
-	public function recycle():Void
+	public function put():Void
 	{
 		pool.put(this);
 	}
@@ -93,7 +93,7 @@ class InventoryItem implements IFlxDestroyable
 		if (stack >= amount)
 		{
 			stack -= amount;
-			return InventoryItem.create(id, amount);
+			return InventoryItem.get(id, amount);
 		}
 		else 
 			return null;		
@@ -105,7 +105,7 @@ class InventoryItem implements IFlxDestroyable
 	 */
 	public function clone():InventoryItem
 	{
-		return InventoryItem.create(id, stack);
+		return InventoryItem.get(id, stack);
 	}
 	
 	/**

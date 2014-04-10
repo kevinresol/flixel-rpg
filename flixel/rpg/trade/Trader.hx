@@ -55,7 +55,7 @@ class Trader
 		// Remove the rewards from trader
 		for (r in tradeData.reward)
 		{
-			buyerInventory.addItem(InventoryItem.create(r.id, r.count));
+			buyerInventory.addItem(InventoryItem.get(r.id, r.count));
 			
 			if(inventory != null)
 				inventory.removeItem(r.id, r.count);
@@ -64,7 +64,7 @@ class Trader
 		// Add the costs to trader
 		if (receiveCost && inventory != null)		
 			for (c in tradeData.cost)
-				inventory.addItem(InventoryItem.create(c.id, c.count));
+				inventory.addItem(InventoryItem.get(c.id, c.count));
 		
 		return true;
 	}

@@ -176,7 +176,7 @@ class Entity extends FlxSprite
 	public function enableInventory():Void
 	{
 		if (inventory == null)
-			inventory = Inventory.create();			
+			inventory = Inventory.get();			
 	}
 	
 	/**
@@ -185,7 +185,7 @@ class Entity extends FlxSprite
 	public function enableEquipments():Void
 	{
 		if (equipments == null)
-			equipments = Inventory.create();
+			equipments = Inventory.get();
 	}
 	
 	/**
