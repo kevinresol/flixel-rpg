@@ -15,6 +15,7 @@ before_script:
   - haxelib -notimeout install spinehx
   - haxelib -notimeout install nape
   - haxelib -notimeout install task
+  - haxelib -notimeout install hscript
   - haxelib git flixel https://github.com/HaxeFlixel/flixel dev
   - haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons dev
   - haxelib git flixel-ui https://github.com/HaxeFlixel/flixel-ui dev
