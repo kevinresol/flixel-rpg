@@ -42,12 +42,12 @@ class GameState extends FlxState
 	 * Enable the lighting system
 	 * @param	color
 	 */
-	private function enableLighting(color:UInt):Void
+	private function enableLighting(darknessColor:UInt, ambientAddColor:UInt):Void
 	{
 		if (lighting != null)
 			return;
 		
-		lighting = new LightingSystem(this, color);
+		lighting = new LightingSystem(this, darknessColor, ambientAddColor);
 	}
 	
 	

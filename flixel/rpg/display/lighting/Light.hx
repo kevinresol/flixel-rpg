@@ -1,7 +1,9 @@
 package flixel.rpg.display.lighting;
 
+import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxPoint;
 
@@ -52,10 +54,16 @@ class Light extends FlxSprite
 	public function new() 
 	{
 		super();		
-		blend = BlendMode.SCREEN;
+		//blend = BlendMode.SCREEN;
 		screenXY = FlxPoint.get();
 		prevScreenXY = FlxPoint.get();
 	}
+	
+	public function refreshPixels():Void
+	{
+		
+	}
+	
 	
 	/**
 	 * Resize this.pixels
@@ -70,6 +78,7 @@ class Light extends FlxSprite
 		halfWidth = width * 0.5;
 		halfHeight = height * 0.5;
 	}
+	
 	
 	/**
 	 * Override.
@@ -94,8 +103,7 @@ class Light extends FlxSprite
 		{
 			darkness.stamp(this, Std.int(screenXY.x - halfWidth), Std.int(screenXY.y - halfHeight));
 			needToDraw = false;
-		}
-		
+		}		
 	}
 	
 	override public function destroy():Void 

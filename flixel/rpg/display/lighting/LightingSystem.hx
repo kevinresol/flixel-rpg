@@ -1,8 +1,14 @@
 package flixel.rpg.display.lighting;
+import flash.display.BlendMode;
+import flash.filters.BlurFilter;
+import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxTypedGroup.FlxTypedGroup;
 
 /**
  * A system providing lighting effects
+ * Follow the steps in HammerWatch - http://www.forumopolis.com/showthread.php?p=4296336
  * @author Kevin
  */
 class LightingSystem
@@ -11,6 +17,8 @@ class LightingSystem
 	 * The darkess that cover the whole screen
 	 */
 	public var darkness:Darkness;
+	
+	public var forceRedraw:Bool = false;
 	
 	/**
 	 * The state reference that this lighting is hooking at
@@ -26,17 +34,33 @@ class LightingSystem
 	 * Array of currently active lights
 	 */
 	private var staticLights:Array<Light>;
+	
+	private var ambientAdd:FlxSprite;
+	
+	private var lightGroup:FlxTypedGroup<Light>;
+	
 
 	/**
 	 * Constructor
 	 * @param	state	the state that this Lighting system is hooked to
 	 * @param	darknessColor	color of the darkness, with alpha channel. e.g. 0xaa000000
 	 */
-	public function new(state:FlxState, darknessColor:UInt) 
-	{		
+	public function new(state:FlxState, darknessColor:UInt, ambientAddColor:UInt) 
+	{
+		//TODO: only need add and multiply (darkness)
+		
 		this.state = state;
 		
-		darkness = new Darkness(darknessColor);
+		ambientAdd = new FlxSprite();
+		ambientAdd.makeGraphic(FlxG.width, FlxG.height, ambientAddColor);
+		ambientAdd.blend = BlendMode.ADD;
+		ambientAdd.scrollFactor.set();
+		state.add(ambientAdd);
+		
+		lightGroup = new FlxTypedGroup<Light>();
+		state.add(lightGroup);
+		
+		darkness = new Darkness(darknessColor, new BlurFilter(15,15)); //TODO parameterize filter
 		state.add(darkness);
 		
 		dynamicLights = [];
@@ -49,33 +73,39 @@ class LightingSystem
 	 */
 	public function update():Void
 	{
-		var needToDraw:Bool = false;
-		
-		for (l in dynamicLights)
-		{
-			if (l.moved)
-			{
-				needToDraw = true;
-				break;
-			}
-		}
+		var needToDraw:Bool = false || forceRedraw;
 		
 		if (!needToDraw)
-		for (l in staticLights)
-		{
-			if (l.moved)
+			for (l in dynamicLights)
 			{
-				needToDraw = true;
-				break;
+				if (l.moved)
+				{
+					needToDraw = true;
+					break;
+				}
 			}
-		}
+		
+		if (!needToDraw)
+			for (l in staticLights)
+			{
+				if (l.moved)
+				{
+					needToDraw = true;
+					break;
+				}
+			}
 		
 		if (needToDraw)
 		{
+			// dont stamp the light here, allow draw() to do so, 
+			// which caters for various things. e.g. screen position. visible, etc
 			for (l in dynamicLights)
 				l.needToDraw = needToDraw;
+				
+			for (l in staticLights)
+				l.needToDraw = needToDraw;
 		
-			darkness.needToDraw = needToDraw;
+			darkness.resetFill();
 		}
 	}
 	
@@ -107,9 +137,12 @@ class LightingSystem
 		to.push(light);		
 		light.darkness = darkness;
 		
-		state.remove(darkness);
-		state.add(light);
-		state.add(darkness);
+		//state.remove(ambientAdd);		
+		//state.remove(darkness);
+		
+		//state.add(ambientAdd);
+		lightGroup.add(light);
+		//state.add(darkness);
 	}	
 	
 	private inline function removeLight(from:Array<Light>, light:Light):Void
@@ -117,7 +150,7 @@ class LightingSystem
 		from.remove(light);		
 		light.darkness = null;
 		
-		state.remove(light);
+		lightGroup.remove(light);
 	}
 	
 	public function destroy():Void
