@@ -24,8 +24,7 @@ class ExampleTest
 	@BeforeClass
 	public function beforeClass():Void
 	{
-		inventory = new Inventory();
-		inventory.
+		inventory = new Inventory();		
 	}
 	
 	@AfterClass
