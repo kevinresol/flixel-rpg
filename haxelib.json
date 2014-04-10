@@ -9,6 +9,7 @@
   "contributors": ["KevinResoL"],
   "dependencies": {
     "flixel": "",
+	"flixel-addons": "",
 	"hscript": ""
   }
 }
