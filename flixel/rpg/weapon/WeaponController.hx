@@ -1,4 +1,4 @@
-package flixel.rpg.damage;
+package flixel.rpg.weapon;
 import flixel.addons.weapon.FlxBullet;
 import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;

@@ -1,7 +1,7 @@
 package flixel.rpg.core;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.rpg.damage.BulletCallbacks;
+import flixel.rpg.weapon.BulletCallbacks;
 import flixel.rpg.data.Data;
 import flixel.rpg.dialog.DialogActions;
 import flixel.rpg.dialog.DialogSystem;

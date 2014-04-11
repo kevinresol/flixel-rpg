@@ -1,4 +1,4 @@
-package flixel.rpg.damage;
+package flixel.rpg.weapon;
 import flixel.rpg.entity.Entity;
 import flixel.util.FlxTimer;
 using Lambda;

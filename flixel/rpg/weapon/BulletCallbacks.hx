@@ -1,4 +1,4 @@
-package flixel.rpg.damage;
+package flixel.rpg.weapon;
 import flixel.FlxSprite;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.system.HitBox;
