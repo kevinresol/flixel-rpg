@@ -34,11 +34,13 @@ class CircularLight extends Light
 		var s = FlxSpriteUtil.flashGfxSprite;
 		var g = FlxSpriteUtil.flashGfx;
 		
-		var m = new Matrix();		
-		m.createGradientBox(radius, radius, 0, -radius / 2, -radius / 2);
-		
+		var m = new Matrix();
 		g.clear();
+		#if !html5
+		m.createGradientBox(radius, radius, 0, -radius / 2, -radius / 2);		
 		g.beginGradientFill(GradientType.RADIAL, colors, alphas, ratios, m);
+		#end
+		
 		g.drawCircle(0, 0, radius);		
 		
 		var rect = new Rectangle( -0, -0, s.height, s.width);

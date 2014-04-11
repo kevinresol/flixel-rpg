@@ -60,7 +60,10 @@ class LightingSystem
 		lightGroup = new FlxTypedGroup<Light>();
 		state.add(lightGroup);
 		
+		#if !html5
 		darkness = new Darkness(darknessColor, new BlurFilter(15,15)); //TODO parameterize filter
+		#end
+		
 		state.add(darkness);
 		
 		dynamicLights = [];

@@ -61,7 +61,7 @@ class Darkness extends FlxSprite
 		if (filter != null)
 		{
 			pixels.applyFilter(pixels, rect, helperPoint, filter);
-			resetFrameBitmapDatas();
+			resetFrameBitmapDatas(); //TODO fix memory use, avoid destroying and re-creating BitmapData
 		}
 			
 		var debugDarkness = true;
