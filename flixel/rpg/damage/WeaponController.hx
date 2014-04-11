@@ -6,6 +6,7 @@ import flixel.group.FlxTypedGroup;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.weapon.Bullet;
+import haxe.Unserializer;
 
 /**
  * Allows an entity to has different weapons and provides functions to switch between them.
@@ -13,6 +14,8 @@ import flixel.rpg.weapon.Bullet;
  */
 class WeaponController
 {
+	public static var data:Array<WeaponData>;
+	
 	public var group:FlxTypedGroup<FlxTypedGroup<FlxBullet>>;
 	
 	private var weapons:Map<Int, FlxWeapon>;
@@ -28,13 +31,24 @@ class WeaponController
 	public var currentWeapon(default, null):FlxWeapon;
 	
 	public var currentWeaponID(default, set):Int;
-	private function set_currentWeaponID(v:Int):Int
+	
+	public static function loadData(dataString:String):Void
 	{
-		if (currentWeaponID == v)
-			return v;
-		
-		switchWeapon(v);			
-		return currentWeaponID = v;
+		if (data == null)
+			data = Unserializer.run(dataString);
+	}
+	
+	public static function getData(id:Int):WeaponData
+	{
+		if (data == null)
+			throw "loadWeaponData first";
+			
+		for (w in data)
+		{
+			if (w.id == id)
+				return w;
+		}
+		return null;
 	}
 	
 	/**
@@ -61,52 +75,6 @@ class WeaponController
 		return weapons.get(id);
 	}
 	
-	/**
-	 * Create the weapon
-	 * @param	id
-	 */
-	private function createWeapon(id:Int):Void
-	{
-		var wd = RpgEngine.data.getWeaponData(id);
-		var w = new FlxWeapon(wd.name, entity, Bullet, id);
-		weapons.set(id, w);
-		
-				
-		w.makePixelBullet(10);
-		
-		w.setBulletOffset(entity.origin.x, entity.origin.y);
-		w.setFireRate(wd.fireRate);
-		w.setBulletSpeed(wd.bulletSpeed);
-		w.bulletDamage = wd.bulletDamage;
-		w.group.setAll("reloadTime", wd.bulletReloadTime);
-		
-		w.setBulletBounds(RpgEngine.levels.current.obstacles.getBounds());
-		
-		group.add(w.group);
-	}	
-	
-	/**
-	 * Switch Weapon
-	 * @param	id
-	 */
-	private function switchWeapon(id:Int):Void
-	{
-		//Set current weapon
-		currentWeapon = getWeapon(id);
-		
-		//Get the fireMode of this weapon from data
-		var fireMode:String = RpgEngine.data.getWeaponData(id).fireMode;
-		
-		//Reset the fire functions
-		fireWeaponAtMouse = null;
-		fireWeaponAtTarget = null;
-		
-		//Map the fire functions
-		if(fireMode == "fireAtMouse")
-			fireWeaponAtMouse = Reflect.getProperty(currentWeapon, fireMode);
-		else if(fireMode == "fireAtTarget")
-			fireWeaponAtTarget = Reflect.getProperty(currentWeapon, fireMode);		
-	}
 	
 	/**
 	 * Try to fire the weapon. The actual cooldown algoritm is in FlxWeapon.
@@ -145,5 +113,78 @@ class WeaponController
 		fireWeaponAtTarget = null;
 		currentWeapon = null;
 	}
+	
+	
+	/**
+	 * Create the weapon
+	 * @param	id
+	 */
+	private function createWeapon(id:Int):Void
+	{
+		var wd = getData(id);
+		var w = new FlxWeapon(wd.name, entity, Bullet, id);
+		weapons.set(id, w);
+		
+				
+		w.makePixelBullet(10);
+		
+		w.setBulletOffset(entity.origin.x, entity.origin.y);
+		w.setFireRate(wd.fireRate);
+		w.setBulletSpeed(wd.bulletSpeed);
+		w.bulletDamage = wd.bulletDamage;
+		w.group.setAll("reloadTime", wd.bulletReloadTime);
+		
+		w.setBulletBounds(RpgEngine.levels.current.obstacles.getBounds());
+		
+		group.add(w.group);
+	}	
+	
+	/**
+	 * Switch Weapon
+	 * @param	id
+	 */
+	private function switchWeapon(id:Int):Void
+	{
+		//Set current weapon
+		currentWeapon = getWeapon(id);
+		
+		//Get the fireMode of this weapon from data
+		var fireMode:String = getData(id).fireMode;
+		
+		//Reset the fire functions
+		fireWeaponAtMouse = null;
+		fireWeaponAtTarget = null;
+		
+		//Map the fire functions
+		if(fireMode == "fireAtMouse")
+			fireWeaponAtMouse = Reflect.getProperty(currentWeapon, fireMode);
+		else if(fireMode == "fireAtTarget")
+			fireWeaponAtTarget = Reflect.getProperty(currentWeapon, fireMode);		
+	}
+	
+	
+	private function set_currentWeaponID(v:Int):Int
+	{
+		if (currentWeaponID == v)
+			return v;
+		
+		switchWeapon(v);			
+		return currentWeaponID = v;
+	}
+	
+}
+
+typedef WeaponData = 
+{
+	id:Int,
+	name:String,
+	collideCallback:String,
+	fireMode:String,	
+	fireRate:Int,	
+	bulletSpeed:Int,	
+	bulletDamage:Int,	
+	bulletReloadTime:Float,
+	image:String
+
 }
 

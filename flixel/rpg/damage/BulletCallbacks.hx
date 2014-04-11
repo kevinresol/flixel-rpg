@@ -19,7 +19,7 @@ class BulletCallbacks
 		
 		callbackMap = new Map < Int, Dynamic->Dynamic->Void > ();
 		
-		for (wd in RpgEngine.data.weaponData)
+		for (wd in WeaponController.data)
 		{
 			var f = Reflect.getProperty(BulletCallbacks, wd.collideCallback);
 			callbackMap.set(wd.id, f);

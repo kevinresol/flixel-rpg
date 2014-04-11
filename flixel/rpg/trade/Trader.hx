@@ -1,8 +1,8 @@
 package flixel.rpg.trade;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.data.Data.TradeData;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
+import haxe.Unserializer;
 
 using flixel.rpg.trade.TraderTools;
 /**
@@ -11,8 +11,30 @@ using flixel.rpg.trade.TraderTools;
  */
 class Trader
 {
+	public static var data:Array<TradeData>;
+	
 	private var tradeIds:Array<Int>;
 	private var inventory:Inventory;
+	
+	public static function loadData(dataString:String):Void
+	{
+		if (data == null)
+			data = Unserializer.run(dataString);
+	}
+	
+	public static function getData(id:Int):TradeData
+	{
+		if (data == null)
+			throw "loadTradeData first";
+			
+		for (d in data)
+		{
+			if (d.id == id)
+				return d;
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Create a new trader. If an inventory is provided, the trader will use that as his inventory.
@@ -37,7 +59,7 @@ class Trader
 	 */
 	public function trade(buyerInventory:Inventory, id:Int, receiveCost:Bool):Bool
 	{
-		var tradeData:TradeData = RpgEngine.data.getTradeData(id);
+		var tradeData:TradeData = getData(id);
 		
 		// Test the buyer inventory
 		if (!buyerInventory.canTrade(tradeData.cost, tradeData.reward))
@@ -77,7 +99,7 @@ class Trader
 	{
 		var result = [];
 		for (id in tradeIds)
-			result.push(RpgEngine.data.getTradeData(id));
+			result.push(getData(id));
 		return result;
 	}
 	
@@ -94,7 +116,7 @@ class Trader
 		// For each trades
 		for (id in tradeIds)
 		{
-			var tradeData = RpgEngine.data.getTradeData(id);
+			var tradeData = getData(id);
 						
 			// Check if the buyer has all the costs for this trade
 			for (c in tradeData.cost)
@@ -113,5 +135,18 @@ class Trader
 		return result;
 	}
 	
+}
+
+typedef TradeData = 
+{
+	id:Int,
+	reward:Array<TradeItemData>,
+	cost:Array<TradeItemData>
+}
+
+typedef TradeItemData = 
+{
+	id:Int,
+	count:Int
 }
 

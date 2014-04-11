@@ -1,7 +1,7 @@
 package flixel.rpg.trade;
-import flixel.rpg.data.Data.TradeItemData;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
+import flixel.rpg.trade.Trader.TradeItemData;
 
 /**
  * Supporting tools for Trader
