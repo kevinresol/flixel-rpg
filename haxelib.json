@@ -5,7 +5,7 @@
   "tags": ["game", "flixel", "openfl", "cross"],
   "description": "A RPG framework based on HaxeFlixel.",
   "version": "0.0.1",
-  "releasenote": "Initial release, everything is working correctly",
+  "releasenote": "Work in Progress",
   "contributors": ["KevinResoL"],
   "dependencies": {
     "flixel": "",
