@@ -31,9 +31,9 @@ class Pickup extends Entity
 		return pickup;
 	}
 	
-	public function new(x:Float = 0, y:Float = 0) 
+	private function new() 
 	{
-		super(x, y);		
+		super();		
 		
 		enableAI();
 		followAI = new FollowAI();
@@ -44,6 +44,11 @@ class Pickup extends Entity
 	{
 		super.update();
 		target = null;
+	}
+	
+	override public function destroy():Void 
+	{		
+		super.destroy();
 	}
 	
 	override public function kill():Void 
