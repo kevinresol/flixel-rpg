@@ -2,6 +2,8 @@ package flixel.rpg.ai;
 import flixel.rpg.entity.Entity;
 import flixel.util.FlxMath;
 
+//TODO add delay. Even in range, need to wait for a delay before actually engaging
+
 /**
  * An AI that engages the player (TODO: or a list of targets) when the parent entity
  * gets too close or when the parent entity is being attacked
