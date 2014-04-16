@@ -1,31 +1,34 @@
 package flixel.rpg.fsm;
 import flixel.rpg.entity.Entity;
+import flixel.util.FlxSignal;
 
 /**
  * ...
  * @author Kevin
  */
+@:generic
 class FiniteStateMachine<T:EnumValue>
-{
-	public var entity(default, null):Entity;
-	public var currentState:T;
+{	
+	public var currentState(default, set):T;
 	
-	public function new(entity) 
+	/**
+	 * Parameters: newState, oldState
+	 */
+	public var changed(default, null):FlxTypedSignal<T->T->Void>;
+	
+	public function new() 
 	{
-		this.entity = entity;
-		states = new Map<String, StateMachineState>();
+		changed = new FlxTypedSignal();
 	}
 	
-	public function set(type:String, state:StateMachineState):Void
+	private function set_currentState(v:T):T
 	{
-		if (states.exists(type))
-			throw '$type already set';
-		else
-			states.set(type, state);
-	}
-	
-	public function get(type:String):StateMachineState
-	{
-		return states.get(type);
+		if (v == currentState)
+			return currentState;
+			
+		changed.dispatch(v, currentState);
+			
+		return currentState = v;
+			
 	}
 }
