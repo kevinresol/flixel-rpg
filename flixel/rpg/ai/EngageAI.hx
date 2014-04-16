@@ -22,12 +22,22 @@ class EngageAI extends AI
 	/**
 	 * Engage range of this entity, only relevant when 'passive' is set to false
 	 */
-	public var engageRange:Float = 80;	
+	public var range:Float = 80;
 	
 	/**
-	 * TODO: A list of targets to check against. Engage if any of them is in range
+	 * When the target is in range, delay to engage (in seconds);
+	 */
+	public var delay(default, set):Float = 0;
+	
+	/**
+	 * A list of targets to check against. Engage if any of them if in range
 	 */
 	public var targets:Array<Entity>;
+	
+	/**
+	 * A map to store the elapsed in-range time for each possible targets
+	 */
+	public var elapsed:Map<Entity, Float>;
 	
 	/**
 	 * Constructor
@@ -62,10 +72,42 @@ class EngageAI extends AI
 			{
 				for (e in targets)
 				{				
-					if (FlxMath.isDistanceWithin(entity, e, engageRange))
+					if (FlxMath.isDistanceWithin(entity, e, range))
 					{
-						entity.engage(e);
-						break;
+						// Engage immediately if there is no delay
+						if (delay == 0)
+						{
+							entity.engage(e);						
+							break;
+						}
+						else // Check elapsed time since in range
+						{
+							var s = elapsed.get(e);
+							
+							if (s == null)
+								s = 0;
+							else
+								s += FlxG.elapsed;
+								
+							
+							if (s >= delay)
+							{
+								entity.engage(e);
+								
+								// Already engaged, no need to store the elapsed time anymore
+								for (k in elapsed.keys())
+									elapsed.remove(k);
+									
+								break;
+							}
+							else
+								elapsed.set(e, s);
+						}
+					}
+					else // Not in range
+					{
+						if(elapsed != null)
+							elapsed.remove(e);
 					}
 				}
 			}
@@ -86,4 +128,14 @@ class EngageAI extends AI
 		}
 	}
 	
+	private function set_delay(v:Float):Float
+	{
+		if (v == delay)
+			return v;
+			
+		if (v != 0 && elapsed == null)
+			elapsed = new Map();
+			
+		return delay = v;
+	}
 }
