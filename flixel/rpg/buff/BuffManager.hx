@@ -24,7 +24,9 @@ class BuffManager
 		{
 			buffs.push(buff);
 			buff.entity = entity;
-			buff.applyCallback(buff);			
+			
+			if(buff.applyCallback != null)
+				buff.applyCallback(buff);			
 		}
 	}
 	
@@ -34,7 +36,10 @@ class BuffManager
 		if (index != -1)
 		{
 			FlxArrayUtil.swapAndPop(buffs, index);
-			buff.unapplyCallback(buff);
+			
+			if(buff.unapplyCallback != null)
+				buff.unapplyCallback(buff);
+				
 			buff.destroy();
 		}
 	}
