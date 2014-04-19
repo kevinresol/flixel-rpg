@@ -118,7 +118,7 @@ class WanderAI extends AI
 					// Clear the stop timer
 					if (stopTimer != null)
 					{				
-						stopTimer.abort();
+						stopTimer.cancel();
 						stopTimer = null;
 					}
 				}				
