@@ -2,8 +2,7 @@ package flixel.rpg.entity;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
-import flixel.rpg.weapon.DamageOverTime;
-import flixel.rpg.weapon.WeaponController;
+import flixel.rpg.buff.BuffManager;
 import flixel.rpg.dialog.DialogInitializer;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.interaction.MouseHandler;
@@ -11,6 +10,7 @@ import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
 import flixel.rpg.system.HitBox;
 import flixel.rpg.trade.Trader;
+import flixel.rpg.weapon.WeaponController;
 import flixel.util.FlxTimer;
 
 /**
@@ -89,9 +89,9 @@ class Entity extends FlxSprite
 	//TODO public var states:FiniteStateMachine;
 	
 	/**
-	 * DOT controller
+	 * Buff controller
 	 */
-	public var damageOverTime:DamageOverTime;
+	public var buffs:BuffManager;
 	
 	/**
 	 * Weapon controller
@@ -161,14 +161,6 @@ class Entity extends FlxSprite
 		weapon = new WeaponController(this);	
 	}
 	
-	/**
-	 * Enable DOT
-	 */
-	public function enableDamageOverTime():Void
-	{
-		if (damageOverTime == null)
-			damageOverTime = new DamageOverTime();	
-	}
 	
 	/**
 	 * Enable inventory
@@ -218,6 +210,11 @@ class Entity extends FlxSprite
 			stat = new StatController();	
 	}
 	
+	public function enableBuffs():Void
+	{
+		if (buffs == null)
+			buffs = new BuffManager(this);
+	}
 	/**
 	 * Enable state machine
 	 */
