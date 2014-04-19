@@ -16,6 +16,7 @@ class FiniteStateMachine<T:EnumValue>
 	 */
 	public var changed(default, null):FlxTypedSignal<T->T->Void>;
 	
+	
 	public function new() 
 	{
 		changed = new FlxTypedSignal();

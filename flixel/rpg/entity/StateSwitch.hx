@@ -1,5 +1,6 @@
 package flixel.rpg.entity;
 import flixel.addons.display.FlxExtendedSprite;
+import flixel.rpg.fsm.FiniteStateMachine;
 import flixel.util.FlxSignal;
 using Lambda;
 /**
@@ -14,79 +15,63 @@ class StateSwitch<T:EnumValue>
 	/**
 	 * Switch mode
 	 */
-	public var switchMode:SwitchMode;
-	
+	public var switchMode:SwitchMode = SInstant;
 	
 	/**
 	 * Current state
 	 */
-	public var state(default, null):T;
+	public var state(get, set):T;
+	
+	private var stateMachine:FiniteStateMachine<T>;
 	
 	/**
 	 * Runtime value of T
 	 */
-	private var stateType:Enum<Dynamic>;
-	
-	/**
-	 * A function to be called when state changed
-	 */
-	public var onStateSwitched:StateSwitch<T>->Void;
-	
-	/**
-	 * A StateSwitchGroup can contain serveral StateSwitches
-	 * And a StateSwitch can be conatined by serveral StateSwitchGroups
-	 * This array stores the groups containing [this]
-	 */
-	public var groups:Array<StateSwitch<T>>;
-	
+	private var stateType:Enum<Dynamic>;	
 	
 	/**
 	 * An array of connected toggles.
 	 */
 	private var connected:Array<StateSwitch<T>>; //TODO
 	
-	private var connectModes:Map < StateSwitch<T>, ConnectMode > ;
-	
+	private var connectModes:Map<StateSwitch<T>, ConnectMode>;	
 	
 	/**
 	 * 
 	 */
-	public var groupMode:GroupMode<T>;
+	public var groupMode:GroupMode<T> = GNone;
 	
 	/**
 	 * Contained switches (only relevant when groupMode != GNone)
 	 */
-	public var switches:Array<StateSwitch<T>>;	
+	public var switches:Array<StateSwitch<T>>;		
+	
+	public var changed(get, never):FlxTypedSignal<T->T->Void>;
 	
 	/**
-	 * Default state (only relevant when groupMode != GNone)
+	 * 
+	 * @param	entity
+	 * @param	defaultState
+	 * @param	groupMode GNone: Not a group
 	 */
-	public var defaultState:T;
-	
-	//TODO signal
-	public var changed(default, null):FlxSignal;
-	
-	/**
-	 * Constructor
-	 * @param	x
-	 * @param	y
-	 */
-	public function new(entity:Entity, defaultState:T, ?groupMode:GroupMode<T>) 
+	public function new(entity:Entity, initialState:T, ?groupMode:GroupMode<T>) 
 	{
 		this.entity = entity;
 		
-		switchMode = SInstant;
+		stateMachine = new FiniteStateMachine<T>();
 		
-		state = defaultState;
+		//switchMode = SInstant;
+		
+		state = initialState;
 		stateType = Type.getEnum(state);
 		
-		this.groupMode = (groupMode == null ? GNone : groupMode);
+		if(groupMode != null)
+			this.groupMode = groupMode;
 		
 		entity.animation.callback = animationCallback;		
 		connectModes = new Map<StateSwitch<T>, ConnectMode>();
 			
 		connected = [];
-		groups = [];
 		
 		// Some group-mode-only settings
 		switch (this.groupMode)
@@ -94,41 +79,21 @@ class StateSwitch<T:EnumValue>
 			case GNone:
 			default:
 				switches = [];
-				this.defaultState = defaultState;
 		}
-	}
-	
-	
-	/**
-	 * Switch state by a delta. E.g. current state is 2, jumpState(3) means 
-	 * switchState(2+3). Auto loop if the state+delta is out of range.
-	 * @param	delta
-	 */
-	/*public function jumpState(delta:Int):Void
-	{
-		var toState = state + delta;
-		
-		if (toState < 0)
-			toState += numStates;
-			
-		if (toState >= numStates)
-			toState -= numStates;
-			
-		switchState(toState);
-	}*/
+	}	
 	
 	/**
 	 * Switch the state. State changes and the corresponding callback is called
 	 * immediately if switchMode is SWITCH_MODE_INSTANT. Otherwise the actual 
 	 * switching will happen at the end of the animation.
 	 */
-	public function switchState(state:T):Void
+	public function switchState(toState:T):Void
 	{
-		if (this.state == state)
+		if (state == toState)
 			return;
 		
 		//play animation
-		var animationName = getAnimationName(this.state, state);		
+		var animationName = getAnimationName(state, toState);		
 		if (entity.animation.get(animationName) == null)
 		{
 			//SWITCH_MODE_ANIMATION_END requires an animation
@@ -144,27 +109,10 @@ class StateSwitch<T:EnumValue>
 		//Switch the state immediately
 		switch (switchMode) 
 		{
-			case SInstant: internalSwitchState(state);	
+			case SInstant: state = toState;
 			default:					
 		}		
 	}	
-	
-	/**
-	 * @private
-	 * Actually switch the state.
-	 */
-	private inline function internalSwitchState(state:T):Void
-	{
-		//Change the state
-		this.state = state;
-		
-		//Callback	
-		if (onStateSwitched != null)
-			onStateSwitched(this);
-		
-		//Tell groups that my state is changed
-		notifyGroups();
-	}
 	
 	/**
 	 * Animation callback. Switch the state at the end of the anmiation if
@@ -182,7 +130,7 @@ class StateSwitch<T:EnumValue>
 			{
 				case SAnimationEnd:
 					var toState:T = cast Type.createEnum(stateType, animationName.split("->")[1]);
-					internalSwitchState(toState);
+					state = toState;
 				default:					
 			}			
 		}		
@@ -228,30 +176,12 @@ class StateSwitch<T:EnumValue>
 		connectModes.remove(stateSwitch);
 			
 		stateSwitch.disconnect(this);	
-	}
-	
+	}	
 	
 	public inline function getAnimationName(fromState:T, toState:T):String
 	{
 		return Std.string(fromState) + "->" + Std.string(toState);
-	}
-	
-	/**
-	 * Notify the groups containing [this]. Called when state actually changed.
-	 */
-	public function notifyGroups():Void
-	{
-		for (g in groups)
-			g.checkSwitches();
-	}
-	
-	/**
-	 * Notify the groups containing [this]. Called when state actually changed.
-	 */
-	public function notifyConnected():Void
-	{
-		
-	}
+	}	
 	
 	/**
 	 * Add a StateSwitch to this group
@@ -259,11 +189,14 @@ class StateSwitch<T:EnumValue>
 	 */
 	public function addSwitch(stateSwitch:StateSwitch<T>):Void
 	{
+		if (groupMode == GNone)
+			throw "This stateSwitch is not configured as a group. Set groupMode to non-GNone values";
+		
 		var index = switches.indexOf(stateSwitch);
 		if (index == -1)
 		{
 			switches.push(stateSwitch);
-			stateSwitch.groups.push(this);
+			stateSwitch.changed.add(onChildChanged);
 		}
 	}
 	
@@ -273,19 +206,19 @@ class StateSwitch<T:EnumValue>
 	 */
 	public function removeSwitch(stateSwitch:StateSwitch<T>):Void
 	{
+		if (groupMode == GNone)
+			throw "This stateSwitch is not configured as a group. Set groupMode to non-GNone values";
+		
 		switches.remove(stateSwitch);
-		stateSwitch.groups.remove(this);
-	}
+		stateSwitch.changed.remove(onChildChanged);
+	}	
 	
-	/**
-	 * Check all child switches and determine the state of this group
-	 */
-	public function checkSwitches():Void
-	{		
+	private function onChildChanged(_,_):Void
+	{
 		switch (groupMode) 
 		{
 			case GNone:
-			case GAnd:
+			case GAnd(defaultState):
 				var prevSwitch:StateSwitch<T> = null;
 				
 				for (s in switches)
@@ -302,7 +235,7 @@ class StateSwitch<T:EnumValue>
 				
 				switchState(prevSwitch.state);
 				
-			case GOr(targetState):
+			case GOr(defaultState, targetState):
 				for (s in switches)
 				{
 					if (s.state == targetState)
@@ -314,11 +247,25 @@ class StateSwitch<T:EnumValue>
 				//switch off if none of the children are at targetState
 				switchState(defaultState);
 				
-			case GPattern(pattern, targetState):
+			case GPattern(pattern, defaultState, targetState):
 				//TODO pattern
 		}	
 	}
 	
+	private function get_state():T
+	{
+		return stateMachine.currentState;
+	}
+	
+	private function set_state(v:T):T
+	{
+		return stateMachine.currentState = v;
+	}
+	
+	private function get_changed():FlxTypedSignal<T->T->Void>
+	{
+		return stateMachine.changed;
+	}
 }
 
 enum SwitchMode 
@@ -336,7 +283,7 @@ enum ConnectMode
 enum GroupMode<T>
 {
 	GNone; // Not a group
-	GAnd; // AND mode: all switches have to have the same state
-	GOr(targetState:T); // OR mode: Any switches has the targetState
-	GPattern(pattern:Array<T>, targetState:T); // Pattern mode: switch to target state if the pattern is fulfilled
+	GAnd(defaultState:T); // AND mode: all switches have to have the same state
+	GOr(defaultState:T, targetState:T); // OR mode: Any switches has the targetState
+	GPattern(pattern:Array<T>, defaultState:T, targetState:T); // Pattern mode: switch to target state if the pattern is fulfilled
 }
