@@ -24,25 +24,33 @@ class MouseHandler
 	
 	private function onMouseDown(s:FlxSprite)
 	{
-		if (downHandler != null) downHandler(cast s);
+		if (downHandler != null)
+			downHandler(cast s);
+			
 		isPressed = true;	
 	}
 	
 	private function onMouseUp(s:FlxSprite)
 	{
-		if (upHandler != null) upHandler(cast s);
+		if (upHandler != null)
+			upHandler(cast s);
+		
 		isPressed = false;	
 	}
 	
 	private function onMouseOver(s:FlxSprite)
 	{
-		if (overHandler != null) overHandler(cast s);
+		if (overHandler != null)
+			overHandler(cast s);
+			
 		isOver = true;
 	}
 	
 	private function onMouseOut(s:FlxSprite)
 	{
-		if (outHandler != null) outHandler(cast s);
+		if (outHandler != null)
+			outHandler(cast s);
+		
 		isOver = false;	
 	}
 	
