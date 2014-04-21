@@ -16,10 +16,11 @@ class Dialog
 	 */
 	public var name:String;
 	
+	public var text(get, never):String;
 	/**
 	 * The actual dialogue contents
 	 */
-	public var text:String;	
+	public var texts:Array<String>;	
 	
 	/**
 	 * Array of all responses associated with this dialogue
@@ -35,18 +36,21 @@ class Dialog
 	
 	private var system:DialogSystem;
 	
+	@:allow(flixel.rpg.dialog.DialogSystem)
+	private var currentParagraph:Int = 0;
+	
 	/**
 	 * Constructor
 	 * @param	id
 	 * @param	name
 	 * @param	text
 	 */
-	public function new(system:DialogSystem, id:String, name:String, text:String, ?autoRespond:Bool) 
+	public function new(system:DialogSystem, id:String, name:String, texts:Array<String>, ?autoRespond:Bool) 
 	{
 		this.system = system;
 		this.id = id;
 		this.name = name;
-		this.text = text;
+		this.texts = texts;
 		this.responses = [];
 		this.autoRespond = autoRespond;
 	}
@@ -64,13 +68,24 @@ class Dialog
 		//Reflect.callMethod(null, response.action, response.actionParams);
 	}
 	
+	public function showNext():Void
+	{
+		if (hasNext())
+			currentParagraph++;
+	}
+	
+	public inline function hasNext():Bool
+	{
+		return currentParagraph < texts.length - 1;
+	}
+	
 	/**
 	 * Debug string
 	 * @return
 	 */
 	public function toString():String
 	{
-		return text;
+		return texts[currentParagraph];
 	}
 	
 	
@@ -103,6 +118,11 @@ class Dialog
 		}
 		
 		return result;
+	}
+	
+	private function get_text():String
+	{
+		return texts[currentParagraph];
 	}
 }
 

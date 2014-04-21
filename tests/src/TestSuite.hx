@@ -1,5 +1,6 @@
 import massive.munit.TestSuite;
 
+import flixel.rpg.dialog.DialogSystemTest;
 import flixel.rpg.inventory.InventoryTest;
 
 /**
@@ -14,6 +15,7 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
+		add(flixel.rpg.dialog.DialogSystemTest);
 		add(flixel.rpg.inventory.InventoryTest);
 	}
 }

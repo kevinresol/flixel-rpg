@@ -4,6 +4,7 @@ import flixel.rpg.core.RpgScript;
 import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
 import flixel.rpg.requirement.RequirementFactory;
+import flixel.util.FlxSignal;
 import haxe.Unserializer;
 
 /**
@@ -26,9 +27,9 @@ class DialogSystem
 	private var dialogs:Map<String, Dialog>;
 	
 	/**
-	 * A callback to be called when a dialogue changes
+	 * A signal to be dispatched when a dialogue changes
 	 */
-	public var onChange:Void->Void;
+	public var changed:FlxSignal;
 	
 	/**
 	 * The current dialogue
@@ -55,13 +56,11 @@ class DialogSystem
 	 * Constructor
 	 * @param	data	json data
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
-	 * @param	?onChange	callback on dialogue change
 	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
-	public function new(data:String, ?dialogActionsClass:Class<DialogActions>, ?onChange:Void->Void, ?requirementFactory:IRequirementFactory) 
+	public function new(data:String, ?dialogActionsClass:Class<DialogActions>, ?requirementFactory:IRequirementFactory) 
 	{
-		
-		this.onChange = onChange;
+		changed = new FlxSignal();
 		
 		this.requirementFactory = (requirementFactory == null ? new RequirementFactory() : requirementFactory);
 		
@@ -93,7 +92,7 @@ class DialogSystem
 		for (dialogData in data)
 		{
 			//create the dialogue object
-			var dialog = new Dialog(this, dialogData.id, dialogData.name, dialogData.text, dialogData.autoRespond);			
+			var dialog = new Dialog(this, dialogData.id, dialogData.name, dialogData.texts, dialogData.autoRespond);			
 			dialogs.set(dialog.id, dialog);
 			
 			//create the responses objects
@@ -117,11 +116,24 @@ class DialogSystem
 		setCurrent(dialogs.get(id));
 	}
 	
+	public function showNext():Void
+	{
+		if (current.hasNext())
+		{
+			current.showNext(); //TODO check hasNext() twice?
+			
+			changed.dispatch();
+		}
+	}
+	
 	/**
-	 * Set current dialogue to null
+	 * Set current dialog to null
 	 */
 	public function end():Void
 	{
+		if (current != null)
+			current.currentParagraph = 0;// Set dialog index back to 0 (first paragraph)
+		
 		setCurrent(null);
 		currentInitializer = null;
 		script.variables.remove("entity");
@@ -129,7 +141,7 @@ class DialogSystem
 	
 	/**
 	 * @private
-	 * Internal function to set the current dialogue, will call the onChange callback if there is a change
+	 * Internal function to set the current dialogue, will dispatch the changed signal if there is a change
 	 * @param	dialogue
 	 */
 	private inline function setCurrent(dialog:Dialog):Void
@@ -138,8 +150,7 @@ class DialogSystem
 		{			
 			current = dialog;
 			
-			if (onChange != null)
-				onChange();
+			changed.dispatch();
 			
 			if (dialog != null && dialog.autoRespond)
 				dialog.respond(dialog.availableResponses[0]);
@@ -168,7 +179,7 @@ typedef DialogData =
 {
 	id:String,
 	name:String,
-	text:String,
+	texts:Array<String>,
 	responses:Array<ResponseData>,
 	?autoRespond:Bool
 }
