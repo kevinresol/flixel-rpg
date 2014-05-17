@@ -50,7 +50,7 @@ class Bullet extends FlxBullet
 	public function reload(target:FlxSprite):Void
 	{
 		reloadedMap.set(target, false);
-		FlxTimer.start(reloadTime, function(_) reloadedMap.set(target, true));
+		new FlxTimer(reloadTime, function(_) reloadedMap.set(target, true));
 	}
 	
 	override public function kill():Void 

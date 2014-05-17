@@ -1,17 +1,12 @@
 package flixel.rpg.display;
 
 import flixel.FlxObject;
-import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
+import flixel.math.FlxRandom;
 import flixel.rpg.core.RpgEngine;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
-import flixel.tweens.FlxEase.EaseFunction;
 import flixel.tweens.FlxTween;
-import flixel.tweens.misc.ColorTween;
-import flixel.tweens.motion.LinearMotion;
-import flixel.util.FlxRandom;
-import flixel.util.FlxTimer;
 
 /**
  * A popup text displaying damage numbers

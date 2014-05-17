@@ -1,13 +1,13 @@
 package flixel.rpg.core;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.rpg.weapon.BulletCallbacks;
 import flixel.rpg.data.Data;
 import flixel.rpg.dialog.DialogActions;
 import flixel.rpg.dialog.DialogSystem;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.weapon.Bullet;
+import flixel.rpg.weapon.BulletCallbacks;
 
 /**
  * The core of the RPG framework.

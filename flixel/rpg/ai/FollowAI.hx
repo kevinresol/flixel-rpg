@@ -1,8 +1,7 @@
 package flixel.rpg.ai;
+import flixel.math.FlxAngle;
+import flixel.math.FlxVelocity;
 import flixel.rpg.ai.FollowAI.AccelerationMode;
-import flixel.util.FlxAngle;
-import flixel.util.FlxPoint;
-import flixel.util.FlxVelocity;
 
 /**
  * Follow the entity's target

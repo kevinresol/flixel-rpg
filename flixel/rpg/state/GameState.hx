@@ -19,14 +19,7 @@ class GameState extends FlxState
 	 */
 	private var lighting:LightingSystem;
 		
-	/**
-	 * Contructor
-	 */
-	public function new() 
-	{
-		super();	
-	}	
-	
+		
 	override public function create():Void 
 	{
 		super.create();

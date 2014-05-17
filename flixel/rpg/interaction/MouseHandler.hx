@@ -1,6 +1,6 @@
 package flixel.rpg.interaction;
 import flixel.FlxSprite;
-import flixel.plugin.MouseEventManager;
+import flixel.input.mouse.FlxMouseEventManager;
 import flixel.rpg.entity.Entity;
 
 /**
@@ -19,7 +19,7 @@ class MouseHandler
 
 	public function new(entity:Entity, pixelPerfect:Bool = false):Void
 	{
-		MouseEventManager.add(entity, onMouseDown, onMouseUp, onMouseOver, onMouseOut , false, true, pixelPerfect);
+		FlxMouseEventManager.add(cast entity, onMouseDown, onMouseUp, onMouseOver, onMouseOut , false, true, pixelPerfect);
 	}
 	
 	private function onMouseDown(s:FlxSprite)

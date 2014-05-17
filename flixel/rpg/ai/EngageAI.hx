@@ -1,6 +1,6 @@
 package flixel.rpg.ai;
+import flixel.math.FlxMath;
 import flixel.rpg.entity.Entity;
-import flixel.util.FlxMath;
 
 /**
  * An AI that engages the player (TODO: or a list of targets) when the parent entity

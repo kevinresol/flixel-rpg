@@ -1,11 +1,8 @@
 package flixel.rpg.display.lighting;
 
-import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.BlendMode;
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxPoint;
+import flixel.math.FlxPoint;
 
 /**
  * A light to be used in the lighting system

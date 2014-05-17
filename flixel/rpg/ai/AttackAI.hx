@@ -1,8 +1,6 @@
 package flixel.rpg.ai;
+import flixel.math.FlxMath;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.entity.Entity;
-import flixel.util.FlxMath;
-import flixel.util.FlxVelocity;
 
 /**
  * An AI that auto attacks the target of the parent entity (if target != null)

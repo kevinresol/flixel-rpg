@@ -1,7 +1,6 @@
 package flixel.rpg.entity;
-import flixel.addons.display.FlxExtendedSprite;
 import flixel.rpg.fsm.FiniteStateMachine;
-import flixel.util.FlxSignal;
+import flixel.util.FlxSignal.FlxTypedSignal;
 using Lambda;
 /**
  * Connect: 2-way communication (Not fully implemented)
@@ -94,7 +93,7 @@ class StateSwitch<T:EnumValue>
 		
 		//play animation
 		var animationName = getAnimationName(state, toState);		
-		if (entity.animation.get(animationName) == null)
+		if (entity.animation.getByName(animationName) == null)
 		{
 			//SWITCH_MODE_ANIMATION_END requires an animation
 			switch (switchMode) 
@@ -124,7 +123,7 @@ class StateSwitch<T:EnumValue>
 	private function animationCallback(animationName:String, currentFrame:Int, currentFrameIndex:Int):Void
 	{
 		
-		if (animationName != null && entity.animation.get(animationName).finished)
+		if (animationName != null && entity.animation.getByName(animationName).finished)
 		{
 			switch (switchMode) 
 			{

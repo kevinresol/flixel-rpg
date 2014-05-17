@@ -1,5 +1,5 @@
 package flixel.rpg.inventory;
-import flixel.interfaces.IFlxDestroyable;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import flixel.util.FlxPool;
 using flixel.util.FlxArrayUtil;
 /**

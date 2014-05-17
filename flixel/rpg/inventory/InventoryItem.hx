@@ -1,6 +1,5 @@
 package flixel.rpg.inventory;
-import flixel.interfaces.IFlxDestroyable;
-import flixel.rpg.core.RpgEngine;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import flixel.util.FlxPool;
 import haxe.Unserializer;
 

@@ -32,7 +32,7 @@ class TiledLevel extends Level
 		var mapArray = layer.tileArray.map(function(v) return v - 1); //The numbering in the data array starts from 1, but we want 0
 		obstacles.widthInTiles = layer.width;
 		obstacles.heightInTiles = layer.height;		
-		obstacles.loadMap(mapArray, Assets.getBitmapData(imagePath), tileset.tileWidth, tileset.tileHeight, 0, 0, 1, 2);
+		obstacles.loadMap(mapArray, Assets.getBitmapData(imagePath), tileset.tileWidth, tileset.tileHeight, OFF, 0, 1, 2);
 				
 		// Load Objects
 		var objectGroup = tmx.getObjectGroup(objectGroupName);

@@ -1,7 +1,4 @@
 package flixel.rpg.stat;
-import flixel.FlxG;
-import flixel.rpg.entity.Entity;
-import flixel.util.FlxMath;
 
 /**
  * ...

@@ -1,7 +1,6 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScript;
-import flixel.rpg.requirement.IRequirement;
 import flixel.rpg.requirement.IRequirementFactory;
 import flixel.rpg.requirement.RequirementFactory;
 import flixel.util.FlxSignal;

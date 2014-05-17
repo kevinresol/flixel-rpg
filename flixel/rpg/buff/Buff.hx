@@ -1,6 +1,6 @@
 package flixel.rpg.buff;
-import flixel.interfaces.IFlxDestroyable;
 import flixel.rpg.entity.Entity;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 /**
  * ...

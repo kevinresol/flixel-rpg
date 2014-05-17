@@ -1,9 +1,9 @@
 package flixel.rpg.ai;
 import flixel.FlxG;
-import flixel.util.FlxPoint;
-import flixel.util.FlxRandom;
+import flixel.math.FlxPoint;
+import flixel.math.FlxRandom;
+import flixel.math.FlxVelocity;
 import flixel.util.FlxTimer;
-import flixel.util.FlxVelocity;
 
 /**
  * An AI that allows the entity to wander (move randomly) around. 
@@ -151,7 +151,7 @@ class WanderAI extends AI
 					FlxVelocity.moveTowardsPoint(entity, targetLocation, speed);
 					
 					// Use a timer to stop the entity when it reaches the target position
-					stopTimer = FlxTimer.start(dt, stopWander);
+					stopTimer = new FlxTimer(dt, stopWander);
 				}				
 		}	
 	}

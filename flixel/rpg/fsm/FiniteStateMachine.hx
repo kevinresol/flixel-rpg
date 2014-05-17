@@ -6,7 +6,7 @@ import flixel.util.FlxSignal;
  * ...
  * @author Kevin
  */
-@:generic
+//@:generic
 class FiniteStateMachine<T:EnumValue>
 {	
 	public var currentState(default, set):T;

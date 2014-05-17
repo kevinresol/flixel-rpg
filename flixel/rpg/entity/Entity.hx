@@ -324,7 +324,7 @@ class Entity extends FlxSprite
 		if (recoverTimer != null)
 			recoverTimer.reset(Math.max(duration, recoverTimer.timeLeft));
 		else 
-			recoverTimer = FlxTimer.start(duration, function(?t) recover());
+			recoverTimer = new FlxTimer(duration, function(?t) recover());
 	}
 	
 	/**
