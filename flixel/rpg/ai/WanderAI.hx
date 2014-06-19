@@ -138,8 +138,8 @@ class WanderAI extends AI
 					wanderState = WMove;
 					
 					// Set a random destination
-					var toX = wanderCenter.x + FlxRandom.floatRanged( -radius, radius);
-					var toY = wanderCenter.y + FlxRandom.floatRanged( -radius, radius);
+					var toX = wanderCenter.x + FlxRandom.float( -radius, radius);
+					var toY = wanderCenter.y + FlxRandom.float( -radius, radius);
 					
 					// Calculate the distance and duration of the move
 					var dx = toX - entity.x - entity.origin.x;
@@ -178,7 +178,7 @@ class WanderAI extends AI
 	 */
 	private inline function setNextWanderInterval():Void
 	{
-		nextWanderInterval = timeInterval + FlxRandom.floatRanged( -timeIntervalRandomRange / 2, timeIntervalRandomRange / 2);
+		nextWanderInterval = timeInterval + FlxRandom.float( -timeIntervalRandomRange / 2, timeIntervalRandomRange / 2);
 	}
 	
 	

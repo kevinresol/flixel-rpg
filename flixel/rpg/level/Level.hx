@@ -1,7 +1,6 @@
 package flixel.rpg.level;
 
 import flixel.group.FlxGroup;
-import flixel.group.FlxTypedGroup;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.Pickup;
 import flixel.tile.FlxTilemap;

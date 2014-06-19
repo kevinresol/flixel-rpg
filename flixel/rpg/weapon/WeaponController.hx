@@ -2,7 +2,7 @@ package flixel.rpg.weapon;
 import flixel.addons.weapon.FlxBullet;
 import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;
-import flixel.group.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.weapon.Bullet;
@@ -16,9 +16,9 @@ class WeaponController
 {
 	public static var data:Array<WeaponData>;
 	
-	public var group:FlxTypedGroup<FlxTypedGroup<FlxBullet>>;
+	public var group:FlxTypedGroup<FlxTypedGroup<Bullet>>;
 	
-	private var weapons:Map<Int, FlxWeapon>;
+	private var weapons:Map<Int, FlxTypedWeapon<Bullet>>;
 	private var entity:Entity;	
 	
 	/**
@@ -28,7 +28,7 @@ class WeaponController
 	private var fireWeaponAtTarget:FlxSprite-> Bool;
 	
 	
-	public var currentWeapon(default, null):FlxWeapon;
+	public var currentWeapon(default, null):FlxTypedWeapon<Bullet>;
 	
 	public var currentWeaponID(default, set):Int;
 	
@@ -58,8 +58,8 @@ class WeaponController
 	public function new(entity:Entity) 
 	{
 		this.entity = entity;
-		group = new FlxTypedGroup<FlxTypedGroup<FlxBullet>>();		
-		weapons = new Map<Int, FlxWeapon>();
+		group = new FlxTypedGroup();		
+		weapons = new Map();
 	}
 	
 	/**
@@ -67,7 +67,7 @@ class WeaponController
 	 * @param	id
 	 * @return	FlxWeaponX instance
 	 */
-	public function getWeapon(id:Int):FlxWeapon
+	public function getWeapon(id:Int):FlxTypedWeapon<Bullet>
 	{
 		if (weapons.get(id) == null)
 			createWeapon(id);
@@ -122,7 +122,7 @@ class WeaponController
 	private function createWeapon(id:Int):Void
 	{
 		var wd = getData(id);
-		var w = new FlxWeapon(wd.name, entity, Bullet, id);
+		var w = new FlxTypedWeapon<Bullet>(wd.name, entity, Bullet, id);
 		weapons.set(id, w);
 		
 				
@@ -132,7 +132,7 @@ class WeaponController
 		w.setFireRate(wd.fireRate);
 		w.setBulletSpeed(wd.bulletSpeed);
 		w.bulletDamage = wd.bulletDamage;
-		w.group.setAll("reloadTime", wd.bulletReloadTime);
+		w.group.forEach(function(b) b.reloadTime = wd.bulletReloadTime);
 		
 		w.setBulletBounds(RpgEngine.levels.current.obstacles.getBounds());
 		

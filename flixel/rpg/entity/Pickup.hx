@@ -1,6 +1,6 @@
 package flixel.rpg.entity;
 
-import flixel.group.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.rpg.ai.FollowAI;
 import flixel.rpg.inventory.InventoryItem;
 import flixel.rpg.system.HitBox;

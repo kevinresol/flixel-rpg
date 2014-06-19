@@ -29,6 +29,4 @@ class RpgScript
 	{
 		return interp.variables;
 	}
-		
-	
 }

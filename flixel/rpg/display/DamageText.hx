@@ -1,7 +1,7 @@
 package flixel.rpg.display;
 
 import flixel.FlxObject;
-import flixel.group.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.math.FlxRandom;
 import flixel.rpg.core.RpgEngine;
 import flixel.text.FlxText;
@@ -54,8 +54,8 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 			RpgEngine.levels.current.add(textBox = new DamageText());
 		}
 				
-		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.intRanged( -10, 10);
-		var fromY = object.y + FlxRandom.intRanged( -10, 5);
+		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.int( -10, 10);
+		var fromY = object.y + FlxRandom.int( -10, 5);
 		var toY = fromY - 20;
 		
 		textBox.alpha = 1;

@@ -3,7 +3,6 @@ import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.group.FlxTypedGroup.FlxTypedGroup;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.Pickup;

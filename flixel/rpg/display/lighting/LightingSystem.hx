@@ -4,7 +4,7 @@ import flash.filters.BlurFilter;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.group.FlxTypedGroup.FlxTypedGroup;
+import flixel.group.FlxGroup;
 
 /**
  * A system providing lighting effects
