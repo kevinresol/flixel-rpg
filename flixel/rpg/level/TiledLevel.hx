@@ -1,7 +1,6 @@
 package flixel.rpg.level;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectGroup;
-import game.entity.Door;
 import haxe.io.Path;
 import openfl.Assets;
 
@@ -46,7 +45,7 @@ class TiledLevel extends Level
 			switch(o.type)
 			{
 				case "Door":
-					objects.add(new Door(o.x, o.y));
+					//objects.add(new Door(o.x, o.y));
 				default:
 					
 			}

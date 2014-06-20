@@ -3,8 +3,10 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.buff.BuffManager;
+import flixel.rpg.core.RpgScript;
 import flixel.rpg.dialog.DialogInitializer;
 import flixel.rpg.display.DamageText;
+import flixel.rpg.entity.StateSwitch.GroupMode;
 import flixel.rpg.interaction.MouseHandler;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.stat.StatController;
@@ -127,18 +129,38 @@ class Entity extends FlxSprite
 	/**
 	 * Current recover state (hit or attack)
 	 */
-	public var recoverState:RecoverState;		
+	public var recoverState:RecoverState;	
+	
+	public var stateSwitch(default, null):StateSwitch<Dynamic>;
+	
+	
+	private var scripting:RpgScript;
+	private var scriptReturn:{init:Void->Void, update:Void->Void};
+	
 
 	/**
 	 * Constructor
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(x:Float = 0, y:Float = 0) 
+	public function new(x:Float = 0, y:Float = 0, script:String = "") 
 	{
-		super(x, y);				
+		super(x, y);
 		
 		recoverState = RNormal;
+	}
+	
+	@:allow(flixel.rpg.entity.EntityManager)
+	private function executeScript(script:String):Void
+	{
+		if (scripting == null)
+		{
+			scripting = new RpgScript();	
+			scripting.variables.set("entity", this);
+		}
+		
+		scriptReturn = scripting.execute(script);		
+		scriptReturn.init();
 	}
 	
 	public function enableHitBox(width:Int, height:Int):Void 
@@ -234,9 +256,14 @@ class Entity extends FlxSprite
 			dialogInitializer = new DialogInitializer();
 	}
 	
-	private inline function enableMouse(pixelPerfect:Bool = false):Void
+	private function enableMouse(pixelPerfect:Bool = false):Void
 	{
 		mouse = new MouseHandler(this, pixelPerfect);		
+	}
+	
+	private function enableStateSwitch<TState:EnumValue>(defaultState:TState, ?groupMode:GroupMode<TState>):Void
+	{
+		stateSwitch =  new StateSwitch(this, defaultState, groupMode);
 	}
 	
 	/**
@@ -248,6 +275,9 @@ class Entity extends FlxSprite
 		
 		if(ai != null)
 			ai.update();
+			
+		if (scriptReturn != null && scriptReturn.update != null)
+			scriptReturn.update();
 	}
 	
 	/**

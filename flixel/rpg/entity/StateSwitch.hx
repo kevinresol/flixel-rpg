@@ -7,6 +7,7 @@ using Lambda;
  * Group Add: 1-way communication
  * @author Kevin
  */
+
 class StateSwitch<T:EnumValue>
 {
 	public var entity:Entity;
