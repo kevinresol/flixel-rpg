@@ -135,7 +135,7 @@ class Entity extends FlxSprite
 	
 	
 	private var scripting:RpgScript;
-	private var scriptReturn:{init:Void->Void, update:Void->Void};
+	private var scriptUpdate:Void->Void;
 	
 
 	/**
@@ -143,7 +143,7 @@ class Entity extends FlxSprite
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(x:Float = 0, y:Float = 0, script:String = "") 
+	public function new(x:Float = 0, y:Float = 0) 
 	{
 		super(x, y);
 		
@@ -159,8 +159,9 @@ class Entity extends FlxSprite
 			scripting.variables.set("entity", this);
 		}
 		
-		scriptReturn = scripting.execute(script);		
-		scriptReturn.init();
+		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.execute(script);	
+		if(scriptReturn.init != null) scriptReturn.init();
+		scriptUpdate = scriptReturn.update;
 	}
 	
 	public function enableHitBox(width:Int, height:Int):Void 
@@ -276,8 +277,8 @@ class Entity extends FlxSprite
 		if(ai != null)
 			ai.update();
 			
-		if (scriptReturn != null && scriptReturn.update != null)
-			scriptReturn.update();
+		if (scriptUpdate != null)
+			scriptUpdate();
 	}
 	
 	/**
