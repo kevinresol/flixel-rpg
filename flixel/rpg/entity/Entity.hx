@@ -159,7 +159,7 @@ class Entity extends FlxSprite
 			scripting.variables.set("entity", this);
 		}
 		
-		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.execute(script);	
+		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.executeScript(script);	
 		if(scriptReturn.init != null) scriptReturn.init();
 		scriptUpdate = scriptReturn.update;
 	}

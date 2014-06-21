@@ -2,9 +2,9 @@ package flixel.rpg.core;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.data.Data;
-import flixel.rpg.dialog.DialogActions;
 import flixel.rpg.dialog.DialogSystem;
 import flixel.rpg.display.DamageText;
+import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.EntityManager;
 import flixel.rpg.entity.Pickup;
 import flixel.rpg.weapon.Bullet;
@@ -21,6 +21,9 @@ class RpgEngine
 	public static var data(default, null):Data;
 	public static var scripting(default, null):RpgScript = new RpgScript();
 	public static var entities(default, null):EntityManager = new EntityManager();
+	
+	// Shorthand propertes (mainly for scripting)
+	public static var player(get, never):Entity;
 	
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
@@ -42,9 +45,9 @@ class RpgEngine
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
 	
-	public static function enableDialogue(data:String, dialogueActionsClass:Class<DialogActions>):Void
+	public static function enableDialogue(data:String):Void
 	{
-		dialog = new DialogSystem(data, dialogueActionsClass);
+		dialog = new DialogSystem(data);
 	}
 
 	/**
@@ -88,5 +91,6 @@ class RpgEngine
 		return true;
 	}
 	
+	private static function get_player():Entity return levels.current.player;
 	
 }

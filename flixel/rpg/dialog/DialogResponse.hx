@@ -1,5 +1,6 @@
 package flixel.rpg.dialog;
-import flixel.rpg.requirement.IRequirement;
+import flixel.rpg.core.RpgScript;
+import hscript.Expr;
 
 /**
  * A response to a dialog
@@ -8,15 +9,15 @@ import flixel.rpg.requirement.IRequirement;
 class DialogResponse
 {
 	public var text:String;
-	public var requirementScripts:Array<String>;
-	public var script:String;
+	public var requirement:Expr;
+	public var action:Expr;
 
-	public function new(text:String, script:String, ?requirementScripts:Array<String>) 
+	public function new(text:String, actionScript:String, ?requirementScript:String = "") 
 	{
 		this.text = text;
-		this.script = script;
-		this.requirementScripts = requirementScripts;
+		this.action = RpgScript.parseString(actionScript);
+		
+		if(requirementScript != "")
+			this.requirement = RpgScript.parseString(requirementScript);
 	}
-	
-	
 }

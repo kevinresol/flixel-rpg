@@ -2,10 +2,12 @@ package flixel.rpg.core;
 import flixel.math.FlxMath;
 import flixel.rpg.entity.StateSwitch.GroupMode;
 import flixel.rpg.entity.Toggle.ToggleState;
+import hscript.Expr;
 import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
 import openfl.Assets;
+using tink.CoreApi;
 
 /**
  * Scripting Engine
@@ -13,7 +15,7 @@ import openfl.Assets;
  */
 class RpgScript
 {
-	public static var parser = new Parser();
+	private static var parser = new Parser();
 	
 	public var variables(get, never):Map<String, Dynamic>;
 	
@@ -28,21 +30,29 @@ class RpgScript
 		interp.variables.set("FlxG", FlxG);
 		interp.variables.set("ToggleState", ToggleState); //TODO remove this?
 		interp.variables.set("GroupMode", GroupMode); //TODO remove this?
-		
 	}
 	
-	public function execute(script:String):Dynamic
+	public static function parseString(script:String):Expr
 	{
 		try
 		{
-			var ast = parser.parseString(script);
-			return interp.execute(ast);		
+			return parser.parseString(script);
 		}
 		catch (e:Error)
 		{
 			trace(e, " at line " + parser.line + " of: \n" + script);
 			return null;
 		}
+	}
+	
+	public inline function executeAst(ast:Expr):Dynamic
+	{
+		return interp.execute(ast);	
+	}
+	
+	public inline function executeScript(script:String):Dynamic
+	{
+		return interp.execute(parseString(script));	
 	}
 	
 	private inline function get_variables():Map<String, Dynamic> 
@@ -67,3 +77,4 @@ private class NewInterp extends Interp
         return v;
     }
 }
+

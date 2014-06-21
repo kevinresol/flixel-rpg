@@ -1,8 +1,6 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScript;
-import flixel.rpg.requirement.IRequirementFactory;
-import flixel.rpg.requirement.RequirementFactory;
 import flixel.util.FlxSignal;
 import haxe.Unserializer;
 
@@ -13,11 +11,6 @@ import haxe.Unserializer;
  */
 class DialogSystem
 {
-	/**
-	 * @private
-	 * A reference to the DialogueAction object
-	 */
-	private var dialogActions:DialogActions;
 	
 	/**
 	 * @private
@@ -33,12 +26,7 @@ class DialogSystem
 	/**
 	 * The current dialogue
 	 */
-	public var current(default, null):Dialog;
-	
-	/**
-	 * A requirement factory
-	 */
-	public var requirementFactory:IRequirementFactory;
+	public var current(default, null):Dialog;	
 	
 	/**
 	 * The initialized which initialized the current dialogue. Can be null.
@@ -57,25 +45,11 @@ class DialogSystem
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
-	public function new(data:String, ?dialogActionsClass:Class<DialogActions>, ?requirementFactory:IRequirementFactory) 
+	public function new(data:String) 
 	{
 		changed = new FlxSignal();
 		
-		this.requirementFactory = (requirementFactory == null ? new RequirementFactory() : requirementFactory);
-		
-		if (dialogActionsClass == null)
-			dialogActionsClass = DialogActions;
-		
-		// Create the DialogueAction object
-		dialogActions = Type.createInstance(dialogActionsClass, []);
-		dialogActions.system = this;
-		
-		// Create the scripting engine and allow the DialogueAction object
-		// to be accessed as "action"
 		script = new RpgScript();
-		script.variables.set("action", dialogActions);
-		script.variables.set("requirementFactory", this.requirementFactory);
-		script.variables.set("RpgEngine", RpgEngine);
 		
 		load(data);
 	}
@@ -98,7 +72,7 @@ class DialogSystem
 			for (responseData in dialogData.responses)
 			{		
 				//create and push the response object
-				dialog.responses.push(new DialogResponse(responseData.text, responseData.script, responseData.requirementScripts));
+				dialog.responses.push(new DialogResponse(responseData.text, responseData.action, responseData.requirement));
 			}
 		}
 	}
@@ -186,6 +160,6 @@ typedef DialogData =
 typedef ResponseData =
 {
 	text:String, 
-	script:String, 
-	requirementScripts:Array<String>
+	action:String, 
+	requirement:String
 }

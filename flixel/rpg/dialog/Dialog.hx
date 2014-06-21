@@ -64,8 +64,7 @@ class Dialog
 		if (responses.indexOf(response) == -1)
 			throw "The specified response object does not belongs to this dialogue object";
 		
-		system.script.execute(response.script);
-		//Reflect.callMethod(null, response.action, response.actionParams);
+		system.script.executeAst(response.action);
 	}
 	
 	public function showNext():Void
@@ -95,23 +94,8 @@ class Dialog
 		
 		for (response in responses)
 		{
-			var fulfilled:Bool = true;
-			
 			// Check if all requirements fulfilled
-			if (response.requirementScripts != null)
-			{
-				for (requirementScript in response.requirementScripts)
-				{
-					// Create the IRequirement instance from script
-					var requirement = system.script.execute(requirementScript);
-					
-					if (!requirement.fulfilled())
-					{
-						fulfilled = false;
-						break;
-					}
-				}
-			}
+			var fulfilled = response.requirement == null || system.script.executeAst(response.requirement);
 			
 			if (fulfilled)
 				result.push(response);
