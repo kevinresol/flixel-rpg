@@ -21,6 +21,10 @@ class EntityManager
 		
 		// basic properties
 		entity.immovable = data.immovable;
+		entity.health = data.health;
+		
+		if (data.maxVelocity != null)
+			entity.maxVelocity.set(data.maxVelocity.x, data.maxVelocity.y);
 		
 		// hitbox
 		if(data.hitbox != null)
@@ -28,6 +32,10 @@ class EntityManager
 		
 		// graphics and animations
 		entity.loadGraphic(data.graphic.asset, false, data.graphic.width, data.graphic.height);
+		
+		if (data.graphic.centerOffsets == true) 
+			entity.centerOffsets();
+			
 		if (data.graphic.animations != null)
 		{
 			for(animation in data.graphic.animations)
@@ -35,12 +43,20 @@ class EntityManager
 			entity.animation.play(data.graphic.defaultAnimation);
 		}
 		
-		// run script
-		if (Assets.exists('assets/data/scripts/$id.hs'))
+		// AI
+		if (data.ai != null)
 		{
-			var script = Assets.getText('assets/data/scripts/$id.hs');
-			entity.executeScript(script);
+			entity.enableAI();
+			for (ai in data.ai)
+			{
+				entity.ai.add(ai.name, Type.createInstance(Type.resolveClass(ai.className), ai.params));
+			}
 		}
+		
+		// run script
+		var path = 'assets/data/scripts/$id.hs';
+		if (Assets.exists(path))
+			entity.executeScript(Assets.getText(path));
 		
 		return entity;
 	}

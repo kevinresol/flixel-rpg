@@ -122,7 +122,7 @@ class Level extends FlxGroup
 		
 		add(overlay = new FlxGroup());
 		
-	}	
+	}
 	
 	//TODO allow more players?
 	/**

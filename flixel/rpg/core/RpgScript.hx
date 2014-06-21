@@ -21,7 +21,7 @@ class RpgScript
 
 	public function new() 
 	{
-		interp = new Interp();	
+		interp = new NewInterp();	
 		interp.variables.set("RpgEngine", RpgEngine);
 		interp.variables.set("FlxMath", FlxMath);
 		interp.variables.set("Assets", Assets);
@@ -49,4 +49,21 @@ class RpgScript
 	{
 		return interp.variables;
 	}
+}
+
+/**
+ * Go thorugh getters/setters when accessing properties (not a default feature in the original Interp)
+ */
+private class NewInterp extends Interp
+{
+	override function get( o : Dynamic, f : String ) : Dynamic {
+        if( o == null ) throw hscript.Expr.Error.EInvalidAccess(f);
+        return Reflect.getProperty(o,f);
+    }
+
+    override function set( o : Dynamic, f : String, v : Dynamic ) : Dynamic {
+        if( o == null ) throw hscript.Expr.Error.EInvalidAccess(f);
+        Reflect.setProperty(o,f,v);
+        return v;
+    }
 }

@@ -385,6 +385,19 @@ class Entity extends FlxSprite
 		this.target = null;
 	}
 	
+	override function set_x(NewX:Float):Float 
+	{
+		if(hitBox != null) hitBox.x = NewX;
+		if (pickupBox != null) pickupBox.x = NewX;
+		return super.set_x(NewX);
+	}
+	
+	override function set_y(NewY:Float):Float 
+	{
+		if(hitBox != null) hitBox.y = NewY;
+		if(pickupBox != null) pickupBox.y = NewY;
+		return super.set_y(NewY);
+	}
 	
 }
 

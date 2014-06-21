@@ -30,8 +30,28 @@ typedef EntityData =
 	id:String,
 	name:String,
 	immovable:Bool,
+	health:Float,
+	graphic:GraphicData,
+	ai:Array<AIData>,
+	maxVelocity:{x:Float, y:Float},
 	hitbox: { width:Int, height:Int },
-	graphic: {asset:String, width:Int, height:Int, defaultAnimation:String, animations:Array<AnimationData>},
+}
+
+typedef GraphicData = 
+{ 
+	asset:String, 
+	width:Int, 
+	height:Int, 
+	centerOffsets:Bool, 
+	defaultAnimation:String, 
+	animations:Array<AnimationData> 
+}
+
+typedef AIData = 
+{
+	name:String,
+	className:String,
+	params:Array<Dynamic>,
 }
 
 typedef AnimationData = 
