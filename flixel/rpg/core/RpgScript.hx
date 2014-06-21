@@ -7,7 +7,6 @@ import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
 import openfl.Assets;
-using tink.CoreApi;
 
 /**
  * Scripting Engine

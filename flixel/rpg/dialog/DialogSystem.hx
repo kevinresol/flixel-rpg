@@ -161,5 +161,5 @@ typedef ResponseData =
 {
 	text:String, 
 	action:String, 
-	requirement:String
+	?requirement:String
 }

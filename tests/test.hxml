@@ -7,6 +7,7 @@
 -lib openfl
 
 -D FLX_RENDER_BLIT
+--macro openfl.Lib.includeBackend('flash')
 
 -D doc
 

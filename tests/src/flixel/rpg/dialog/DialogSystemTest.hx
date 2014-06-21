@@ -1,15 +1,13 @@
 package flixel.rpg.dialog;
 
 import haxe.Serializer;
-import massive.munit.util.Timer;
 import massive.munit.Assert;
-import massive.munit.async.AsyncFactory;
 
 
 class DialogSystemTest
 {
 	private var dialogSystem:DialogSystem;
-	private var data:Array<Dynamic>;
+	private var data:Array<flixel.rpg.dialog.DialogSystem.DialogData>;
 	
 	public function new() 
 	{
@@ -28,8 +26,8 @@ class DialogSystemTest
 			texts:["Paragraph1 of dialog1","Paragraph2 of dialog1","Paragraph3 of dialog1"],
 			responses:
 				[
-					{text:"I'm fine.", script:"action.displayDialog('dialog2');"},
-					{text:"Not feeling well", script:"action.displayDialog('dialog3');", requirementScripts:["requirementFactory.create('item', {id:1, count:2, inventory:RpgEngine.levels.current.player.inventory});"]}
+					{text:"I'm fine.", action:"RpgEngine.dialog.display('dialog2');"},
+					{text:"Not feeling well", action:"RpgEngine.dialog.display('dialog3');", requirement:"RpgEngine.levels.current.player.inventory.has(1,2);"}
 				]
 		});
 		
@@ -40,7 +38,7 @@ class DialogSystemTest
 			texts:["Paragraph1 of dialog2", "Paragraph2 of dialog2", "Paragraph3 of dialog2"],
 			responses:
 				[
-					{text:"Next", script:"action.endDialog();"},					
+					{text:"Next", action:"RpgEngine.dialog.end();"},					
 				]
 		});
 		

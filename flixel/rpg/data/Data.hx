@@ -62,10 +62,10 @@ typedef AnimationData =
 	frames:Array<Int>,
 }
 
-typedef DialogData = 
+/*typedef DialogData = 
 {
 	
-}
+}*/
 
 
 
