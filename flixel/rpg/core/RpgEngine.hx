@@ -45,7 +45,7 @@ class RpgEngine
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
 	
-	public static function enableDialogue(data:String):Void
+	public static function enableDialog(data:String):Void
 	{
 		dialog = new DialogSystem(data);
 	}
