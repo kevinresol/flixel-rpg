@@ -9,7 +9,7 @@ import openfl.Assets;
 @:build(flixel.rpg.data.DataMacro.build("assets/data"))
 class Data
 {	
-	public var entity(default, null):Array<EntityData>;
+	private var entity:Array<EntityData>;
 	public function new(entityData:String)
 	{
 		entity = Unserializer.run(entityData);
