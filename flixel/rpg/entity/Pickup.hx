@@ -49,6 +49,7 @@ class Pickup extends Entity
 	override public function destroy():Void 
 	{		
 		super.destroy();
+		item = null;
 	}
 	
 	override public function kill():Void 
