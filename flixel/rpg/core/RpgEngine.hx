@@ -3,7 +3,6 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.rpg.data.Data;
 import flixel.rpg.dialog.DialogSystem;
-import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.EntityManager;
 import flixel.rpg.entity.Pickup;
@@ -37,7 +36,6 @@ class RpgEngine
 	public static function init(state:FlxState):Void
 	{
 		levels = new LevelManager(state);
-		DamageText.init();
 		
 		var entityData = Assets.getText("assets/data/output/entity_data.txt");
 		data = new Data(entityData);
