@@ -6,6 +6,7 @@ import flixel.rpg.dialog.DialogSystem;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.EntityManager;
 import flixel.rpg.entity.Pickup;
+import flixel.rpg.level.Level;
 import flixel.rpg.weapon.Bullet;
 import flixel.rpg.weapon.BulletCallbacks;
 import openfl.Assets;
@@ -22,6 +23,7 @@ class RpgEngine
 	public static var entities(default, null):EntityManager = new EntityManager();
 	
 	// Shorthand propertes (mainly for scripting)
+	public static var level(get, never):Level;
 	public static var player(get, never):Entity;
 	
 	/**
@@ -89,6 +91,7 @@ class RpgEngine
 		return true;
 	}
 	
+	private static function get_level():Level return levels.current;
 	private static function get_player():Entity return levels.current.player;
 	
 }
