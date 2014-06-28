@@ -3,9 +3,11 @@ import flixel.addons.weapon.FlxBullet;
 import flixel.addons.weapon.FlxWeapon;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.math.FlxPoint;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.weapon.Bullet;
+import flixel.util.helpers.FlxBounds;
 import haxe.Unserializer;
 
 /**
@@ -122,20 +124,28 @@ class WeaponController
 	private function createWeapon(id:Int):Void
 	{
 		var wd = getData(id);
-		var w = new FlxTypedWeapon<Bullet>(wd.name, entity, Bullet, id);
-		weapons.set(id, w);
 		
-				
-		w.makePixelBullet(10);
+		var offset = entity.origin.copyTo();
 		
-		w.setBulletOffset(entity.origin.x, entity.origin.y);
-		w.setFireRate(wd.fireRate);
-		w.setBulletSpeed(wd.bulletSpeed);
+		var w = new FlxTypedWeapon<Bullet>(
+			wd.name, 
+			function(w) 
+			{
+				var b = new Bullet(w, id);
+				b.makeGraphic(2, 2);
+				return b;
+			}, 
+			PARENT(entity, new FlxBounds(offset, offset)), 
+			SPEED(new FlxBounds<Float>(wd.bulletSpeed, wd.bulletSpeed))
+		);
+		
+		w.fireRate = wd.fireRate;
 		w.bulletDamage = wd.bulletDamage;
+		w.bounds = RpgEngine.levels.current.obstacles.getBounds();
 		w.group.forEach(function(b) b.reloadTime = wd.bulletReloadTime);
 		
-		w.setBulletBounds(RpgEngine.levels.current.obstacles.getBounds());
 		
+		weapons.set(id, w);
 		group.add(w.group);
 	}	
 	

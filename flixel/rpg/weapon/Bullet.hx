@@ -5,26 +5,25 @@ import flixel.FlxSprite;
 import flixel.util.FlxTimer;
 
 /**
- * ...
+ * A very special kind of bullet. A bullet can hit the same target multiple times
  * @author Kevin
  */
 class Bullet extends FlxBullet
 {
-	public var reloadTime:Float = 0.3;
+	public var reloadTime:Float = 0.3;	
 	
-	public var weapon(get, never):FlxWeapon;
-	private function get_weapon():FlxWeapon { return _weapon;}
-	
-	
+	public var weapon(default, null):FlxTypedWeapon<Bullet>;
 	/**
 	 * A map to store the reloaded property for each targets
 	 */
 	private var reloadedMap:Map<FlxSprite, Bool>;
 
-	public function new(Weapon:FlxWeapon, WeaponID:Int)
+	public function new(weapon:FlxTypedWeapon<Bullet>, id:Int)
 	{
-		super(Weapon, WeaponID);		
-		reloadedMap = new Map<FlxSprite, Bool>();
+		super();
+		ID = id;
+		this.weapon = weapon;
+		reloadedMap = new Map();
 	}
 	
 	/**
