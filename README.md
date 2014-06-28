@@ -1,3 +1,6 @@
+# WORK-IN-PROGRESS!
+This library is still experimental. Use with care. Expect drastic API changes.
+
 ## About [![Build Status](https://travis-ci.org/kevinresol/flixel-rpg.svg?branch=dev)](https://travis-ci.org/kevinresol/flixel-rpg)
 
 An RPG framework based on [HaxeFlixel], including a set of essential components to build an RPG such as:
