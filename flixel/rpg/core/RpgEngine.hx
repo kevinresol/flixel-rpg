@@ -17,14 +17,18 @@ import openfl.Assets;
  */
 class RpgEngine
 {
-	public static var levels(default, null):LevelManager;
+	public static var levels(default, null):LevelManager = new LevelManager();
 	public static var data(default, null):Data = new Data();
 	public static var scripting(default, null):RpgScript = new RpgScript();
 	public static var entities(default, null):EntityManager = new EntityManager();
 	
+	public static var state(default, set):FlxState;
+	
 	// Shorthand propertes (mainly for scripting)
 	public static var level(get, never):Level;
 	public static var player(get, never):Entity;
+	
+	
 	
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
@@ -35,10 +39,8 @@ class RpgEngine
 	 * Initialize the engine on a FlxState
 	 * @param	state
 	 */
-	public static function init(state:FlxState):Void
+	public static function init():Void
 	{
-		levels = new LevelManager(state);
-		
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
 	
@@ -91,7 +93,9 @@ class RpgEngine
 		return true;
 	}
 	
+	private static function set_state(v:FlxState):FlxState return levels.state = v;
 	private static function get_level():Level return levels.current;
 	private static function get_player():Entity return levels.current.player;
+	
 	
 }

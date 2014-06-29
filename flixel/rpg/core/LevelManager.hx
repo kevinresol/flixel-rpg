@@ -15,17 +15,15 @@ import flixel.util.FlxSort;
  */
 class LevelManager
 {
-	private var state:FlxState;
+	public var state(default, set):FlxState;
 	
 	private var levels:Map<String, Level>;
 	
 	public var current(default, set):Level;
 	public var currentName(default, null):String;
 	
-	public function new(state:FlxState)
+	public function new()
 	{
-		this.state = state;
-		
 		levels = new Map<String, Level>();
 	}
 	
@@ -45,24 +43,37 @@ class LevelManager
 			current = level;
 			currentName = name;
 		}
-			
-			
 	}
 	
-	private function set_current(level:Level):Level
+	private function set_current(v:Level):Level
 	{
-		if (current != null)
+		if (current != null && state != null)
 		{
 			state.remove(current);
 			current.overlay.remove(DamageText.group);
 		}
 		
-		if (level != null)
+		if (v != null && state != null)
 		{
-			state.add(level);			
-			level.overlay.add(DamageText.group);
+			state.add(v);			
+			v.overlay.add(DamageText.group);
 		}
 		
-		return current = level;
+		return current = v;
+	}
+	
+	private function set_state(v:FlxState):FlxState
+	{
+		if (state != null && current != null)
+		{
+			state.remove(current);
+		}
+		
+		if (v != null && current != null)
+		{
+			v.add(current);
+		}
+		
+		return state = v;
 	}
 }
