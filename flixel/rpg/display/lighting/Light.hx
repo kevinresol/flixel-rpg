@@ -83,7 +83,7 @@ class Light extends FlxSprite
 	 */
 	override public function update():Void 
 	{
-		getScreenXY(screenXY);		
+		getScreenPosition(screenXY);		
 		moved = ((screenXY.x != prevScreenXY.x) || (screenXY.y != prevScreenXY.y));		
 		prevScreenXY.copyFrom(screenXY);			
 		
