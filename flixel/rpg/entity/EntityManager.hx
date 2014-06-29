@@ -8,13 +8,22 @@ import openfl.Assets;
  */
 class EntityManager
 {
+	private var entities:Map<String, Entity>;
 
 	public function new() 
 	{
-		
+		entities = new Map();
 	}
 	
-	public function create(id:String, x:Float = 0, y:Float = 0):Entity
+	/**
+	 * Create an entity from data
+	 * @param	id			the ID to identify the data
+	 * @param	x
+	 * @param	y
+	 * @param	gameId 		the in-game ID, for identifying the created entity instance later
+	 * @return
+	 */
+	public function create(id:String, x:Float = 0, y:Float = 0, gameId:String = ""):Entity
 	{
 		var data = RpgEngine.data.getEntity(id);
 		var entity = new Entity(x, y);
@@ -58,7 +67,30 @@ class EntityManager
 		if (Assets.exists(path))
 			entity.executeScript(Assets.getText(path));
 		
+		// add to pool
+		if (gameId != "")
+			register(gameId, entity);
+		
 		return entity;
 	}
 	
+	public function get(id:String):Entity
+	{
+		return entities.get(id);
+	}
+	
+	public function register(id:String, entity:Entity):Void
+	{
+		if (entities.exists(id))
+			FlxG.log.warn('EntityManager#register: Entity of the id: $id already exists');
+		entities.set(id, entity);
+	}
+	
+	public function unregister(id:String):Entity
+	{
+		var entity = entities.get(id);
+		if (entity != null)
+			entities.remove(id);
+		return entity;
+	}
 }
