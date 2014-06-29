@@ -39,12 +39,6 @@ class RpgEngine
 	{
 		levels = new LevelManager(state);
 		
-		data.entityData = Assets.getText("assets/data/output/entity_data.txt");
-		data.dialogData = Assets.getText("assets/data/output/dialog_data.txt");
-		data.weaponData = Assets.getText("assets/data/output/weapon_data.txt");
-		data.tradeData = Assets.getText("assets/data/output/trade_data.txt");
-		data.itemData = Assets.getText("assets/data/output/item_data.txt");
-		
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
 	
