@@ -18,7 +18,7 @@ import openfl.Assets;
 class RpgEngine
 {
 	public static var levels(default, null):LevelManager;
-	public static var data(default, null):Data;
+	public static var data(default, null):Data = new Data();
 	public static var scripting(default, null):RpgScript = new RpgScript();
 	public static var entities(default, null):EntityManager = new EntityManager();
 	
@@ -39,12 +39,11 @@ class RpgEngine
 	{
 		levels = new LevelManager(state);
 		
-		data = new Data();
 		data.entityData = Assets.getText("assets/data/output/entity_data.txt");
 		data.dialogData = Assets.getText("assets/data/output/dialog_data.txt");
-		data.itemData = Assets.getText("assets/data/output/item_data.txt");
 		data.weaponData = Assets.getText("assets/data/output/weapon_data.txt");
 		data.tradeData = Assets.getText("assets/data/output/trade_data.txt");
+		data.itemData = Assets.getText("assets/data/output/item_data.txt");
 		
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
