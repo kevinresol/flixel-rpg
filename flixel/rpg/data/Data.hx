@@ -1,4 +1,7 @@
 package flixel.rpg.data;
+#if macro
+import haxe.macro.Expr;
+#else
 import haxe.Unserializer;
 import openfl.Assets;
 
@@ -9,63 +12,51 @@ import openfl.Assets;
 @:build(flixel.rpg.data.DataMacro.build("assets/data"))
 class Data
 {	
-	private var entity:Array<EntityData>;
-	public function new(entityData:String)
+	public var entity(default, null):Array<EntityData>;
+	public var dialog(default, null):Array<DialogData>;
+	public var item(default, null):Array<InventoryItemData>;
+	public var weapon(default, null):Array<WeaponData>;
+	public var trade(default, null):Array<TradeData>;
+	
+	public var entityData(never, set):String;
+	public var dialogData(never, set):String;
+	public var itemData(never, set):String;
+	public var weaponData(never, set):String;
+	public var tradeData(never, set):String;
+	
+	public function new()
 	{
-		entity = Unserializer.run(entityData);
+		
 	}
 	
-	public function getEntity(id:String):EntityData
+	public function getEntity(id:String):EntityData Macro.getData(entity, id);
+	public function getDialog(id:String):DialogData Macro.getData(dialog, id);
+	public function getItem(id:String):InventoryItemData Macro.getData(item, id);
+	public function getWeapon(id:String):WeaponData Macro.getData(weapon, id);
+	public function getTrade(id:String):TradeData Macro.getData(trade, id);
+	
+	private function set_entityData(v:String):String {entity = Unserializer.run(v); return v;}
+	private function set_dialogData(v:String):String {dialog = Unserializer.run(v); return v;}
+	private function set_itemData(v:String):String {item = Unserializer.run(v); return v;}
+	private function set_weaponData(v:String):String {weapon = Unserializer.run(v); return v;}
+	private function set_tradeData(v:String):String {trade = Unserializer.run(v); return v;}
+	
+}
+#end
+
+private class Macro
+{
+	macro public static function getData<TData, TID>(data:ExprOf<Array<TData>>, id:ExprOf<TID>):ExprOf<TData>
 	{
-		for (e in entity)
-			if (e.id == id)
-				return e;
-				
-		return null;
+		return macro 
+		{
+			for (d in $data)
+				if (d.id == $id)
+					return d;
+			
+			return null;
+		}
 	}
 }
-
-typedef EntityData = 
-{
-	id:String,
-	name:String,
-	immovable:Bool,
-	health:Float,
-	graphic:GraphicData,
-	ai:Array<AIData>,
-	maxVelocity:{x:Float, y:Float},
-	hitbox: { width:Int, height:Int },
-}
-
-typedef GraphicData = 
-{ 
-	asset:String, 
-	width:Int, 
-	height:Int, 
-	centerOffsets:Bool, 
-	defaultAnimation:String, 
-	animations:Array<AnimationData> 
-}
-
-typedef AIData = 
-{
-	name:String,
-	className:String,
-	params:Array<Dynamic>,
-}
-
-typedef AnimationData = 
-{
-	name:String,
-	frameRate:Int,
-	looped:Bool,
-	frames:Array<Int>,
-}
-
-/*typedef DialogData = 
-{
-	
-}*/
-
 
 

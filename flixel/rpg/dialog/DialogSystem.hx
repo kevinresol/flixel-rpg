@@ -1,6 +1,7 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScript;
+import flixel.rpg.data.Data;
 import flixel.util.FlxSignal;
 import haxe.Unserializer;
 
@@ -45,24 +46,19 @@ class DialogSystem
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
-	public function new(data:String) 
+	public function new() 
 	{
 		changed = new FlxSignal();
 		
 		script = new RpgScript();
 		
-		load(data);
+		init();
 	}
 	
-	/**
-	 * Create dialogue objects from a data string (haxe-serialized)
-	 * @param	data
-	 */
-	private function load(data:String):Void
+	private function init():Void
 	{
 		dialogs = new Map<String, Dialog>();
-		var data:Array<DialogData> = Unserializer.run(data);
-		for (dialogData in data)
+		for (dialogData in RpgEngine.data.dialog)
 		{
 			//create the dialogue object
 			var dialog = new Dialog(this, dialogData.id, dialogData.name, dialogData.texts, dialogData.autoRespond);			
@@ -148,18 +144,3 @@ class DialogSystem
 }
 
 
-typedef DialogData = 
-{
-	id:String,
-	name:String,
-	texts:Array<String>,
-	responses:Array<ResponseData>,
-	?autoRespond:Bool
-}
-
-typedef ResponseData =
-{
-	text:String, 
-	action:String, 
-	?requirement:String
-}

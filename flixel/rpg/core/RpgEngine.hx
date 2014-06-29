@@ -39,15 +39,22 @@ class RpgEngine
 	{
 		levels = new LevelManager(state);
 		
-		var entityData = Assets.getText("assets/data/output/entity_data.txt");
-		data = new Data(entityData);
+		data = new Data();
+		data.entityData = Assets.getText("assets/data/output/entity_data.txt");
+		data.dialogData = Assets.getText("assets/data/output/dialog_data.txt");
+		data.itemData = Assets.getText("assets/data/output/item_data.txt");
+		data.weaponData = Assets.getText("assets/data/output/weapon_data.txt");
+		data.tradeData = Assets.getText("assets/data/output/trade_data.txt");
 		
 		scripting.variables.set("RpgEngine", RpgEngine);
 	}
 	
-	public static function enableDialog(data:String):Void
+	public static function enableDialog():Void
 	{
-		dialog = new DialogSystem(data);
+		if (data.dialog == null) 
+			throw "Dialog data does not exist";
+			
+		dialog = new DialogSystem();
 	}
 
 	/**

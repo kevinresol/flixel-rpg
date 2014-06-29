@@ -5,7 +5,9 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.rpg.core.RpgEngine;
+import flixel.rpg.data.WeaponData;
 import flixel.rpg.entity.Entity;
+import flixel.rpg.util.Hash;
 import flixel.rpg.weapon.Bullet;
 import flixel.util.helpers.FlxBounds;
 import haxe.Unserializer;
@@ -16,11 +18,9 @@ import haxe.Unserializer;
  */
 class WeaponController
 {
-	public static var data:Array<WeaponData>;
-	
 	public var group:FlxTypedGroup<FlxTypedGroup<Bullet>>;
 	
-	private var weapons:Map<Int, FlxTypedWeapon<Bullet>>;
+	private var weapons:Map<String, FlxTypedWeapon<Bullet>>;
 	private var entity:Entity;	
 	
 	/**
@@ -32,25 +32,11 @@ class WeaponController
 	
 	public var currentWeapon(default, null):FlxTypedWeapon<Bullet>;
 	
-	public var currentWeaponID(default, set):Int;
+	public var currentWeaponID(default, set):String;
 	
-	public static function loadData(dataString:String):Void
+	public static inline function getData(id:String):WeaponData
 	{
-		if (data == null)
-			data = Unserializer.run(dataString);
-	}
-	
-	public static function getData(id:Int):WeaponData
-	{
-		if (data == null)
-			throw "loadWeaponData first";
-			
-		for (w in data)
-		{
-			if (w.id == id)
-				return w;
-		}
-		return null;
+		return RpgEngine.data.getWeapon(id);
 	}
 	
 	/**
@@ -69,7 +55,7 @@ class WeaponController
 	 * @param	id
 	 * @return	FlxWeaponX instance
 	 */
-	public function getWeapon(id:Int):FlxTypedWeapon<Bullet>
+	public function getWeapon(id:String):FlxTypedWeapon<Bullet>
 	{
 		if (weapons.get(id) == null)
 			createWeapon(id);
@@ -121,7 +107,7 @@ class WeaponController
 	 * Create the weapon
 	 * @param	id
 	 */
-	private function createWeapon(id:Int):Void
+	private function createWeapon(id:String):Void
 	{
 		var wd = getData(id);
 		
@@ -131,7 +117,7 @@ class WeaponController
 			wd.name, 
 			function(w) 
 			{
-				var b = new Bullet(w, id);
+				var b = new Bullet(w, Hash.stringToIntHash(id));
 				b.makeGraphic(2, 2);
 				return b;
 			}, 
@@ -153,7 +139,7 @@ class WeaponController
 	 * Switch Weapon
 	 * @param	id
 	 */
-	private function switchWeapon(id:Int):Void
+	private function switchWeapon(id:String):Void
 	{
 		//Set current weapon
 		currentWeapon = getWeapon(id);
@@ -173,7 +159,7 @@ class WeaponController
 	}
 	
 	
-	private function set_currentWeaponID(v:Int):Int
+	private function set_currentWeaponID(v:String):String
 	{
 		if (currentWeaponID == v)
 			return v;
@@ -182,19 +168,7 @@ class WeaponController
 		return currentWeaponID = v;
 	}
 	
+	
 }
 
-typedef WeaponData = 
-{
-	id:Int,
-	name:String,
-	collideCallback:String,
-	fireMode:String,	
-	fireRate:Int,	
-	bulletSpeed:Int,	
-	bulletDamage:Int,	
-	bulletReloadTime:Float,
-	image:String
-
-}
 

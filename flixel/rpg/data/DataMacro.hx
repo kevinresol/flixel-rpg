@@ -5,8 +5,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.Serializer;
 import sys.FileSystem;
-import sys.io.File;
- 
+import sys.io.File; 
 using haxe.macro.ExprTools;
 using StringTools;
 
@@ -109,4 +108,6 @@ class DataMacro
     {
         return (name.indexOf(QUOTED_FIELD_PREFIX) == 0) ? name.substr(QUOTED_FIELD_PREFIX.length) : name;
     }
+	
+	
 }

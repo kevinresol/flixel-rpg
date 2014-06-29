@@ -22,7 +22,7 @@ class Pickup extends Entity
 	public var followAI(default, null):FollowAI;
 	
 	
-	public static function get(x:Float, y:Float, id:Int, stack:Int):Pickup
+	public static function get(x:Float, y:Float, id:String, stack:Int):Pickup
 	{
 		var pickup = _pool.get();
 			

@@ -129,7 +129,7 @@ class Inventory implements IFlxDestroyable
 	 * @param	amount	count (stack) of item to be removed
 	 * @return	true if sucessful. false if inventory contains not enough [amount]
 	 */
-	public function removeItem(id:Int, amount:Int):Bool
+	public function removeItem(id:String, amount:Int):Bool
 	{
 		if (countItem(id) < amount)
 			return false;
@@ -188,7 +188,7 @@ class Inventory implements IFlxDestroyable
 	 * @param	id
 	 * @return 	An InventorySlot instance. null if not found
 	 */
-	public function getNonFullItemSlot(id:Int):InventorySlot
+	public function getNonFullItemSlot(id:String):InventorySlot
 	{
 		for (s in slots)
 		{
@@ -204,7 +204,7 @@ class Inventory implements IFlxDestroyable
 	 * @param	id
 	 * @return	null if not found
 	 */
-	public function getItemSlot(id:Int):InventorySlot
+	public function getItemSlot(id:String):InventorySlot
 	{
 		for (s in slots)
 		{
@@ -220,7 +220,7 @@ class Inventory implements IFlxDestroyable
 	 * @param	id
 	 * @return	total stack
 	 */
-	public function countItem(id:Int):Int
+	public function countItem(id:String):Int
 	{
 		var total:Int = 0;
 		
@@ -233,7 +233,7 @@ class Inventory implements IFlxDestroyable
 		return total;
 	}
 	
-	public inline function has(id:Int, stack:Int):Bool
+	public inline function has(id:String, stack:Int):Bool
 	{
 		return countItem(id) >= stack;
 	}

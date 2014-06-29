@@ -1,38 +1,24 @@
 package flixel.rpg.trade;
 import flixel.rpg.core.RpgEngine;
+import flixel.rpg.data.TradeData;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
 import haxe.Unserializer;
 
 using flixel.rpg.trade.TraderTools;
+
 /**
  * A Trader can trade items.
  * @author Kevin
  */
 class Trader
 {
-	public static var data:Array<TradeData>;
-	
-	private var tradeIds:Array<Int>;
+	private var tradeIds:Array<String>;
 	private var inventory:Inventory;
 	
-	public static function loadData(dataString:String):Void
+	public static inline function getData(id:String):TradeData
 	{
-		if (data == null)
-			data = Unserializer.run(dataString);
-	}
-	
-	public static function getData(id:Int):TradeData
-	{
-		if (data == null)
-			throw "loadTradeData first";
-			
-		for (d in data)
-		{
-			if (d.id == id)
-				return d;
-		}
-		return null;
+		return RpgEngine.data.getTrade(id);
 	}
 	
 	
@@ -45,7 +31,7 @@ class Trader
 	public function new(?inventory:Inventory)
 	{
 		// TODO hardcoded
-		tradeIds = [1];
+		tradeIds = ["1"];
 		
 		this.inventory = inventory;		
 	}
@@ -57,7 +43,7 @@ class Trader
 	 * @param	receiveCost true if this trader should receive the cost (ignored if this trader does not have an inventory)
 	 * @return	return true if the trade is successful
 	 */
-	public function trade(buyerInventory:Inventory, id:Int, receiveCost:Bool):Bool
+	public function trade(buyerInventory:Inventory, id:String, receiveCost:Bool):Bool
 	{
 		var tradeData:TradeData = getData(id);
 		
@@ -137,16 +123,4 @@ class Trader
 	
 }
 
-typedef TradeData = 
-{
-	id:Int,
-	reward:Array<TradeItemData>,
-	cost:Array<TradeItemData>
-}
-
-typedef TradeItemData = 
-{
-	id:Int,
-	count:Int
-}
 

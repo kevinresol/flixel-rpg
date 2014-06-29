@@ -2,6 +2,7 @@ package flixel.rpg.weapon;
 import flixel.FlxSprite;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.system.HitBox;
+import flixel.rpg.util.Hash;
 import flixel.rpg.weapon.Bullet;
 
 /**
@@ -17,12 +18,12 @@ class BulletCallbacks
 		if (callbackMap != null)
 			return;
 		
-		callbackMap = new Map < Int, Dynamic->Dynamic->Void > ();
+		callbackMap = new Map();
 		
-		for (wd in WeaponController.data)
+		for (wd in RpgEngine.data.weapon)
 		{
 			var f = Reflect.getProperty(BulletCallbacks, wd.collideCallback);
-			callbackMap.set(wd.id, f);
+			callbackMap.set(Hash.stringToIntHash(wd.id), f);
 		}
 	}
 	

@@ -1,4 +1,6 @@
 package flixel.rpg.inventory;
+import flixel.rpg.core.RpgEngine;
+import flixel.rpg.data.InventoryItemData;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import flixel.util.FlxPool;
 import haxe.Unserializer;
@@ -12,12 +14,9 @@ import haxe.Unserializer;
  */
 class InventoryItem implements IFlxDestroyable
 {
-	
-	public static var data:Array<InventoryItemData>;
-	
 	private static var pool:FlxPool<InventoryItem> = new FlxPool<InventoryItem>(InventoryItem);
 	
-	public var id(default, null):Int;
+	public var id(default, null):String;
 	public var displayName(default, null):String;
 	public var slotType(default, null):Int;
 	public var maxStack(default, null):Int;
@@ -40,7 +39,7 @@ class InventoryItem implements IFlxDestroyable
 	 * @param	tooltip
 	 * @return
 	 */
-	public static function get(id:Int, stack:Int = 1):InventoryItem
+	public static function get(id:String, stack:Int = 1):InventoryItem
 	{
 		var data = getData(id);
 		
@@ -58,23 +57,9 @@ class InventoryItem implements IFlxDestroyable
 		return item;
 	}
 	
-	public static function getData(id:Int):InventoryItemData
+	public static inline function getData(id:String):InventoryItemData
 	{
-		if (data == null)
-			throw "loadItemData first";
-			
-		for (d in data)
-		{
-			if (d.id == id)
-				return d;
-		}			
-		return null;
-	}
-	
-	public static function loadData(dataString:String):Void
-	{
-		if (data == null)
-			data = Unserializer.run(dataString);
+		return RpgEngine.data.getItem(id);
 	}
 	
 	/**
@@ -155,11 +140,4 @@ class InventoryItem implements IFlxDestroyable
 	}
 }
 
-typedef InventoryItemData =
-{
-	id:Int,
-	type:Int,
-	displayName:String,
-	maxStack:Int,
-	tooltip:String
-}
+
