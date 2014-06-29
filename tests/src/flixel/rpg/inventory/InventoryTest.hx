@@ -1,10 +1,10 @@
 package flixel.rpg.inventory;
 
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.inventory.Inventory;
 import flixel.rpg.inventory.InventoryItem;
 import haxe.Serializer;
 import massive.munit.Assert;
-import massive.munit.async.AsyncFactory;
 import massive.munit.util.Timer;
 
 
@@ -23,10 +23,12 @@ class InventoryTest
 	@BeforeClass
 	public function beforeClass():Void
 	{
-		var data = [{id:1, type:0, displayName:"Key Card", maxStack:1}];
+		var data = [{id:"1", type:0, displayName:"Key Card", maxStack:1}];
 		var dataString = Serializer.run(data);
 		
-		InventoryItem.loadData(dataString);
+		
+		RpgEngine.init(new FlxState());
+		RpgEngine.data.itemData = dataString;
 	}
 	
 	@AfterClass
@@ -38,7 +40,7 @@ class InventoryTest
 	public function setup():Void
 	{		
 		inventory = Inventory.get();
-		item = InventoryItem.get(1, 1);
+		item = InventoryItem.get("1", 1);
 	}
 	
 	@After
@@ -67,9 +69,9 @@ class InventoryTest
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);		
 		
-		Assert.isTrue(inventory.has(1, 1));
-		Assert.isFalse(inventory.has(1, 2));
-		Assert.isFalse(inventory.has(2, 1));
+		Assert.isTrue(inventory.has("1", 1));
+		Assert.isFalse(inventory.has("1", 2));
+		Assert.isFalse(inventory.has("2", 1));
 	}
 	
 	@Test
@@ -78,7 +80,7 @@ class InventoryTest
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);		
 		
-		Assert.isTrue(inventory.countItem(1) == 1);
+		Assert.isTrue(inventory.countItem("1") == 1);
 	}
 	
 	@Test
@@ -92,7 +94,7 @@ class InventoryTest
 		inventory.addItem(item);
 		Assert.isTrue(inventory.countEmptySlot(1) == 0);
 		
-		inventory.removeItem(1, 1);
+		inventory.removeItem("1", 1);
 		Assert.isTrue(inventory.countEmptySlot(1) == 1);
 	}
 	
@@ -103,13 +105,13 @@ class InventoryTest
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);		
 		
-		Assert.isTrue(inventory.removeItem(1, 1));		
+		Assert.isTrue(inventory.removeItem("1", 1));		
 	}
 	
 	@Test
 	public function testRemoveWithoutAdd():Void
 	{		
-		Assert.isFalse(inventory.removeItem(1, 1));		
+		Assert.isFalse(inventory.removeItem("1", 1));		
 	}
 	
 	@Test
@@ -117,8 +119,8 @@ class InventoryTest
 	{
 		inventory.createEmptySlots(1);		
 		inventory.addItem(item);
-		Assert.isFalse(inventory.removeItem(1, 2));
-		Assert.isTrue(inventory.has(1, 1));
+		Assert.isFalse(inventory.removeItem("1", 2));
+		Assert.isTrue(inventory.has("1", 1));
 	}
 	
 	

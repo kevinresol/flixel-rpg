@@ -1,5 +1,7 @@
 package flixel.rpg.dialog;
 
+import flixel.FlxState;
+import flixel.rpg.core.RpgEngine;
 import haxe.Serializer;
 import massive.munit.Assert;
 
@@ -7,7 +9,6 @@ import massive.munit.Assert;
 class DialogSystemTest
 {
 	private var dialogSystem:DialogSystem;
-	private var data:Array<flixel.rpg.dialog.DialogSystem.DialogData>;
 	
 	public function new() 
 	{
@@ -17,7 +18,7 @@ class DialogSystemTest
 	@BeforeClass
 	public function beforeClass():Void
 	{
-		data = [];
+		var data = [];
 		
 		data.push(
 		{
@@ -42,7 +43,9 @@ class DialogSystemTest
 				]
 		});
 		
-		
+		var dataString = Serializer.run(data);
+		RpgEngine.init(new FlxState());
+		RpgEngine.data.dialogData = dataString;
 	}
 	
 	@AfterClass
@@ -53,8 +56,7 @@ class DialogSystemTest
 	@Before
 	public function setup():Void
 	{
-		var dataString = Serializer.run(data);
-		dialogSystem = new DialogSystem(dataString);
+		dialogSystem = new DialogSystem();
 	}
 	
 	@After
