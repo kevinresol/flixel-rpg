@@ -14,9 +14,9 @@ class Inventory implements IFlxDestroyable
 	
 	private var slots:Array<InventorySlot>;
 
-	public function new() 
+	private function new() 
 	{		
-		slots = []; 		
+		
 	}
 	
 	public static function get():Inventory
@@ -145,8 +145,6 @@ class Inventory implements IFlxDestroyable
 				slot.unhold();
 		}
 		
-		
-		
 		return true;
 	}
 	
@@ -256,9 +254,6 @@ class Inventory implements IFlxDestroyable
 		return result.join(",");
 	}
 	
-	
-	
-	
 	/**
 	 * Clone this inventory and its containing items
 	 * @return	a cloned inventory
@@ -273,7 +268,6 @@ class Inventory implements IFlxDestroyable
 		return inventory;
 	}
 	
-	
 	/**
 	 * Properly destroys the object
 	 */
@@ -281,5 +275,4 @@ class Inventory implements IFlxDestroyable
 	{
 		slots = null;
 	}
-	
 }

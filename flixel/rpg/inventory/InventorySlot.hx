@@ -27,12 +27,11 @@ class InventorySlot implements IFlxDestroyable
 	 * If the slot is empty
 	 */
 	public var empty(get, never):Bool;
-	private inline function get_empty():Bool { return item == null; }
 	
 	
 	/**
 	 * Do not use this contructor to create an instance.
-	 * Use InventorySlot.create instead.
+	 * Use InventorySlot.get instead.
 	 */
 	private function new() 
 	{
@@ -61,8 +60,6 @@ class InventorySlot implements IFlxDestroyable
 		
 		pool.put(this);
 	}
-	
-	
 	
 	/**
 	 * Hold the item
@@ -124,4 +121,6 @@ class InventorySlot implements IFlxDestroyable
 	{
 		item = null;
 	}
+	
+	private inline function get_empty():Bool return item == null;
 }

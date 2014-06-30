@@ -23,6 +23,10 @@ class InventoryItem implements IFlxDestroyable
 	public var stack(default, null):Int;
 	public var tooltip(default, null):String;
 	
+	/**
+	 * If the item stack is full
+	 */
+	public var full(get, never):Bool;
 
 	private function new() 
 	{
@@ -70,7 +74,6 @@ class InventoryItem implements IFlxDestroyable
 		pool.put(this);
 	}
 	
-	
 	/**
 	 * Try to stack [item] to [this]. Any remaining stack will remains in the [item]
 	 * @param	item
@@ -117,12 +120,6 @@ class InventoryItem implements IFlxDestroyable
 	}
 	
 	/**
-	 * If the item stack is full
-	 */
-	public var full(get, never):Bool;
-	private inline function get_full():Bool { return stack == maxStack; }
-	
-	/**
 	 * Debug String
 	 * @return
 	 */
@@ -138,6 +135,8 @@ class InventoryItem implements IFlxDestroyable
 	{
 		
 	}
+	
+	private inline function get_full():Bool return stack == maxStack;
 }
 
 
