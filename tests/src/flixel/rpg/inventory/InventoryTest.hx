@@ -46,7 +46,8 @@ class InventoryTest
 	@After
 	public function tearDown():Void
 	{
-		
+		inventory.put();
+		item.put();
 	}
 	
 	@Test
