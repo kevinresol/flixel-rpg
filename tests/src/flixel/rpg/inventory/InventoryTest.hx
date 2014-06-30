@@ -27,7 +27,7 @@ class InventoryTest
 		var dataString = Serializer.run(data);
 		
 		
-		RpgEngine.init(new FlxState());
+		RpgEngine.init();
 		RpgEngine.data.itemData = dataString;
 	}
 	

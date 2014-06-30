@@ -44,7 +44,7 @@ class DialogSystemTest
 		});
 		
 		var dataString = Serializer.run(data);
-		RpgEngine.init(new FlxState());
+		RpgEngine.init();
 		RpgEngine.data.dialogData = dataString;
 	}
 	
