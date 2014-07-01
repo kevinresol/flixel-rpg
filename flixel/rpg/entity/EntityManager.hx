@@ -62,6 +62,13 @@ class EntityManager
 			}
 		}
 		
+		// Dialog
+		if (data.dialog != null)
+		{
+			entity.enableDialogueInitializer();
+			entity.dialogInitializer.script = data.dialog;
+		}
+		
 		// run script
 		var path = 'assets/data/scripts/$id.hs';
 		if (Assets.exists(path))

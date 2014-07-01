@@ -12,8 +12,9 @@ typedef EntityData =
 	health:Float,
 	graphic:GraphicData,
 	ai:Array<AIData>,
+	dialog:String,
 	maxVelocity:{x:Float, y:Float},
-	hitbox: { width:Int, height:Int },
+	hitbox: { width:Int, height:Int }, // map collision box
 }
 
 typedef GraphicData = 

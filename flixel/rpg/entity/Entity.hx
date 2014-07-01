@@ -254,7 +254,7 @@ class Entity extends FlxSprite
 	public function enableDialogueInitializer():Void
 	{
 		if (dialogInitializer == null)
-			dialogInitializer = new DialogInitializer();
+			dialogInitializer = new DialogInitializer(this);
 	}
 	
 	private function enableMouse(pixelPerfect:Bool = false):Void
