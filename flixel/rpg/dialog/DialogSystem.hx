@@ -88,10 +88,15 @@ class DialogSystem
 		setCurrent(dialogs.get(id));
 	}
 	
-	public function showNext():Void
+	public function showNext():Bool
 	{
-		if(current.showNext())
+		if (current != null && current.showNext())
+		{
 			changed.dispatch();
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	/**
