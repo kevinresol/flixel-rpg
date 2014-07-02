@@ -136,7 +136,10 @@ class Level extends FlxGroup
 			throw "Already registered a player";
 		
 		registerAlly(entity);
-		playerPickupBoxes.add(entity.pickupBox);
+		
+		if(entity.pickupBox != null)
+			playerPickupBoxes.add(entity.pickupBox);
+		
 		player = entity;
 	}
 	
@@ -157,8 +160,12 @@ class Level extends FlxGroup
 	public function registerEnemy(entity:Entity):Void
 	{		
 		enemies.add(entity);
-		enemyHitBoxes.add(entity.hitBox);
-		enemyBullets.add(entity.weapon.group);
+		
+		if(entity.hitBox != null)
+			enemyHitBoxes.add(entity.hitBox);
+		
+		if(entity.weapon != null)
+			enemyBullets.add(entity.weapon.group);
 	}
 	
 	/**
@@ -168,15 +175,23 @@ class Level extends FlxGroup
 	public function registerAlly(entity:Entity):Void
 	{		
 		allies.add(entity);
-		allyHitBoxes.add(entity.hitBox);
-		allyBullets.add(entity.weapon.group);
+		
+		if(entity.hitBox != null)
+			allyHitBoxes.add(entity.hitBox);
+		
+		if(entity.weapon != null)
+			allyBullets.add(entity.weapon.group);
 	}
 	
 	public function unregisterAlly(entity:Entity):Void
 	{		
 		allies.remove(entity);
-		allyHitBoxes.remove(entity.hitBox);
-		allyBullets.remove(entity.weapon.group);
+		
+		if(entity.hitBox != null)
+			allyHitBoxes.remove(entity.hitBox);
+		
+		if(entity.weapon != null)
+			allyBullets.remove(entity.weapon.group);
 	}
 	
 	/**
@@ -186,5 +201,11 @@ class Level extends FlxGroup
 	public function registerNeutral(entity:Entity):Void
 	{		
 		neutrals.add(entity);
+	}
+	
+	override public function destroy():Void 
+	{
+		super.destroy();
+		
 	}
 }

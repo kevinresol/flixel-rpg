@@ -21,4 +21,8 @@ class EventManager
 		rpg.scripting.executeScript(data.script);
 	}
 	
+	public function destroy():Void
+	{
+		rpg = null;
+	}
 }

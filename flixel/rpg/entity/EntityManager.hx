@@ -110,4 +110,12 @@ class EntityManager
 			entities.remove(id);
 		return entity;
 	}
+	
+	public function destroy():Void
+	{
+		rpg = null;
+		for (entity in entities)
+			entity.destroy();
+		entities = null;
+	}
 }

@@ -71,6 +71,17 @@ class LevelManager
 		}
 	}
 	
+	public function destroy():Void
+	{
+		state = null;
+		rpg = null;
+		
+		for (level in levels)
+			level.destroy();
+		
+		levels = null;
+	}
+	
 	private function set_current(v:Level):Level
 	{
 		if (current != null && state != null)
@@ -82,7 +93,7 @@ class LevelManager
 		if (v != null && state != null)
 		{
 			state.add(v);			
-			v.overlay.add(DamageText.group);
+			//v.overlay.add(DamageText.group); //FIXME temporarily disable
 		}
 		
 		return current = v;

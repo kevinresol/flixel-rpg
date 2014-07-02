@@ -143,7 +143,7 @@ class Entity extends FlxSprite
 	
 	
 	private var scripting:RpgScripting;
-	private var scriptUpdate:Entity->Void;
+	private var scriptUpdate:Void->Void;
 	
 	
 
@@ -169,8 +169,8 @@ class Entity extends FlxSprite
 			scripting.variables.set("entity", this);
 		}
 		
-		var scriptReturn: { init:Entity->Void, update:Entity->Void } = scripting.executeScript(script);	
-		if(scriptReturn.init != null) scriptReturn.init(this);
+		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.executeScript(script);	
+		if(scriptReturn.init != null) scriptReturn.init();
 		scriptUpdate = scriptReturn.update;
 	}
 	
@@ -288,7 +288,7 @@ class Entity extends FlxSprite
 			ai.update();
 			
 		if (scriptUpdate != null)
-			scriptUpdate(this);
+			scriptUpdate();
 	}
 	
 	/**

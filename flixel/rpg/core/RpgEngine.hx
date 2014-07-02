@@ -10,12 +10,13 @@ import flixel.rpg.event.EventManager;
 import flixel.rpg.level.Level;
 import flixel.rpg.weapon.Bullet;
 import flixel.rpg.weapon.BulletCallbacks;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 /**
  * The core of the RPG framework.
  * @author Kevin
  */
-class RpgEngine
+class RpgEngine implements IFlxDestroyable
 {
 	public static var current(default, null):RpgEngine;
 	
@@ -59,6 +60,13 @@ class RpgEngine
 			throw "Dialog data does not exist";
 			
 		dialog = new DialogSystem(this);
+	}
+	
+	public function destroy():Void
+	{
+		state = null;
+		levels.destroy();
+		scripting.destroy();
 	}
 
 	/**

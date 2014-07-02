@@ -6,7 +6,6 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import state.PlayState;
 
 /**
  * The darkness to be used in the lighting system
@@ -64,11 +63,6 @@ class Darkness extends FlxSprite
 			resetFrameBitmapDatas(); //TODO fix memory use, avoid destroying and re-creating BitmapData
 		}
 			
-		var debugDarkness = true;
-		if (debugDarkness)
-		{
-			PlayState.debugBitmap.bitmapData = pixels.clone();				
-		}
 		super.draw();
 		
 	}
