@@ -63,15 +63,7 @@ class RpgScripting implements IFlxDestroyable
 	
 	public inline function executeAst(ast:Expr):Dynamic
 	{
-		try
-		{
-			return interp.execute(ast);	
-		}
-		catch (e:Dynamic)
-		{
-			FlxG.log.error(e);
-			return null;
-		}
+		return interp.execute(ast);
 	}
 	
 	public inline function executeScript(script:String):Dynamic
@@ -79,11 +71,10 @@ class RpgScripting implements IFlxDestroyable
 		return executeAst(parseString(script));	
 	}
 	
-	
 	public function destroy():Void 
 	{
-		for (key in interp.variables.keys())
-			interp.variables.remove(key);
+		/*for (key in interp.variables.keys())
+			interp.variables.remove(key);*/
 	}
 	
 	private inline function get_variables():Map<String, Dynamic> 
