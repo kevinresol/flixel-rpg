@@ -1,13 +1,10 @@
 package flixel.rpg.core;
-import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
+import flixel.rpg.data.LevelData;
 import flixel.rpg.display.DamageText;
-import flixel.rpg.entity.Entity;
-import flixel.rpg.entity.Pickup;
 import flixel.rpg.level.Level;
-import flixel.util.FlxSort;
+import flixel.rpg.level.TiledLevel;
 
 /**
  * A manager to manage various groups. These groups are then used by RpgEngine to handle collisions
@@ -25,6 +22,33 @@ class LevelManager
 	public function new()
 	{
 		levels = new Map<String, Level>();
+	}
+	
+	public function init():Void
+	{
+		if (RpgEngine.data.level == null)
+			throw "Level data not set. Use `RpgEngine.data.level = somedata;`";
+	
+		for (data in RpgEngine.data.level)
+		{
+			register(data.id, create(data));
+		}
+	}
+	
+	public function create(data:LevelData):Level
+	{
+		switch(data.type)
+		{
+			case "tiled":
+				var level = new TiledLevel();
+				level.loadTmx(data.tmx, data.tileset, data.layer, data.objectGroup);
+				return level;
+				
+			default:
+				
+		}
+		
+		return null;
 	}
 	
 	public function register(name:String, level:Level):Void

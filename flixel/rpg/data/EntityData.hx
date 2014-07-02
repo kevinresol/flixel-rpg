@@ -8,6 +8,7 @@ typedef EntityData =
 {
 	id:String,
 	name:String,
+	force:String,
 	immovable:Bool,
 	health:Float,
 	graphic:GraphicData,

@@ -33,6 +33,8 @@ import flixel.util.FlxTimer;
  */
 class Entity extends FlxSprite
 {
+	public var force:Force;
+	
 	/**
 	 * Hitbox for bullet collision
 	 */
@@ -406,4 +408,12 @@ enum RecoverState
 	RNormal;
 	RAttack;
 	RHit;
+}
+
+enum Force
+{
+	FAlly;
+	FEnemy;
+	FNeutral;
+	FPlayer;
 }

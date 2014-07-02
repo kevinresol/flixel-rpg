@@ -1,6 +1,7 @@
 package flixel.rpg.level;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectGroup;
+import flixel.rpg.core.RpgEngine;
 import haxe.io.Path;
 import openfl.Assets;
 
@@ -17,7 +18,7 @@ class TiledLevel extends Level
 		super();		
 	}
 	
-	private function loadTmx(tmxPath:String, tilesetName:String, layerName:String, objectGroupName:String):Void
+	public function loadTmx(tmxPath:String, tilesetName:String, layerName:String, objectGroupName:String):Void
 	{
 		// Load tmx
 		var tmx = new TiledMap(tmxPath);
@@ -31,7 +32,7 @@ class TiledLevel extends Level
 		var mapArray = layer.tileArray.map(function(v) return v - 1); //The numbering in the data array starts from 1, but we want 0
 		obstacles.widthInTiles = layer.width;
 		obstacles.heightInTiles = layer.height;		
-		obstacles.loadMap(mapArray, Assets.getBitmapData(imagePath), tileset.tileWidth, tileset.tileHeight, OFF, 0, 1, 2);
+		obstacles.loadMap(mapArray, imagePath, tileset.tileWidth, tileset.tileHeight, OFF, 0, 1, 2);
 				
 		// Load Objects
 		var objectGroup = tmx.getObjectGroup(objectGroupName);
@@ -42,13 +43,15 @@ class TiledLevel extends Level
 	{
 		for (o in objectGroup.objects)
 		{
-			switch(o.type)
+			var entity = RpgEngine.entities.create(o.type, o.x, o.y, o.name);
+			switch (entity.force) 
 			{
-				case "Door":
-					//objects.add(new Door(o.x, o.y));
-				default:
-					
+				case FPlayer: registerAlly(entity); registerPlayer(entity);
+				case FAlly: registerAlly(entity);
+				case FEnemy: registerEnemy(entity);
+				case FNeutral: registerNeutral(entity);
 			}
+			objects.add(entity);
 		}
 	}	
 }

@@ -28,12 +28,20 @@ class EntityManager
 		var data = RpgEngine.data.getEntity(id);
 		var entity = new Entity(x, y);
 		
-		// basic properties
+		// basic properties		
 		entity.immovable = data.immovable;
 		entity.health = data.health;
 		
 		if (data.maxVelocity != null)
 			entity.maxVelocity.set(data.maxVelocity.x, data.maxVelocity.y);
+			
+		entity.force = switch (data.force) 
+		{
+			case "ally": FAlly;
+			case "enemy": FEnemy;
+			case "player": FPlayer;
+			default: FNeutral;
+		}
 		
 		// hitbox
 		if(data.hitbox != null)
