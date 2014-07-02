@@ -43,7 +43,7 @@ class TiledLevel extends Level
 	{
 		for (o in objectGroup.objects)
 		{
-			var entity = RpgEngine.entities.create(o.type, o.x, o.y, o.name);
+			var entity = RpgEngine.current.entities.create(o.type, o.x, o.y, o.name);
 			switch (entity.force) 
 			{
 				case FPlayer: registerAlly(entity); registerPlayer(entity);

@@ -1,6 +1,6 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.core.RpgScript;
+import flixel.rpg.core.RpgScripting;
 import flixel.rpg.data.Data;
 import flixel.util.FlxSignal;
 import haxe.Unserializer;
@@ -38,7 +38,9 @@ class DialogSystem
 	 * The scripting engine used by the dialogue system.
 	 * Use script.variables.set() to set variables
 	 */
-	public var script(default, null):RpgScript;
+	public var script(default, null):RpgScripting;
+	
+	private var rpg:RpgEngine;
 	
 	/**
 	 * Constructor
@@ -46,11 +48,12 @@ class DialogSystem
 	 * @param	dialogueActionsClass	the class containing all the dialogue actions. Must extend DialogueActions. Default is DialogueActions
 	 * @param	?requirementFactory if omitted, the default RequirementFactory will be used
 	 */
-	public function new() 
+	public function new(rpg:RpgEngine) 
 	{
 		changed = new FlxSignal();
 		
-		script = new RpgScript();
+		this.rpg = rpg;
+		script = RpgScripting.get(rpg);
 		
 		init();
 	}
@@ -58,7 +61,7 @@ class DialogSystem
 	private function init():Void
 	{
 		dialogs = new Map<String, Dialog>();
-		for (dialogData in RpgEngine.data.dialog)
+		for (dialogData in RpgEngine.current.data.dialog)
 		{
 			//create the dialogue object
 			var dialog = new Dialog(this, dialogData.id, dialogData.name, dialogData.texts, dialogData.autoRespond);			

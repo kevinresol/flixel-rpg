@@ -1,6 +1,6 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.core.RpgScript;
+import flixel.rpg.core.RpgScripting;
 import flixel.rpg.entity.Entity;
 import hscript.Expr;
 
@@ -24,16 +24,18 @@ class DialogInitializer
 	
 	public function start():Void
 	{
-		// Let the system know that this dialogue is started by a initializer
-		RpgEngine.dialog.currentInitializer = this;
+		var rpg = entity.rpg;
 		
-		var dialogId = RpgEngine.scripting.executeAst(ast);
-		RpgEngine.dialog.display(dialogId);			
+		// Let the system know that this dialogue is started by a initializer
+		rpg.dialog.currentInitializer = this;
+		
+		var dialogId = rpg.scripting.executeAst(ast);
+		rpg.dialog.display(dialogId);			
 	}
 	
 	private function set_script(v:String):String
 	{
-		ast = RpgScript.parseString(v);
+		ast = RpgScripting.parseString(v);
 		return script = v;
 	}
 }

@@ -9,7 +9,6 @@ import flixel.rpg.entity.Pickup;
 import flixel.rpg.level.Level;
 import flixel.rpg.weapon.Bullet;
 import flixel.rpg.weapon.BulletCallbacks;
-import openfl.Assets;
 
 /**
  * The core of the RPG framework.
@@ -17,46 +16,53 @@ import openfl.Assets;
  */
 class RpgEngine
 {
-	public static var levels(default, null):LevelManager = new LevelManager();
-	public static var data(default, null):Data = new Data();
-	public static var scripting(default, null):RpgScript = new RpgScript();
-	public static var entities(default, null):EntityManager = new EntityManager();
+	public static var current(default, null):RpgEngine;
 	
-	public static var state(default, set):FlxState;
+	public var levels(default, null):LevelManager;
+	public var data(default, null):Data;
+	public var scripting(default, null):RpgScripting;
+	public var entities(default, null):EntityManager;
+	
+	public var state(default, set):FlxState;
 	
 	// Shorthand propertes (mainly for scripting)
-	public static var level(get, never):Level;
-	public static var player(get, never):Entity;
+	public var level(get, never):Level;
+	public var player(get, never):Entity;
 	
 	
 	
 	/**
 	 * The DialogueSystem object. Call enableDialogue() before accessing this object
 	 */
-	public static var dialog:DialogSystem;
+	public var dialog:DialogSystem;
 	
 	/**
 	 * Initialize the engine on a FlxState
 	 * @param	state
 	 */
-	public static function init():Void
+	public function new():Void
 	{
-		scripting.variables.set("RpgEngine", RpgEngine);
+		current = this;
+		
+		levels = new LevelManager(this);
+		entities = new EntityManager(this);
+		data = new Data();
+		scripting = RpgScripting.get(this);
 	}
 	
-	public static function enableDialog():Void
+	public function enableDialog():Void
 	{
 		if (data.dialog == null) 
 			throw "Dialog data does not exist";
 			
-		dialog = new DialogSystem();
+		dialog = new DialogSystem(this);
 	}
 
 	/**
 	 * The main collide function.
 	 * A collection of collide checks performed on various groups of objects
 	 */
-	public inline static function collide():Void
+	public function collide():Void
 	{
 		var collide = FlxG.collide;
 		var overlap = FlxG.overlap;
@@ -82,20 +88,20 @@ class RpgEngine
 	}
 	
 	
-	private inline static function bulletCollideWall(bullet:Bullet, map):Void
+	private function bulletCollideWall(bullet:Bullet, map):Void
 	{
 		bullet.kill();
 	}
 	
 	
-	private inline static function returnTrue(?p1, ?p2):Bool
+	private function returnTrue(?p1, ?p2):Bool
 	{
 		return true;
 	}
 	
-	private static function set_state(v:FlxState):FlxState return levels.state = v;
-	private static function get_level():Level return levels.current;
-	private static function get_player():Entity return levels.current.player;
+	private function set_state(v:FlxState):FlxState return levels.state = v;
+	private function get_level():Level return levels.current;
+	private function get_player():Entity return levels.current.player;
 	
 	
 }

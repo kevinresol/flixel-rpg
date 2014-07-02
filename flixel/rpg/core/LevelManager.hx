@@ -15,21 +15,23 @@ class LevelManager
 	public var state(default, set):FlxState;
 	
 	private var levels:Map<String, Level>;
+	private var rpg:RpgEngine;
 	
 	public var current(default, set):Level;
 	public var currentName(default, null):String;
 	
-	public function new()
+	public function new(rpg:RpgEngine)
 	{
+		this.rpg = rpg;
 		levels = new Map<String, Level>();
 	}
 	
 	public function init():Void
 	{
-		if (RpgEngine.data.level == null)
+		if (rpg.data.level == null)
 			throw "Level data not set. Use `RpgEngine.data.level = somedata;`";
 	
-		for (data in RpgEngine.data.level)
+		for (data in rpg.data.level)
 		{
 			register(data.id, create(data));
 		}

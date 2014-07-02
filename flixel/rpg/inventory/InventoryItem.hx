@@ -63,7 +63,7 @@ class InventoryItem implements IFlxDestroyable
 	
 	public static inline function getData(id:String):InventoryItemData
 	{
-		return RpgEngine.data.getItem(id);
+		return RpgEngine.current.data.getItem(id);
 	}
 	
 	/**

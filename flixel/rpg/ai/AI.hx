@@ -1,4 +1,5 @@
 package flixel.rpg.ai;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.entity.Entity;
 
 
@@ -27,6 +28,8 @@ class AI implements IAI
 	 * The parent entity
 	 */
 	public var entity:Entity;
+	
+	public var rpg(get, never):RpgEngine;
 
 	/**
 	 * Constuctor
@@ -51,5 +54,7 @@ class AI implements IAI
 	{
 		entity = null;
 	}
+	
+	private inline function get_rpg():RpgEngine return entity.rpg;
 	
 }

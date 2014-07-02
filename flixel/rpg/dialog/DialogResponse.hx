@@ -1,5 +1,5 @@
 package flixel.rpg.dialog;
-import flixel.rpg.core.RpgScript;
+import flixel.rpg.core.RpgScripting;
 import hscript.Expr;
 
 /**
@@ -15,9 +15,9 @@ class DialogResponse
 	public function new(text:String, actionScript:String, ?requirementScript:String = "") 
 	{
 		this.text = text;
-		this.action = RpgScript.parseString(actionScript);
+		this.action = RpgScripting.parseString(actionScript);
 		
 		if(requirementScript != "")
-			this.requirement = RpgScript.parseString(requirementScript);
+			this.requirement = RpgScripting.parseString(requirementScript);
 	}
 }

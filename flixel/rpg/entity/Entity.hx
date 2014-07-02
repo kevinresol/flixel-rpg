@@ -3,7 +3,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.rpg.ai.AIController;
 import flixel.rpg.buff.BuffManager;
-import flixel.rpg.core.RpgScript;
+import flixel.rpg.core.RpgEngine;
+import flixel.rpg.core.RpgScripting;
 import flixel.rpg.dialog.DialogInitializer;
 import flixel.rpg.display.DamageText;
 import flixel.rpg.entity.StateSwitch.GroupMode;
@@ -33,6 +34,11 @@ import flixel.util.FlxTimer;
  */
 class Entity extends FlxSprite
 {
+	/**
+	 * The RpgEngine instance this entity belongs to.
+	 */
+	public var rpg(default, null):RpgEngine;
+	
 	public var force:Force;
 	
 	/**
@@ -136,8 +142,9 @@ class Entity extends FlxSprite
 	public var stateSwitch(default, null):StateSwitch<Dynamic>;
 	
 	
-	private var scripting:RpgScript;
-	private var scriptUpdate:Void->Void;
+	private var scripting:RpgScripting;
+	private var scriptUpdate:Entity->Void;
+	
 	
 
 	/**
@@ -145,9 +152,10 @@ class Entity extends FlxSprite
 	 * @param	x
 	 * @param	y
 	 */
-	public function new(x:Float = 0, y:Float = 0) 
+	public function new(rpg:RpgEngine, x:Float = 0, y:Float = 0) 
 	{
 		super(x, y);
+		this.rpg = rpg;
 		
 		recoverState = RNormal;
 	}
@@ -157,12 +165,12 @@ class Entity extends FlxSprite
 	{
 		if (scripting == null)
 		{
-			scripting = new RpgScript();	
+			scripting = RpgScripting.get(rpg);
 			scripting.variables.set("entity", this);
 		}
 		
-		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.executeScript(script);	
-		if(scriptReturn.init != null) scriptReturn.init();
+		var scriptReturn: { init:Entity->Void, update:Entity->Void } = scripting.executeScript(script);	
+		if(scriptReturn.init != null) scriptReturn.init(this);
 		scriptUpdate = scriptReturn.update;
 	}
 	
@@ -280,7 +288,7 @@ class Entity extends FlxSprite
 			ai.update();
 			
 		if (scriptUpdate != null)
-			scriptUpdate();
+			scriptUpdate(this);
 	}
 	
 	/**
@@ -289,6 +297,9 @@ class Entity extends FlxSprite
 	override public function destroy():Void 
 	{		
 		super.destroy();
+		
+		if (scripting != null)
+			scripting.put();
 		
 		if (ai != null)
 			ai.destroy();

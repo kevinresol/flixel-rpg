@@ -2,6 +2,7 @@ package flixel.rpg.entity;
 
 import flixel.group.FlxGroup;
 import flixel.rpg.ai.FollowAI;
+import flixel.rpg.core.RpgEngine;
 import flixel.rpg.inventory.InventoryItem;
 import flixel.rpg.system.HitBox;
 import flixel.util.FlxPool;
@@ -31,9 +32,9 @@ class Pickup extends Entity
 		return pickup;
 	}
 	
-	private function new() 
+	private function new(rpg:RpgEngine, x:Float = 0, y:Float = 0) 
 	{
-		super();		
+		super(rpg, x, y);		
 		
 		enableAI();
 		followAI = new FollowAI();

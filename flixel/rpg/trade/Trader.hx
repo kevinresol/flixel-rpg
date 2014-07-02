@@ -18,7 +18,7 @@ class Trader
 	
 	public static inline function getData(id:String):TradeData
 	{
-		return RpgEngine.data.getTrade(id);
+		return RpgEngine.current.data.getTrade(id);
 	}
 	
 	

@@ -36,7 +36,7 @@ class WeaponController
 	
 	public static inline function getData(id:String):WeaponData
 	{
-		return RpgEngine.data.getWeapon(id);
+		return RpgEngine.current.data.getWeapon(id);
 	}
 	
 	/**
@@ -127,7 +127,7 @@ class WeaponController
 		
 		w.fireRate = wd.fireRate;
 		w.bulletDamage = wd.bulletDamage;
-		w.bounds = RpgEngine.levels.current.obstacles.getBounds();
+		w.bounds = entity.rpg..obstacles.getBounds();
 		w.group.forEach(function(b) b.reloadTime = wd.bulletReloadTime);
 		
 		

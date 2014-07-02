@@ -8,10 +8,12 @@ import openfl.Assets;
  */
 class EntityManager
 {
+	private var rpg:RpgEngine;
 	private var entities:Map<String, Entity>;
 
-	public function new() 
+	public function new(rpg:RpgEngine) 
 	{
+		this.rpg = rpg;
 		entities = new Map();
 	}
 	
@@ -25,8 +27,8 @@ class EntityManager
 	 */
 	public function create(id:String, x:Float = 0, y:Float = 0, gameId:String = ""):Entity
 	{
-		var data = RpgEngine.data.getEntity(id);
-		var entity = new Entity(x, y);
+		var data = rpg.data.getEntity(id);
+		var entity = new Entity(rpg, x, y);
 		
 		// basic properties		
 		entity.immovable = data.immovable;

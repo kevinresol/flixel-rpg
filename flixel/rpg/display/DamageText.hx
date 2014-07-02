@@ -12,6 +12,9 @@ import flixel.tweens.FlxTween;
  * A popup text displaying damage numbers
  * @author Kevin
  */
+
+ //TODO should do a manager structure......
+ 
 class DamageText extends FlxText //FlxTypedGroup<FlxText>
 {
 	public static var group(default, null):FlxTypedGroup<DamageText>;
@@ -51,7 +54,7 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 		
 		if (textBox == null)
 		{
-			RpgEngine.levels.current.add(textBox = new DamageText());
+			RpgEngine.current.levels.current.add(textBox = new DamageText());
 		}
 				
 		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.int( -10, 10);
