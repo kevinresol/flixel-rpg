@@ -92,7 +92,7 @@ class LevelManager
 		
 		if (v != null && state != null)
 		{
-			state.add(v);			
+			state.add(v);
 			//v.overlay.add(DamageText.group); //FIXME temporarily disable
 		}
 		
