@@ -71,7 +71,8 @@ class Dialog
 	 * Show next piece of text
 	 * @return true if there is next, false if there is no next
 	 */
-	public function showNext():Bool
+	@:allow(flixel.rpg.dialog.DialogSystem)
+	private function showNext():Bool
 	{
 		if (hasNext())
 		{
