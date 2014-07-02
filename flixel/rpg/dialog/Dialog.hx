@@ -67,10 +67,19 @@ class Dialog
 		system.script.executeAst(response.action);
 	}
 	
-	public function showNext():Void
+	/**
+	 * Show next piece of text
+	 * @return true if there is next, false if there is no next
+	 */
+	public function showNext():Bool
 	{
 		if (hasNext())
+		{
 			currentParagraph++;
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	public inline function hasNext():Bool

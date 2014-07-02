@@ -90,12 +90,8 @@ class DialogSystem
 	
 	public function showNext():Void
 	{
-		if (current.hasNext())
-		{
-			current.showNext(); //TODO check hasNext() twice?
-			
+		if(current.showNext())
 			changed.dispatch();
-		}
 	}
 	
 	/**
