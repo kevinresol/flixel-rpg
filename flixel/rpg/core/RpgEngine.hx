@@ -6,6 +6,7 @@ import flixel.rpg.dialog.DialogSystem;
 import flixel.rpg.entity.Entity;
 import flixel.rpg.entity.EntityManager;
 import flixel.rpg.entity.Pickup;
+import flixel.rpg.event.EventManager;
 import flixel.rpg.level.Level;
 import flixel.rpg.weapon.Bullet;
 import flixel.rpg.weapon.BulletCallbacks;
@@ -22,6 +23,7 @@ class RpgEngine
 	public var data(default, null):Data;
 	public var scripting(default, null):RpgScripting;
 	public var entities(default, null):EntityManager;
+	public var events(default, null):EventManager;
 	
 	public var state(default, set):FlxState;
 	
@@ -48,6 +50,7 @@ class RpgEngine
 		entities = new EntityManager(this);
 		data = new Data();
 		scripting = RpgScripting.get(this);
+		events = new EventManager(this);
 	}
 	
 	public function enableDialog():Void
@@ -86,7 +89,6 @@ class RpgEngine
 		//Take Pickups
 		overlap(levels.current.player, levels.current.pickups, Pickup.picked , returnTrue);
 	}
-	
 	
 	private function bulletCollideWall(bullet:Bullet, map):Void
 	{

@@ -45,7 +45,7 @@ class RpgScripting implements IFlxDestroyable
 	{
 		var scripting = pool.get();
 		
-		scripting.variables.set("RpgEngine", rpg);
+		scripting.variables.set("rpg", rpg);
         scripting.variables.set("FlxMath", FlxMath);
         scripting.variables.set("Assets", Assets);
         scripting.variables.set("FlxG", FlxG);
@@ -63,12 +63,20 @@ class RpgScripting implements IFlxDestroyable
 	
 	public inline function executeAst(ast:Expr):Dynamic
 	{
-		return interp.execute(ast);	
+		try
+		{
+			return interp.execute(ast);	
+		}
+		catch (e:Dynamic)
+		{
+			FlxG.log.error(e);
+			return null;
+		}
 	}
 	
 	public inline function executeScript(script:String):Dynamic
 	{
-		return interp.execute(parseString(script));	
+		return executeAst(parseString(script));	
 	}
 	
 	

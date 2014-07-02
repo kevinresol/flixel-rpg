@@ -54,7 +54,7 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 		
 		if (textBox == null)
 		{
-			RpgEngine.current.levels.current.add(textBox = new DamageText());
+			RpgEngine.current.level.add(textBox = new DamageText());
 		}
 				
 		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.int( -10, 10);
