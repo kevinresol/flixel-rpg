@@ -15,6 +15,11 @@ class GameState extends FlxState
 	public var hud:HUDSubState;
 	
 	/**
+	 * Set to true to pause the game. The HUD will still work.
+	 */
+	public var paused(default, set):Bool;
+	
+	/**
 	 * The Lighting object. Call enableLighting() before accessing this object
 	 */
 	private var lighting:LightingSystem;
@@ -64,18 +69,10 @@ class GameState extends FlxState
 		super.destroy();
 	}
 	
-	/**
-	 * Set to true to pause the game. The HUD will still work.
-	 */
-	public var paused(default, set):Bool;
-	private function set_paused(v:Bool):Bool
+	private inline function set_paused(v:Bool):Bool
 	{
-		if (paused != v)
-		{
-			paused = v;
-			persistentUpdate = !v;
-		}
-		return v;
+		persistentUpdate = !v;
+		return paused = v;
 	}
 	
 	
