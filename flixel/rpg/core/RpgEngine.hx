@@ -43,9 +43,10 @@ class RpgEngine implements IFlxDestroyable
 	 * Initialize the engine on a FlxState
 	 * @param	state
 	 */
-	public function new():Void
+	public function new(setAsCurrent:Bool = true):Void
 	{
-		current = this;
+		if(setAsCurrent)
+			current = this;
 		
 		levels = new LevelManager(this);
 		entities = new EntityManager(this);
