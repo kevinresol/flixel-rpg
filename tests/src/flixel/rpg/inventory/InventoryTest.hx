@@ -12,6 +12,7 @@ class InventoryTest
 {
 	private var timer:Timer;
 	
+	private var rpg:RpgEngine;
 	private var inventory:Inventory;
 	private var item:InventoryItem;
 	
@@ -26,9 +27,8 @@ class InventoryTest
 		var data = [{id:"1", type:0, displayName:"Key Card", maxStack:1}];
 		var dataString = Serializer.run(data);
 		
-		
-		RpgEngine.init();
-		RpgEngine.data.itemData = dataString;
+		rpg = new RpgEngine();
+		rpg.data.itemData = dataString;
 	}
 	
 	@AfterClass

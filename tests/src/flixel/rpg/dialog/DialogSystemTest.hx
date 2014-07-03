@@ -8,6 +8,7 @@ import massive.munit.Assert;
 
 class DialogSystemTest
 {
+	private var rpg:RpgEngine;
 	private var dialogSystem:DialogSystem;
 	
 	public function new() 
@@ -44,8 +45,9 @@ class DialogSystemTest
 		});
 		
 		var dataString = Serializer.run(data);
-		RpgEngine.init();
-		RpgEngine.data.dialogData = dataString;
+		
+		rpg = new RpgEngine();
+		rpg.data.dialogData = dataString;
 	}
 	
 	@AfterClass
@@ -56,7 +58,7 @@ class DialogSystemTest
 	@Before
 	public function setup():Void
 	{
-		dialogSystem = new DialogSystem();
+		dialogSystem = new DialogSystem(rpg);
 	}
 	
 	@After
