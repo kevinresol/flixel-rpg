@@ -1,9 +1,7 @@
 package flixel.rpg.dialog;
 import flixel.rpg.core.RpgEngine;
 import flixel.rpg.core.RpgScripting;
-import flixel.rpg.data.Data;
 import flixel.util.FlxSignal;
-import haxe.Unserializer;
 
 /**
  * A dialogue system. 
@@ -34,13 +32,9 @@ class DialogSystem
 	 */
 	public var currentInitializer:DialogInitializer;
 	
-	/**
-	 * The scripting engine used by the dialogue system.
-	 * Use script.variables.set() to set variables
-	 */
-	public var script(default, null):RpgScripting;
-	
 	private var rpg:RpgEngine;
+	
+	public var scripting(get, never):RpgScripting;
 	
 	/**
 	 * Constructor
@@ -53,14 +47,13 @@ class DialogSystem
 		changed = new FlxSignal();
 		
 		this.rpg = rpg;
-		script = RpgScripting.get(rpg);
 		
 		init();
 	}
 	
 	private function init():Void
 	{
-		dialogs = new Map<String, Dialog>();
+		dialogs = new Map();
 		for (dialogData in RpgEngine.current.data.dialog)
 		{
 			//create the dialogue object
@@ -71,7 +64,7 @@ class DialogSystem
 			for (responseData in dialogData.responses)
 			{		
 				//create and push the response object
-				dialog.responses.push(new DialogResponse(responseData.text, responseData.action, responseData.requirement));
+				dialog.responses.push(new DialogResponse(responseData.text, responseData.dialog, responseData.requirement, responseData.events));
 			}
 		}
 	}
@@ -80,18 +73,20 @@ class DialogSystem
 	 * Set current dialogue to the specified id
 	 * @param	id
 	 */
-	public function display(id:String):Void
+	public inline function display(id:String):Void
 	{
-		if (currentInitializer != null && !script.variables.exists("entity"))
-			script.variables.set("entity", currentInitializer.entity);
-			
-		setCurrent(dialogs.get(id));
+		setCurrent(getDialog(id));
 	}
 	
+	/**
+	 * Show next piece of text
+	 * @return true if there is next, false if there is no next
+	 */
 	public function showNext():Bool
 	{
-		if (current != null && current.showNext())
+		if (current != null && current.hasNext)
 		{
+			current.currentParagraph++;
 			changed.dispatch();
 			return true;
 		}
@@ -109,8 +104,56 @@ class DialogSystem
 		
 		setCurrent(null);
 		currentInitializer = null;
-		script.variables.remove("entity");
 	}
+	
+	/**
+	 * Respond to current dialog
+	 * @param	response	A DialogResponse object. Must belong to the current dialog object.
+	 */
+	public function respond(response:DialogResponse):Void
+	{
+		if (current == null)
+			throw "No active dialog";
+			
+		if (current.responses.indexOf(response) == -1)
+			throw "The specified response object does not belongs to this dialogue object";
+		
+		if (response.dialog != null)
+			display(response.dialog);
+		
+		for (event in response.events)
+			rpg.events.dispatch(event);
+	}
+	
+	/**
+	 * Get a dialogue instance by id
+	 * @param	id
+	 * @return
+	 */
+	public inline function getDialog(id:String):Dialog
+	{
+		var d = dialogs.get(id);
+		
+		if (d == null)
+			throw 'No dialog is found for id:$id';
+			
+		return d;
+	}
+	
+	@:allow(flixel.rpg.dialog.Dialog)
+	private inline function setVariable():Void
+	{
+		if (currentInitializer != null)
+			rpg.scripting.variables.set("entity", currentInitializer.entity);
+	}
+	
+	@:allow(flixel.rpg.dialog.Dialog)
+	private inline function removeVariable():Void 
+	{
+		if (currentInitializer != null)
+			rpg.scripting.variables.remove("entity");
+	}
+	
 	
 	/**
 	 * @private
@@ -125,24 +168,18 @@ class DialogSystem
 			
 			changed.dispatch();
 			
-			if (dialog != null && dialog.autoRespond)
-				dialog.respond(dialog.availableResponses[0]);
+			if (current != null)
+			{
+				if(current.autoRespond)
+					respond(dialog.availableResponses[0]);
+			}
 		}
 	}
 	
-	/**
-	 * Get a dialogue instance by id
-	 * @param	id
-	 * @return
-	 */
-	public function getDialog(id:String):Dialog
+	
+	private inline function get_scripting():RpgScripting
 	{
-		var d = dialogs.get(id);
-		
-		if (d == null)
-			throw 'No dialog is found for id:$id';
-			
-		return d;
+		return rpg.scripting;
 	}
 	
 }

@@ -1,4 +1,5 @@
 package flixel.rpg.dialog;
+import flixel.rpg.core.RpgScripting;
 using flixel.util.FlxArrayUtil;
 /**
  * A dialog includes the dialog texts and list of responses
@@ -32,6 +33,8 @@ class Dialog
 	 */
 	public var availableResponses(get, null):Array<DialogResponse>;
 	
+	public var hasNext(get, never):Bool;
+	
 	public var autoRespond:Bool = false;
 	
 	private var system:DialogSystem;
@@ -56,39 +59,6 @@ class Dialog
 	}
 	
 	/**
-	 * Respond to this dialogue
-	 * @param	response	A DialogueResponse object. Must belong to this dialogue object.
-	 */
-	public function respond(response:DialogResponse):Void
-	{		
-		if (responses.indexOf(response) == -1)
-			throw "The specified response object does not belongs to this dialogue object";
-		
-		system.script.executeAst(response.action);
-	}
-	
-	/**
-	 * Show next piece of text
-	 * @return true if there is next, false if there is no next
-	 */
-	@:allow(flixel.rpg.dialog.DialogSystem)
-	private function showNext():Bool
-	{
-		if (hasNext())
-		{
-			currentParagraph++;
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	public inline function hasNext():Bool
-	{
-		return currentParagraph < texts.length - 1;
-	}
-	
-	/**
 	 * Debug string
 	 * @return
 	 */
@@ -102,19 +72,26 @@ class Dialog
 	{
 		var result = [];
 		
+		system.setVariable();
 		for (response in responses)
 		{
 			// Check if all requirements fulfilled
-			var fulfilled = response.requirement == null || system.script.executeAst(response.requirement);
+			var fulfilled = response.requirement == null || system.scripting.executeAst(response.requirement);
 			
 			if (fulfilled)
 				result.push(response);
 		}
+		system.removeVariable();
 		
 		return result;
 	}
 	
-	private function get_text():String
+	private inline function get_hasNext():Bool
+	{
+		return currentParagraph < texts.length - 1;
+	}
+	
+	private inline function get_text():String
 	{
 		return texts[currentParagraph];
 	}

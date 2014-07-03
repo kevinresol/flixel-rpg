@@ -10,12 +10,13 @@ typedef DialogData =
 	name:String,
 	texts:Array<String>,
 	responses:Array<ResponseData>,
-	?autoRespond:Bool
+	?autoRespond:Bool,
 }
 
 typedef ResponseData =
 {
-	text:String, 
-	action:String, 
-	?requirement:String
+	text:String,
+	?dialog:String, // show another dialog
+	?requirement:String, // (hscript) conditions for this response to be available
+	?events:Array<String>,  // list of event to be dispatched
 }

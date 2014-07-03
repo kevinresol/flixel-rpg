@@ -10,12 +10,14 @@ class DialogResponse
 {
 	public var text:String;
 	public var requirement:Expr;
-	public var action:Expr;
+	public var dialog:Null<String>;
+	public var events:Array<String>;
 
-	public function new(text:String, actionScript:String, ?requirementScript:String = "") 
+	public function new(text:String, ?dialog:Null<String>, ?requirementScript:String = "", ?events:Array<String>) 
 	{
 		this.text = text;
-		this.action = RpgScripting.parseString(actionScript);
+		this.dialog = dialog;
+		this.events = events == null ? [] : events;
 		
 		if(requirementScript != "")
 			this.requirement = RpgScripting.parseString(requirementScript);
