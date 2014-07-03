@@ -27,46 +27,44 @@ Very basic example:
 	
 ```haxe
 
-import flixel.rpg.state.GameState;
+import flixel.FlxState;
 import flixel.rpg.core.RpgEngine;
-import flixel.rpg.entity.Entity;
+import openfl.Assets;
 
-class PlayState extends GameState
+class PlayState extends FlxState
 {	
+	private var rpg:RpgEngine;
+	
 	override public function create():Void
 	{		
 		super.create();
 		
-		RpgEngine.init(this);
-		RpgEngine.levels.register("Level 1", new LevelOne()); //LevelOne extends Level		
-		RpgEngine.levels.switchTo("Level 1");
+		if (RpgEngine.current != null)
+			RpgEngine.current.destroy();
 		
-		var e = new Entity();
-		e.enableAI();
-		e.ai.add(new SomeAI()); // SomeAI implments IAI
+		var rpg = new RpgEngine();
 		
-		e.enableInventory();		
-		e.inventory.createEmptySlots(0, 4); // Create 4 slots of type 0
+		rpg.data.entityData = Assets.getText("assets/data/output/entity_data.txt");
+		rpg.data.dialogData = Assets.getText("assets/data/output/dialog_data.txt");
+		rpg.data.weaponData = Assets.getText("assets/data/output/weapon_data.txt");
+		rpg.data.tradeData = Assets.getText("assets/data/output/trade_data.txt");
+		rpg.data.levelData = Assets.getText("assets/data/output/level_data.txt");
+		rpg.data.eventData = Assets.getText("assets/data/output/event_data.txt");
+		rpg.data.itemData = Assets.getText("assets/data/output/item_data.txt");
 		
-		e.enableEquipments(); // Equipment Slots (just another Inventory instance)
-		e.enableEquipments.createEmptySlots(1); // Create a slot of type 1
-		e.enableEquipments.createEmptySlots(2); // Create a slot of type 2
-		e.enableEquipments.createEmptySlots(3); // Create a slot of type 3
+		rpg.enableDialog();
 		
-		e.enableWeapon();		
-		e.enableStat();
+		rpg.state = this;
+		rpg.levels.init();
 		
-		e.enableDialogueInitializer();		
-		e.dialogInitializer.dialogId = "some_dialog_id";
-		
-		RpgEngine.levels.current.registerPlayer(e);
+		rpg.events.dispatch("game_start");
 	}
 	
 	override public function update():Void
 	{
 		super.update();
 		
-		RpgEngine.collide();		
+		rpg.collide();		
 	}
 }
 ```
