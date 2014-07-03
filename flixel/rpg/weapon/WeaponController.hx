@@ -126,7 +126,7 @@ class WeaponController
 		);
 		
 		w.fireRate = wd.fireRate;
-		w.bulletDamage = wd.bulletDamage;
+		//w.bulletDamage = wd.bulletDamage;
 		w.bounds = entity.rpg.level.obstacles.getBounds(); //TODO what if current level changed?
 		w.group.forEach(function(b) b.reloadTime = wd.bulletReloadTime);
 		
