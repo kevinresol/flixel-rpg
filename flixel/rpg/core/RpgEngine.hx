@@ -76,27 +76,25 @@ class RpgEngine implements IFlxDestroyable
 	 */
 	public function collide():Void
 	{
-		var collide = FlxG.collide;
-		var overlap = FlxG.overlap;
-		
 		//Don't walk into walls
-		collide(levels.current.characters, levels.current.obstacles);
+		FlxG.collide(levels.current.characters, levels.current.obstacles);
 		
+		return;
 		//Don't walk into objects
-		collide(levels.current.characters, levels.current.objects);
+		FlxG.collide(levels.current.characters, levels.current.objects);
 		
 		//Don't shoot through walls
-		collide(levels.current.bullets, levels.current.obstacles, bulletCollideWall);
+		FlxG.collide(levels.current.bullets, levels.current.obstacles, bulletCollideWall);
 		
 		//Bullets should hit the target!
-		overlap(levels.current.allyBullets, levels.current.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
-		overlap(levels.current.enemyBullets, levels.current.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
+		FlxG.overlap(levels.current.allyBullets, levels.current.enemyHitBoxes, BulletCallbacks.collideCallback, returnTrue);		
+		FlxG.overlap(levels.current.enemyBullets, levels.current.allyHitBoxes, BulletCallbacks.collideCallback, returnTrue);
 		
 		//Pickup magnet
-		overlap(levels.current.playerPickupBoxes, levels.current.pickups, Pickup.moveTowardsPlayer, returnTrue);		
+		FlxG.overlap(levels.current.playerPickupBoxes, levels.current.pickups, Pickup.moveTowardsPlayer, returnTrue);		
 		
 		//Take Pickups
-		overlap(levels.current.player, levels.current.pickups, Pickup.picked , returnTrue);
+		FlxG.overlap(levels.current.player, levels.current.pickups, Pickup.picked , returnTrue);
 	}
 	
 	private function bulletCollideWall(bullet:Bullet, map):Void
