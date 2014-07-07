@@ -2,6 +2,7 @@ package flixel.rpg.level;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectGroup;
 import flixel.rpg.core.RpgEngine;
+import flixel.tile.FlxTilemap;
 import haxe.io.Path;
 import openfl.Assets;
 
@@ -18,7 +19,7 @@ class TiledLevel extends Level
 		super();		
 	}
 	
-	public function loadTmx(tmxPath:String, tilesetName:String, layerName:String, objectGroupName:String):Void
+	public function loadTmx(tmxPath:String, tilesetName:String, layerNames:Array<String>, objectGroupNames:Array<String>):Void
 	{
 		// Load tmx
 		var tmx = new TiledMap(tmxPath);
@@ -28,15 +29,25 @@ class TiledLevel extends Level
 		var imagePath = Path.normalize(Path.directory(tmxPath) + "/" + tileset.imageSource);
 		
 		// Load map
-		var layer = tmx.getLayer(layerName);
-		var mapArray = layer.tileArray.map(function(v) return v - 1); //The numbering in the data array starts from 1, but we want 0
-		obstacles.widthInTiles = layer.width;
-		obstacles.heightInTiles = layer.height;		
-		obstacles.loadMap(mapArray, imagePath, tileset.tileWidth, tileset.tileHeight, OFF, 0, 1, 2);
-				
+		for (layerName in layerNames)
+		{
+			var layer = tmx.getLayer(layerName);
+			var mapArray = layer.tileArray.map(function(v) return v - 1); //The numbering in the data array starts from 1, but we want 0
+			var tilemap = new FlxTilemap();
+			tilemap.widthInTiles = layer.width;
+			tilemap.heightInTiles = layer.height;		
+			tilemap.loadMap(mapArray, imagePath, tileset.tileWidth, tileset.tileHeight, OFF, 0, 1, 2);
+			obstacles.add(tilemap);
+		}
+		
 		// Load Objects
-		var objectGroup = tmx.getObjectGroup(objectGroupName);
-		loadObjects(objectGroup);
+		if (objectGroupNames != null)
+		for (objectGroupName in objectGroupNames)
+		{
+			var objectGroup = tmx.getObjectGroup(objectGroupName);
+			loadObjects(objectGroup);
+		}
+		
 	}
 	
 	private function loadObjects(objectGroup:TiledObjectGroup):Void

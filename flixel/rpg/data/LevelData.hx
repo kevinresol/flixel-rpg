@@ -12,6 +12,6 @@ typedef LevelData =
 	// Tiled
 	tmx:String,
 	tileset:String,
-	layer:String,
-	objectGroup:String,
+	layers:Array<String>,
+	objectGroups:Array<String>,
 }

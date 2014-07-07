@@ -13,7 +13,7 @@ import openfl.Assets;
 class Level extends FlxGroup
 {
 	public var background:FlxTilemap;	
-	public var obstacles(default, null):FlxTilemap;
+	public var obstacles(default, null):FlxTypedGroup<FlxTilemap>;
 	public var overlay:FlxGroup;
 	
 	/**
@@ -100,7 +100,7 @@ class Level extends FlxGroup
 		super();
 		
 		//add(background = new FlxTilemap());
-		add(obstacles = new FlxTilemap());		
+		add(obstacles = new FlxTypedGroup());
 		
 		add(characters = new FlxGroup());
 		characters.add(allies = new FlxGroup());

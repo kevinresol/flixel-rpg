@@ -43,7 +43,7 @@ class LevelManager
 		{
 			case "tiled":
 				var level = new TiledLevel();
-				level.loadTmx(data.tmx, data.tileset, data.layer, data.objectGroup);
+				level.loadTmx(data.tmx, data.tileset, data.layers, data.objectGroups);
 				return level;
 				
 			default:
