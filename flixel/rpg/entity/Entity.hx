@@ -143,7 +143,7 @@ class Entity extends FlxSprite
 	
 	
 	private var scripting:RpgScripting;
-	private var scriptUpdate:Void->Void;
+	private var scriptUpdate:Float->Void;
 	
 	
 
@@ -169,7 +169,7 @@ class Entity extends FlxSprite
 			scripting.variables.set("entity", this);
 		}
 		
-		var scriptReturn: { init:Void->Void, update:Void->Void } = scripting.executeScript(script);	
+		var scriptReturn: { init:Void->Void, update:Float->Void } = scripting.executeScript(script);	
 		if(scriptReturn.init != null) scriptReturn.init();
 		scriptUpdate = scriptReturn.update;
 	}
@@ -280,15 +280,15 @@ class Entity extends FlxSprite
 	/**
 	 * Override
 	 */
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if(ai != null)
-			ai.update();
+			ai.update(elapsed);
 			
 		if (scriptUpdate != null)
-			scriptUpdate();
+			scriptUpdate(elapsed);
 	}
 	
 	/**

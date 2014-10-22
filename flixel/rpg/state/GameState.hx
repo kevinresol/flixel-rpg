@@ -53,12 +53,12 @@ class GameState extends FlxState
 	 * Override.
 	 * Update the lighting system if it is enabled.
 	 */
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
 		if (lighting != null)
 			lighting.update();
 			
-		super.update();
+		super.update(elapsed);
 	}
 	
 	public override function destroy():Void 

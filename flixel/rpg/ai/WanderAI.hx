@@ -90,9 +90,9 @@ class WanderAI extends AI
 	/**
 	 * Override
 	 */
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		// Check if entity has an target
 		switch (wanderState) 
@@ -138,8 +138,8 @@ class WanderAI extends AI
 					wanderState = WMove;
 					
 					// Set a random destination
-					var toX = wanderCenter.x + FlxRandom.float( -radius, radius);
-					var toY = wanderCenter.y + FlxRandom.float( -radius, radius);
+					var toX = wanderCenter.x + FlxG.random.float( -radius, radius);
+					var toY = wanderCenter.y + FlxG.random.float( -radius, radius);
 					
 					// Calculate the distance and duration of the move
 					var dx = toX - entity.x - entity.origin.x;
@@ -178,7 +178,7 @@ class WanderAI extends AI
 	 */
 	private inline function setNextWanderInterval():Void
 	{
-		nextWanderInterval = timeInterval + FlxRandom.float( -timeIntervalRandomRange / 2, timeIntervalRandomRange / 2);
+		nextWanderInterval = timeInterval + FlxG.random.float( -timeIntervalRandomRange / 2, timeIntervalRandomRange / 2);
 	}
 	
 	

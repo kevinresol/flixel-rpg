@@ -89,10 +89,10 @@ class AIController
 	/**
 	 * Called by the entity's update() function
 	 */
-	public function update():Void
+	public function update(elapsed:Float):Void
 	{		
 		for (ai in aiArray)
-			ai.update();
+			ai.update(elapsed);
 	}
 	
 	/**

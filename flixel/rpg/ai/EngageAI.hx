@@ -37,7 +37,7 @@ class EngageAI extends AI
 	/**
 	 * A map to store the elapsed in-range time for each possible targets
 	 */
-	public var elapsed:Map<Entity, Float>;
+	public var elapsedList:Map<Entity, Float>;
 	
 	/**
 	 * Constructor
@@ -56,9 +56,9 @@ class EngageAI extends AI
 	/**
 	 * Override
 	 */
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 				
 		//Try to aquire a target when currently not engaged
 		if (entity.target == null)
@@ -82,12 +82,12 @@ class EngageAI extends AI
 						}
 						else // Check elapsed time since in range
 						{
-							var s = elapsed.get(e);
+							var s = elapsedList.get(e);
 							
 							if (s == null)
 								s = 0;
 							else
-								s += FlxG.elapsed;
+								s += elapsed;
 								
 							
 							if (s >= delay)
@@ -95,19 +95,19 @@ class EngageAI extends AI
 								entity.engage(e);
 								
 								// Already engaged, no need to store the elapsed time anymore
-								for (k in elapsed.keys())
-									elapsed.remove(k);
+								for (k in elapsedList.keys())
+									elapsedList.remove(k);
 									
 								break;
 							}
 							else
-								elapsed.set(e, s);
+								elapsedList.set(e, s);
 						}
 					}
 					else // Not in range
 					{
-						if(elapsed != null)
-							elapsed.remove(e);
+						if(elapsedList != null)
+							elapsedList.remove(e);
 					}
 				}
 			}
@@ -133,8 +133,8 @@ class EngageAI extends AI
 		if (v == delay)
 			return v;
 			
-		if (v != 0 && elapsed == null)
-			elapsed = new Map();
+		if (v != 0 && elapsedList == null)
+			elapsedList = new Map();
 			
 		return delay = v;
 	}

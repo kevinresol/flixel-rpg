@@ -81,13 +81,13 @@ class Light extends FlxSprite
 	 * Override.
 	 * Check if this sprite is moved.
 	 */
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
 		getScreenPosition(screenXY);		
 		moved = ((screenXY.x != prevScreenXY.x) || (screenXY.y != prevScreenXY.y));		
 		prevScreenXY.copyFrom(screenXY);			
 		
-		super.update();
+		super.update(elapsed);
 	}
 	
 	/**

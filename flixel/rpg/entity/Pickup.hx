@@ -41,9 +41,9 @@ class Pickup extends Entity
 		ai.add("follow", followAI);		
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		target = null;
 	}
 	

@@ -12,7 +12,7 @@ import flixel.rpg.entity.Entity;
 interface IAI
 {
 	public var entity:Entity;
-	public function update():Void;
+	public function update(elapsed:Float):Void;
 	public function destroy():Void;
 }
 
@@ -42,7 +42,7 @@ class AI implements IAI
 	/**
 	 * Update function to be called by AIController
 	 */
-	public function update():Void
+	public function update(elapsed:Float):Void
 	{
 		
 	}

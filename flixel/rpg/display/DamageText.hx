@@ -39,8 +39,8 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 	{
 		super(0, 0, 30);		
 		alignment = "center";		
-		motionTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, complete:onMotionTweenComplete };
-		alphaTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, complete:onAlphaTweenComplete };			
+		motionTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, onComplete:onMotionTweenComplete };
+		alphaTweenOptions = { type:FlxTween.ONESHOT, ease:FlxEase.expoOut, onComplete:onAlphaTweenComplete };			
 	}
 	
 	/**
@@ -57,8 +57,8 @@ class DamageText extends FlxText //FlxTypedGroup<FlxText>
 			RpgEngine.current.level.add(textBox = new DamageText());
 		}
 				
-		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxRandom.int( -10, 10);
-		var fromY = object.y + FlxRandom.int( -10, 5);
+		var fromX = object.x + (object.width - textBox.width) * 0.5 + FlxG.random.int( -10, 10);
+		var fromY = object.y + FlxG.random.int( -10, 5);
 		var toY = fromY - 20;
 		
 		textBox.alpha = 1;

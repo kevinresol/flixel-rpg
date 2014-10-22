@@ -19,9 +19,9 @@ class FollowAI extends AI
 	
 	//TODO need some pathfinding to get pass obstacles
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (entity.target != null)
 		{
