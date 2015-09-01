@@ -1,5 +1,8 @@
-# WORK-IN-PROGRESS!
-This library is still experimental. Use with care. Expect drastic API changes.
+# OBSOLETE
+This library is obsolete. A newer RPG Engine is available at https://github.com/kevinresol/hare
+
+
+
 
 ## About [![Build Status](https://travis-ci.org/kevinresol/flixel-rpg.svg?branch=dev)](https://travis-ci.org/kevinresol/flixel-rpg)
 
